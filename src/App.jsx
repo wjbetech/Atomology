@@ -1,7 +1,12 @@
 import "./App.css";
+import Layout from "./components/Layout";
 
 function App() {
-  return <div className="bg-primary"></div>;
+  return (
+    <div className="">
+      <Layout />
+    </div>
+  );
 }
 
 export default App;
