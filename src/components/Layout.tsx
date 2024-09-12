@@ -7,7 +7,7 @@ type Props = {};
 
 export default function Layout({}: Props) {
   return (
-    <div className="w-screen h-screen">
+    <div className="w-screen">
       <Navbar />
     </div>
   );
