@@ -23,7 +23,7 @@ export default function Element({ atomicNumber, name, symbol }: ElementData) {
       {loading && <div>Loading...</div>}
       {error && <div>Error occurred: {error}</div>}
       {dummyElement && (
-        <div className="border-2 border-accent h-[200px] place-items-center text-center align-middle justify-center w-[200px] m-auto flex flex-col rounded-sm">
+        <div className="border-4 border-accent h-[200px] place-items-center text-center align-middle justify-center w-[200px] m-auto flex flex-col rounded-md">
           <h1 className="text-5xl">{dummyElement.atomicNumber}</h1>
         </div>
       )}

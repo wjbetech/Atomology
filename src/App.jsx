@@ -5,7 +5,7 @@ import Element from "./components/Element";
 
 function App() {
   return (
-    <div className="">
+    <div className="h-screen flex flex-col">
       <Layout />
       <GameMode />
       <Element />
