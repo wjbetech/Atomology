@@ -10,7 +10,7 @@ interface GameState {
 }
 
 export const useGameStore = create<GameState>((set) => ({
-  gameMode: "multiple-choice",
+  gameMode: "multi",
   score: 0,
   element: null,
   setGameMode: (mode) => set({ gameMode: mode }),

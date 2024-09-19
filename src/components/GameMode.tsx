@@ -1,25 +1,11 @@
 import React from "react";
 import { useState } from "react";
-// import { getRandomElement } from "../hooks/gameLogic.js";
 
-// console.log(getRandomElement("2"));
+// import zustand store
+import { useGameStore } from "../store/atomologyStore";
 
-type Props = {};
-
-export default function GameMode({}: Props) {
-  const [gameMode, setGameMode] = useState<"multiple" | "open">("multiple");
-
-  const handleSetMultiple = () => {
-    if (gameMode === "open") {
-      setGameMode("multiple");
-    } else return;
-  };
-
-  const handleSetOpen = () => {
-    if (gameMode === "multiple") {
-      setGameMode("open");
-    } else return;
-  };
+export default function GameMode() {
+  const { gameMode, setGameMode } = useGameStore();
 
   console.log(gameMode);
 
@@ -30,7 +16,11 @@ export default function GameMode({}: Props) {
         <button
           id="multiple"
           value="multiple"
-          onClick={handleSetMultiple}
+          onClick={() => {
+            if (gameMode === "open") {
+              setGameMode("multi");
+            }
+          }}
           className="btn text-lg"
         >
           Multiple Choice
@@ -38,7 +28,11 @@ export default function GameMode({}: Props) {
         <button
           id="open"
           value="multiple"
-          onClick={handleSetOpen}
+          onClick={() => {
+            if (gameMode === "multi") {
+              setGameMode("open");
+            }
+          }}
           className="btn text-lg"
         >
           Open Answer
