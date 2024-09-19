@@ -2,6 +2,7 @@ import "./App.css";
 import Layout from "./components/Layout";
 import GameMode from "./components/GameMode";
 import Element from "./components/Element";
+import Score from "./components/Score";
 
 function App() {
   return (
@@ -9,6 +10,7 @@ function App() {
       <Layout />
       <GameMode />
       <Element />
+      <Score />
     </div>
   );
 }

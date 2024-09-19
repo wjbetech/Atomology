@@ -10,7 +10,7 @@ export default function GameMode() {
   console.log(gameMode);
 
   return (
-    <div className="my-32 flex flex-col gap-4 justify-center">
+    <div className="mt-32 flex flex-col gap-4 justify-center">
       <h1 className="graduate-regular text-5xl">Atomology</h1>
       <div className="flex justify-center gap-6">
         <button

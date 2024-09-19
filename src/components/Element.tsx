@@ -51,14 +51,13 @@ export default function Element({
   }, []);
 
   // conditional rendering for loading and errors
-  if (loading) return <p>{randomLoadingMessage()}</p>;
-  if (error) return <p>Error: {error}</p>;
+  if (loading) return <p className="mt-24">{randomLoadingMessage()}</p>;
+  if (error) return <p className="mt-24">Error: {error}</p>;
 
   return (
-    <div className="element">
-      <h2>Element: {dummyData.elementName}</h2>
-      <p>Symbol: {dummyData.elementSymbol}</p>
-      <p>Atomic Number: {dummyData.atomicNumber}</p>
+    <div className="border-4 p-6 border-accent w-[15%] place-self-center mt-24 rounded-md">
+      <span>{dummyData.atomicNumber}</span>
+      <h1 className="font-bold text-3xl">{dummyData.elementSymbol}</h1>
     </div>
   );
 }
