@@ -41,6 +41,7 @@ export default function Element({
         setLoading(true);
         const response = await GET();
         setElementData(response.data);
+        console.log(elementData);
         setLoading(false);
       } catch (error) {
         setError(error.message);
@@ -55,7 +56,7 @@ export default function Element({
   if (error) return <p className="mt-24">Error: {error}</p>;
 
   return (
-    <div className="border-4 p-6 border-accent w-[15%] place-self-center mt-24 rounded-md">
+    <div className="border-4 p-6 border-secondary w-[15%] place-self-center mt-24 rounded-md">
       <span>{dummyData.atomicNumber}</span>
       <h1 className="font-bold text-3xl">{dummyData.elementSymbol}</h1>
     </div>

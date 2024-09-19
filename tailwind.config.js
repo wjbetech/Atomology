@@ -4,16 +4,16 @@ import daisyui from "daisyui";
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {}
+    extend: {},
   },
   plugins: [daisyui],
   daisyui: {
-    themes: ["garden", "dim"],
-    lightTheme: "garden",
-    darkTheme: "dim",
+    themes: ["retro", "business"],
+    lightTheme: "retro",
+    darkTheme: "business",
     base: true,
     styled: true,
     utils: true,
-    themeRoot: ":root"
-  }
+    themeRoot: ":root",
+  },
 };

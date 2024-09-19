@@ -1,7 +1,14 @@
 import React from "react";
 
-type Props = {};
-
-export default function Answer({}: Props) {
-  return <div>Answer</div>;
+export default function Answer() {
+  return (
+    <div>
+      <input
+        type="text"
+        name="answer"
+        id="answer"
+        className="bg-neutral rounded-md mt-[100px] p-2"
+      />
+    </div>
+  );
 }

@@ -21,7 +21,7 @@ export default function GameMode() {
               setGameMode("multi");
             }
           }}
-          className="btn text-lg"
+          className="btn bg-secondary text-lg"
         >
           Multiple Choice
         </button>
@@ -33,7 +33,7 @@ export default function GameMode() {
               setGameMode("open");
             }
           }}
-          className="btn text-lg"
+          className="btn bg-secondary text-lg"
         >
           Open Answer
         </button>

@@ -9,6 +9,11 @@ interface GameState {
   setElement: (element: object) => void;
 }
 
+interface uiSlice {
+  theme: string;
+  setTheme: (theme: string) => void;
+}
+
 export const useGameStore = create<GameState>((set) => ({
   gameMode: "multi",
   score: 0,
@@ -16,4 +21,9 @@ export const useGameStore = create<GameState>((set) => ({
   setGameMode: (mode) => set({ gameMode: mode }),
   setScore: (score) => set({ score }),
   setElement: (element) => set({ element }),
+}));
+
+export const useUIStore = create<uiSlice>((set) => ({
+  theme: "dark",
+  setTheme: (theme) => set({ theme }),
 }));
