@@ -7,7 +7,7 @@ export default function Answer() {
         type="text"
         name="answer"
         id="answer"
-        className="bg-neutral rounded-md mt-[100px] p-2"
+        className=" rounded-full mt-[100px] p-2"
       />
     </div>
   );

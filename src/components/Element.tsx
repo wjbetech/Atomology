@@ -1,5 +1,4 @@
-import React, { useEffect } from "react";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { messages } from "../utils/loadingMessages";
 
 // data method import
@@ -8,40 +7,36 @@ import { GET } from "../data/fetch";
 // zustand store
 import { useGameStore } from "../store/atomologyStore";
 
-interface ElementData {
-  atomicNumber: number;
-  elementName: string;
-  elementSymbol: string;
-}
+export default function Element() {
+  const { element, setElement, loading, setLoading, error, setError } =
+    useGameStore();
 
-const dummyData = {
-  atomicNumber: 1,
-  elementName: "Hydrogen",
-  elementSymbol: "H",
-};
-
-const randomLoadingMessage = () => {
-  const randomIndex = Math.floor(Math.random() * messages.length);
-  return messages[randomIndex];
-};
-
-export default function Element({
-  atomicNumber,
-  elementName,
-  elementSymbol,
-}: ElementData) {
-  const [elementData, setElementData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  // get random loading message
+  const randomLoadingMessage = () => {
+    const randomIndex = Math.floor(Math.random() * messages.length);
+    return messages[randomIndex];
+  };
 
   // async GET api call
   useEffect(() => {
+    // get random idx for setElementData
+    const randomIndex = Math.floor(Math.random() * 119);
     const fetchData = async () => {
       try {
         setLoading(true);
         const response = await GET();
-        setElementData(response.data);
-        console.log(elementData);
+        // console.log(response.data.data[randomIndex]);
+        const elementInformation = ({
+          atomic_mass: atomicMass,
+          category,
+          density,
+          name,
+          number,
+          period,
+          phase,
+          symbol,
+        } = response.data.data[randomIndex]);
+        setElementData(response.data.data[5].data);
         setLoading(false);
       } catch (error) {
         setError(error.message);
@@ -56,9 +51,9 @@ export default function Element({
   if (error) return <p className="mt-24">Error: {error}</p>;
 
   return (
-    <div className="border-4 p-6 border-secondary w-[15%] place-self-center mt-24 rounded-md">
-      <span>{dummyData.atomicNumber}</span>
-      <h1 className="font-bold text-3xl">{dummyData.elementSymbol}</h1>
+    <div className="border-4 p-6 border-secondary w-[15%] place-self-center mt-24 rounded-md shadow-md">
+      {/* <span></span> */}
+      <h1 className="font-bold text-3xl">{}</h1>
     </div>
   );
 }

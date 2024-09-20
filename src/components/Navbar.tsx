@@ -4,10 +4,7 @@ type Props = {};
 
 export default function Navbar({}: Props) {
   return (
-    <nav className="p-6 bg-secondary-content flex justify-between items-baseline">
-      <h1 className="text-neutral-content font-semibold text-2xl graduate-regular">
-        Atomology
-      </h1>
+    <nav className="p-6 flex items-baseline justify-center">
       <div className="flex gap-4">
         <a href="/about">About</a>
         <a href="/faq">FAQ</a>

@@ -1,6 +1,8 @@
 import React from "react";
 import { useState } from "react";
 
+import atoms from "../assets/atoms.svg";
+
 // import zustand store
 import { useGameStore } from "../store/atomologyStore";
 
@@ -10,7 +12,8 @@ export default function GameMode() {
   console.log(gameMode);
 
   return (
-    <div className="mt-32 flex flex-col gap-4 justify-center">
+    <div className="mt-32 flex flex-col gap-8 justify-center">
+      <img src={atoms} alt="" className="w-16 h-16 m-auto" />
       <h1 className="graduate-regular text-5xl">Atomology</h1>
       <div className="flex justify-center gap-6">
         <button
@@ -21,7 +24,7 @@ export default function GameMode() {
               setGameMode("multi");
             }
           }}
-          className="btn bg-secondary text-lg"
+          className="btn btn-outline px-8 font-[400] rounded-full"
         >
           Multiple Choice
         </button>
@@ -33,7 +36,7 @@ export default function GameMode() {
               setGameMode("open");
             }
           }}
-          className="btn bg-secondary text-lg"
+          className="btn btn-outline px-8 font-[400] rounded-full"
         >
           Open Answer
         </button>
