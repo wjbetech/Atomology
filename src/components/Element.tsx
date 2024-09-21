@@ -33,18 +33,7 @@ export default function Element() {
       try {
         setLoading(true);
         const response = await GET();
-        // console.log(response.data.data[randomIndex]);
-        const elementInformation = ({
-          atomic_mass: atomicMass,
-          category,
-          density,
-          name,
-          number,
-          period,
-          phase,
-          symbol,
-        } = response.data.data[randomIndex]);
-        setElementData(response.data.data[5].data);
+        console.log(response.data.data[randomIndex]);
         setLoading(false);
       } catch (error) {
         setError(error.message);

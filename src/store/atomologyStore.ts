@@ -3,13 +3,24 @@ import { create } from "zustand";
 interface GameState {
   gameMode: string;
   score: number;
-  element: object | null;
+  element: {
+    atomicMass: number;
+    category: string;
+    density: number;
+    discoveredBy: string;
+    melt: number | null;
+    name: string;
+    number: number;
+    period: number;
+    phase: string;
+    symbol: string;
+  } | null;
   loading: boolean;
   error: boolean;
   gameStarted: boolean;
   setGameMode: (mode: string) => void;
   setScore: (score: number) => void;
-  setElement: (element: object) => void;
+  setElement: (element: GameState["element"]) => void;
   setLoading: (loading: boolean) => void;
   setError: (error: boolean) => void;
   setGameStarted: (gameStarted: boolean) => void;
