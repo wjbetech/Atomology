@@ -4,18 +4,36 @@ import GameMode from "./components/GameMode";
 import Element from "./components/Element";
 import Score from "./components/Score";
 import Answer from "./components/Answer";
+import About from "./components/About";
+import Faq from "./components/Faq";
+
+// react-router
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {
   return (
-    <div className="h-screen flex flex-col bg-neutral">
-      <Layout />
-      <div className="max-w-[33%] flex flex-col place-self-center m-auto">
-        <GameMode />
-        <Element />
-        <Answer />
-        <Score />
+    <Router>
+      <div className="h-screen flex flex-col bg-neutral">
+        <Layout />
+        <div className="max-w-[33%] flex flex-col place-self-center m-auto">
+          <Routes>
+            <Route path="/about" element={<About />} />
+            <Route path="/faq" element={<Faq />} />
+            <Route
+              path="/"
+              element={
+                <>
+                  <GameMode />
+                  <Element />
+                  <Answer />
+                  <Score />
+                </>
+              }
+            />
+          </Routes>
+        </div>
       </div>
-    </div>
+    </Router>
   );
 }
 
