@@ -2,7 +2,7 @@ import React from "react";
 import { useGameStore } from "../store/atomologyStore";
 
 export default function Answer() {
-  const { gameStarted, setGameStarted } = useGameStore();
+  const { gameMode, setGameMode, gameStarted, setGameStarted } = useGameStore();
 
   if (gameStarted) {
     return (
@@ -11,7 +11,7 @@ export default function Answer() {
           type="text"
           name="answer"
           id="answer"
-          className=" rounded-full mt-[100px] p-2"
+          className="rounded-full mt-[100px] input input-bordered"
         />
       </div>
     );
