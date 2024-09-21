@@ -16,8 +16,15 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.graduate-regular {
-  font-family: "Graduate", serif;
-  font-weight: 400;
-  font-style: normal;
+.rotate {
+  animation: rotation 8s infinite linear;
+}
+
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
 }

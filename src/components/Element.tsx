@@ -8,8 +8,16 @@ import { GET } from "../data/fetch";
 import { useGameStore } from "../store/atomologyStore";
 
 export default function Element() {
-  const { element, setElement, loading, setLoading, error, setError } =
-    useGameStore();
+  const {
+    element,
+    setElement,
+    loading,
+    setLoading,
+    error,
+    setError,
+    gameStarted,
+    setGameStarted,
+  } = useGameStore();
 
   // get random loading message
   const randomLoadingMessage = () => {
@@ -46,14 +54,16 @@ export default function Element() {
     fetchData();
   }, []);
 
-  // conditional rendering for loading and errors
-  if (loading) return <p className="mt-24">{randomLoadingMessage()}</p>;
-  if (error) return <p className="mt-24">Error: {error}</p>;
+  if (gameStarted) {
+    // conditional rendering for loading and errors
+    if (loading) return <p className="mt-24">{randomLoadingMessage()}</p>;
+    if (error) return <p className="mt-24">Error: {error}</p>;
 
-  return (
-    <div className="border-4 p-6 border-secondary w-[15%] place-self-center mt-24 rounded-md shadow-md">
-      {/* <span></span> */}
-      <h1 className="font-bold text-3xl">{}</h1>
-    </div>
-  );
+    return (
+      <div className="border-4 p-6 border-secondary w-[15%] place-self-center mt-24 rounded-md shadow-md transition-all duration-1000">
+        {/* <span></span> */}
+        <h1 className="font-bold text-3xl">{}</h1>
+      </div>
+    );
+  }
 }

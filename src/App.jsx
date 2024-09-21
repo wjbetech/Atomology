@@ -9,10 +9,12 @@ function App() {
   return (
     <div className="h-screen flex flex-col bg-neutral">
       <Layout />
-      <GameMode />
-      <Element />
-      <Answer />
-      <Score />
+      <div className="max-w-[33%] flex flex-col place-self-center m-auto">
+        <GameMode />
+        <Element />
+        <Answer />
+        <Score />
+      </div>
     </div>
   );
 }

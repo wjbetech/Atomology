@@ -4,9 +4,11 @@ import React from "react";
 import { useGameStore } from "../store/atomologyStore";
 
 export default function Score() {
-  const { score, setScore } = useGameStore();
+  const { score, setScore, gameStarted } = useGameStore();
 
-  return (
-    <div className="absolute inset-x-0 bottom-6">Current Score: {score}</div>
-  );
+  if (gameStarted) {
+    return (
+      <div className="absolute inset-x-0 bottom-6">Current Score: {score}</div>
+    );
+  }
 }
