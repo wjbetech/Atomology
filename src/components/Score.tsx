@@ -11,6 +11,7 @@ export default function Score() {
 
   const handleGameMode = () => {
     setGameStarted(false);
+    setScore(0);
   };
 
   if (gameStarted) {
