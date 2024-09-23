@@ -40,9 +40,7 @@ export default function Element() {
         setElements(randomElements);
 
         // set a randomElement[x] as correct answer
-        const randomCorrectIndex = Math.floor(
-          Math.random() * randomElements.length
-        );
+        const randomCorrectIndex = Math.floor(Math.random() * 3);
         setAnswer(randomElements[randomCorrectIndex]);
 
         setGameStarted(true);
@@ -53,7 +51,7 @@ export default function Element() {
       }
     };
     fetchData();
-  }, []);
+  }, [gameStarted, setLoading, setElements, setAnswer, setError]);
 
   if (gameStarted) {
     // conditional rendering for loading and errors

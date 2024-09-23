@@ -25,6 +25,7 @@ export default function GameMode() {
           value="multiple"
           onClick={() => {
             if (gameMode === "open") {
+              setGameStarted(true);
               setGameMode("multi");
             }
             if (gameStarted === false) {
@@ -40,6 +41,7 @@ export default function GameMode() {
           value="multiple"
           onClick={() => {
             if (gameMode === "multi") {
+              setGameStarted(true);
               setGameMode("open");
             }
             if (gameStarted === false) {
