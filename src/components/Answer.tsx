@@ -2,14 +2,7 @@ import React from "react";
 import { useGameStore } from "../store/atomologyStore";
 
 export default function Answer() {
-  const {
-    gameMode,
-    setGameMode,
-    gameStarted,
-    setGameStarted,
-    elements,
-    answer,
-  } = useGameStore();
+  const { gameMode, gameStarted, elements } = useGameStore();
 
   console.log(elements);
 
@@ -18,7 +11,7 @@ export default function Answer() {
       <div className="my-10 flex flex-col gap-y-2 w-[200px]">
         {elements.map((e) => {
           return (
-            <button className="btn btn-outline rounded-full" key={e.period}>
+            <button className="btn btn-outline rounded-full" key={e.name}>
               {e.name}
             </button>
           );

@@ -12,8 +12,9 @@ export default function GameMode() {
   console.log(gameMode);
 
   if (gameStarted) {
-    return;
+    return null;
   }
+
   return (
     <div className="flex flex-col gap-8 justif items-center transition-all duration-1000">
       <img src={atoms} alt="" className="rotate w-16 h-16" />

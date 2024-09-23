@@ -1,9 +1,6 @@
 import React, { useEffect } from "react";
 import { messages } from "../utils/loadingMessages";
 
-// data method import
-import { GET } from "../data/fetch";
-
 // zustand store
 import { useGameStore } from "../store/atomologyStore";
 
@@ -18,22 +15,20 @@ export default function Element() {
   };
 
   const {
-    elements,
     setElements,
     loading,
     setLoading,
     error,
     setError,
     gameStarted,
-    setGameStarted,
     answer,
     setAnswer,
+    setGameStarted,
   } = useGameStore();
 
   // async GET api call
   useEffect(() => {
-    // get random idx for setElementData
-    const randomIndex = Math.floor(Math.random() * 119);
+    if (!gameStarted) return;
 
     // get the data for one random Element
     const fetchData = async () => {
@@ -50,39 +45,7 @@ export default function Element() {
         );
         setAnswer(randomElements[randomCorrectIndex]);
 
-        const response = await GET();
-        const data = response.data.data[randomIndex];
-
-        // destructure and store data
-        const {
-          atomic_mass: atomicMass,
-          category,
-          density,
-          discovered_by: discoveredBy,
-          melt,
-          name,
-          number,
-          period,
-          phase,
-          symbol,
-        } = data;
-
-        // pass bundled data to zustand
-        setElements([
-          {
-            atomicMass,
-            category,
-            density,
-            discoveredBy,
-            melt,
-            name,
-            number,
-            period,
-            phase,
-            symbol,
-          },
-        ]);
-
+        setGameStarted(true);
         setLoading(false);
       } catch (error) {
         setError(error.message);
