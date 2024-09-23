@@ -81,7 +81,7 @@ export default function Element() {
     if (error) return <p className="mt-24">Error: {error}</p>;
 
     return (
-      <div className="border-4 p-6 border-secondary w-[66%] place-self-center mt-24 rounded-md shadow-md transition-all duration-1000">
+      <div className="border-4 p-6 border-secondary place-self-center mt-24 rounded-md shadow-md transition-all duration-1000">
         <span>{element?.number}</span>
         <h1 className="font-bold text-3xl">{element?.symbol}</h1>
       </div>

@@ -25,7 +25,9 @@ function App() {
                 <>
                   <GameMode />
                   <Element />
-                  <Answer />
+                  <div>
+                    <Answer />
+                  </div>
                   <Score />
                 </>
               }
