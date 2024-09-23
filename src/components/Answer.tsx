@@ -10,9 +10,10 @@ export default function Answer() {
     if (gameStarted && gameMode === "multi") {
       return (
         <div className="my-10 flex flex-col gap-y-2 w-[200px]">
-          {elements.map((e) => {
+          {elements.map((e, idx) => {
             return (
               <button className="btn btn-outline rounded-full" key={e.name}>
+                <span>{idx + 1}.</span>
                 {e.name}
               </button>
             );

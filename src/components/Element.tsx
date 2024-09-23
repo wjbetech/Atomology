@@ -59,9 +59,19 @@ export default function Element() {
     if (error) return <p className="mt-24">Error: {error}</p>;
 
     return (
-      <div className="border-4 p-6 border-secondary place-self-center mt-24 rounded-md shadow-md transition-all duration-1000">
-        <span>{answer?.number}</span>
-        <h1 className="font-bold text-3xl">{answer?.symbol}</h1>
+      <div className="relative p-8 place-self-center rounded-lg bg-opacity-50 bg-gradient-to-rshadow-lg backdrop-blur-md transition-all duration-500 w-[100px]">
+        <div className="absolute -inset-1 rounded-lg bg-gradient-to-r from-white to-transparent blur opacity-20"></div>
+
+        {/* Main content with number and symbol */}
+        <div className="relative z-10 flex flex-col items-center justify-center">
+          <span className="text-white drop-shadow-lg">{answer?.number}</span>
+          <h1 className="font-semibold text-5xl text-white drop-shadow-lg tracking-wider">
+            {answer?.symbol}
+          </h1>
+        </div>
+
+        {/* Glowing animated border */}
+        <div className="absolute inset-0 rounded-lg border-2 animate-pulse"></div>
       </div>
     );
   }
