@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { messages } from "../utils/loadingMessages";
 
 // data method import
@@ -6,6 +6,9 @@ import { GET } from "../data/fetch";
 
 // zustand store
 import { useGameStore } from "../store/atomologyStore";
+
+// API hook
+import { fetchUniqueElements } from "../hooks/uniqueElements";
 
 export default function Element() {
   // get random loading message
@@ -15,14 +18,16 @@ export default function Element() {
   };
 
   const {
-    element,
-    setElement,
+    elements,
+    setElements,
     loading,
     setLoading,
     error,
     setError,
     gameStarted,
     setGameStarted,
+    answer,
+    setAnswer,
   } = useGameStore();
 
   // async GET api call
@@ -34,6 +39,17 @@ export default function Element() {
     const fetchData = async () => {
       try {
         setLoading(true);
+
+        // call fetchUniqueElements to get answers
+        const randomElements = await fetchUniqueElements(4);
+        setElements(randomElements);
+
+        // set a randomElement[x] as correct answer
+        const randomCorrectIndex = Math.floor(
+          Math.random() * randomElements.length
+        );
+        setAnswer(randomElements[randomCorrectIndex]);
+
         const response = await GET();
         const data = response.data.data[randomIndex];
 
@@ -52,20 +68,21 @@ export default function Element() {
         } = data;
 
         // pass bundled data to zustand
-        setElement({
-          atomicMass,
-          category,
-          density,
-          discoveredBy,
-          melt,
-          name,
-          number,
-          period,
-          phase,
-          symbol,
-        });
+        setElements([
+          {
+            atomicMass,
+            category,
+            density,
+            discoveredBy,
+            melt,
+            name,
+            number,
+            period,
+            phase,
+            symbol,
+          },
+        ]);
 
-        console.log(element);
         setLoading(false);
       } catch (error) {
         setError(error.message);
@@ -82,8 +99,8 @@ export default function Element() {
 
     return (
       <div className="border-4 p-6 border-secondary place-self-center mt-24 rounded-md shadow-md transition-all duration-1000">
-        <span>{element?.number}</span>
-        <h1 className="font-bold text-3xl">{element?.symbol}</h1>
+        <span>{answer?.number}</span>
+        <h1 className="font-bold text-3xl">{answer?.symbol}</h1>
       </div>
     );
   }

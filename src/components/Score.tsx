@@ -22,7 +22,7 @@ export default function Score() {
           <Link
             onClick={handleGameMode}
             to="/"
-            className="btn btn-outline w-[15%] rounded-full place-self-center"
+            className="btn btn-outline w-[15%] min-w-[175px] rounded-full place-self-center"
           >
             Return to Main
           </Link>

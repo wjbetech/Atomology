@@ -1,32 +1,37 @@
 import { create } from "zustand";
 
-interface GameState {
+// define the shape of items inside ElementType array & for answer
+export interface ElementType {
+  atomicMass: number;
+  category: string;
+  density: number;
+  discoveredBy: string;
+  melt: number | null;
+  name: string;
+  number: number;
+  period: number;
+  phase: string;
+  symbol: string;
+}
+
+export interface GameState {
   gameMode: string;
   score: number;
-  element: {
-    atomicMass: number;
-    category: string;
-    density: number;
-    discoveredBy: string;
-    melt: number | null;
-    name: string;
-    number: number;
-    period: number;
-    phase: string;
-    symbol: string;
-  } | null;
+  elements: ElementType[]; // now that elements contains four, it should be shaped as array
   loading: boolean;
   error: boolean;
   gameStarted: boolean;
+  answer: ElementType | null; // and now answer will be an item of shape ElementType or null
   setGameMode: (mode: string) => void;
   setScore: (score: number) => void;
-  setElement: (element: GameState["element"]) => void;
+  setElements: (elements: ElementType[]) => void;
   setLoading: (loading: boolean) => void;
   setError: (error: boolean) => void;
   setGameStarted: (gameStarted: boolean) => void;
+  setAnswer: (answer: ElementType | null) => void;
 }
 
-interface uiSlice {
+export interface uiSlice {
   theme: string;
   setTheme: (theme: string) => void;
 }
@@ -34,16 +39,18 @@ interface uiSlice {
 export const useGameStore = create<GameState>((set) => ({
   gameMode: "multi",
   score: 0,
-  element: null,
+  elements: [],
   loading: false,
   error: false,
   gameStarted: false,
+  answer: null,
   setLoading: (loading) => set({ loading }),
   setError: (error) => set({ error }),
   setGameMode: (mode) => set({ gameMode: mode }),
   setScore: (score) => set({ score }),
-  setElement: (element) => set({ element }),
+  setElements: (elements) => set({ elements }),
   setGameStarted: (gameStarted) => set({ gameStarted }),
+  setAnswer: (answer) => set({ answer }),
 }));
 
 export const useUIStore = create<uiSlice>((set) => ({

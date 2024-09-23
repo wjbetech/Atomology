@@ -2,21 +2,27 @@ import React from "react";
 import { useGameStore } from "../store/atomologyStore";
 
 export default function Answer() {
-  const { gameMode, setGameMode, gameStarted, setGameStarted } = useGameStore();
+  const {
+    gameMode,
+    setGameMode,
+    gameStarted,
+    setGameStarted,
+    elements,
+    answer,
+  } = useGameStore();
+
+  console.log(elements);
 
   if (gameStarted && gameMode === "multi") {
     return (
       <div className="my-10 flex flex-col gap-y-2 w-[200px]">
-        <button className="btn btn-outline rounded-full px-4">answer 1</button>
-        <button className="btn btn-outline rounded-full px-4 w-full">
-          answer 2
-        </button>
-        <button className="btn btn-outline rounded-full px-4 w-full">
-          answer 3
-        </button>
-        <button className="btn btn-outline rounded-full px-4 w-full">
-          answer 4
-        </button>
+        {elements.map((e) => {
+          return (
+            <button className="btn btn-outline rounded-full" key={e.period}>
+              {e.name}
+            </button>
+          );
+        })}
       </div>
     );
   }
