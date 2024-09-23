@@ -59,7 +59,7 @@ export default function Element() {
     if (error) return <p className="mt-24">Error: {error}</p>;
 
     return (
-      <div className="relative p-8 place-self-center rounded-lg bg-opacity-50 bg-gradient-to-rshadow-lg backdrop-blur-md transition-all duration-500 w-[100px]">
+      <div className="relative p-8 place-self-center rounded-lg bg-opacity-50 bg-gradient-to-rshadow-lg backdrop-blur-md transition-all duration-500 w-[125px]">
         <div className="absolute -inset-1 rounded-lg bg-gradient-to-r from-white to-transparent blur opacity-20"></div>
 
         {/* Main content with number and symbol */}

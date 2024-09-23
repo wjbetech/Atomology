@@ -17,8 +17,8 @@ export default function Score() {
   if (gameStarted) {
     return (
       <>
-        <div className="absolute inset-x-0 bottom-6 flex flex-col gap-2">
-          <span>Current Score: {score}</span>
+        <div className="absolute inset-x-0 font-semibold bottom-6 flex flex-col gap-2">
+          <span>Score: {score}</span>
           <Link
             onClick={handleGameMode}
             to="/"
