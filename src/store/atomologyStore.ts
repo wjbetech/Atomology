@@ -17,13 +17,13 @@ export interface ElementType {
 export interface GameState {
   gameMode: string;
   score: number;
-  elements: ElementType[]; // now that elements contains four, it should be shaped as array
+  elements: ElementType[];
   loading: boolean;
   error: boolean;
   gameStarted: boolean;
-  answer: ElementType | null; // and now answer will be an item of shape ElementType or null
+  answer: ElementType | null;
   setGameMode: (mode: string) => void;
-  setScore: (score: number) => void;
+  setScore: (update: number | ((prevScore: number) => number)) => void;
   setElements: (elements: ElementType[]) => void;
   setLoading: (loading: boolean) => void;
   setError: (error: boolean) => void;
@@ -47,7 +47,10 @@ export const useGameStore = create<GameState>((set) => ({
   setLoading: (loading) => set({ loading }),
   setError: (error) => set({ error }),
   setGameMode: (mode) => set({ gameMode: mode }),
-  setScore: (score) => set({ score }),
+  setScore: (update) =>
+    set((state) => ({
+      score: typeof update === "function" ? update(state.score) : update,
+    })),
   setElements: (elements) => set({ elements }),
   setGameStarted: (gameStarted) => set({ gameStarted }),
   setAnswer: (answer) => set({ answer }),

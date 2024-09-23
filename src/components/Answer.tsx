@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { useGameStore } from "../store/atomologyStore";
 
 export default function Answer() {
-  const { gameMode, gameStarted, elements } = useGameStore();
-  const { input, setInput } = useState("");
+  const { answer, setScore, gameMode, gameStarted, elements } = useGameStore();
+  const [input, setInput] = useState("");
 
   console.log(elements);
 
@@ -12,11 +12,23 @@ export default function Answer() {
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInput(e.target.value);
     console.log(e.target.value);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     console.log("you submitted your guess!");
+
+    // game logic
+    const inputElement = e.currentTarget.elements.namedItem(
+      "answer"
+    ) as HTMLInputElement;
+    const givenAnswer = inputElement?.value;
+
+    if (answer && givenAnswer == answer.name) {
+      setScore((prevScore: number) => prevScore + 1);
+    }
   };
 
   if (elements.length === 4) {
@@ -41,7 +53,7 @@ export default function Answer() {
 
     if (gameStarted && gameMode === "open") {
       return (
-        <div>
+        <form onSubmit={handleSubmit}>
           <input
             type="text"
             name="answer"
@@ -49,10 +61,9 @@ export default function Answer() {
             value={input}
             className="rounded-full mt-[100px] input input-bordered placeholder:text-gray-400/50 placeholder:italic"
             onChange={handleChange}
-            onSubmit={handleSubmit}
             placeholder="What's that element..."
           />
-        </div>
+        </form>
       );
     }
   }
