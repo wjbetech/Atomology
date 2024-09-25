@@ -31,6 +31,7 @@ export default function Answer() {
 
     if (answer && givenAnswer == answer.name) {
       setScore((prevScore: number) => prevScore + 1);
+      setInput("");
     }
   };
 
