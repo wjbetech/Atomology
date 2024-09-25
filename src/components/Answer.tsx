@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { useGameStore } from "../store/atomologyStore";
 
+// sanitiser hook
+import { sanitiseAnswer } from "../utils/answerSanitiser";
+
 export default function Answer() {
   const { answer, setScore, gameMode, gameStarted, elements } = useGameStore();
   const [input, setInput] = useState("");
@@ -24,7 +27,7 @@ export default function Answer() {
     const inputElement = e.currentTarget.elements.namedItem(
       "answer"
     ) as HTMLInputElement;
-    const givenAnswer = inputElement?.value;
+    const givenAnswer = sanitiseAnswer(inputElement?.value);
 
     if (answer && givenAnswer == answer.name) {
       setScore((prevScore: number) => prevScore + 1);
