@@ -25,6 +25,7 @@ export default function Element() {
     setAnswer,
     setGameStarted,
     score,
+    setAnswerElementName,
   } = useGameStore();
 
   // async GET api call
@@ -43,6 +44,7 @@ export default function Element() {
         // set a randomElement[x] as correct answer
         const randomCorrectIndex = Math.floor(Math.random() * 3);
         setAnswer(randomElements[randomCorrectIndex]);
+        setAnswerElementName(answer && answer.name);
 
         setGameStarted(true);
         setLoading(false);

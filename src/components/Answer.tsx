@@ -5,10 +5,17 @@ import { useGameStore } from "../store/atomologyStore";
 import { sanitiseAnswer } from "../utils/answerSanitiser";
 
 export default function Answer() {
-  const { answer, setScore, gameMode, gameStarted, elements } = useGameStore();
+  const {
+    answer,
+    setScore,
+    gameMode,
+    gameStarted,
+    elements,
+    playerAnswer,
+    setPlayerAnswer,
+    answerElementName,
+  } = useGameStore();
   const [input, setInput] = useState("");
-
-  console.log(elements);
 
   const handleMultiButtonSubmit = () => {
     console.log("you clicked a multi choice button!");
@@ -28,6 +35,7 @@ export default function Answer() {
       "answer"
     ) as HTMLInputElement;
     const givenAnswer = sanitiseAnswer(inputElement?.value);
+    setPlayerAnswer(givenAnswer);
 
     if (answer && givenAnswer == answer.name) {
       setScore((prevScore: number) => prevScore + 1);
@@ -67,6 +75,13 @@ export default function Answer() {
             onChange={handleChange}
             placeholder="What's that element..."
           />
+          {playerAnswer && playerAnswer !== answerElementName ? (
+            <div className="label relative">
+              <span className="label-text-alt text-red-500">
+                Incorrect, try again!
+              </span>
+            </div>
+          ) : null}
         </form>
       );
     }

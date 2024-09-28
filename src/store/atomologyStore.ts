@@ -22,6 +22,8 @@ export interface GameState {
   error: boolean;
   gameStarted: boolean;
   answer: ElementType | null;
+  answerElementName: ElementType["name"] | null;
+  playerAnswer: string | null;
   setGameMode: (mode: string) => void;
   setScore: (update: number | ((prevScore: number) => number)) => void;
   setElements: (elements: ElementType[]) => void;
@@ -29,6 +31,8 @@ export interface GameState {
   setError: (error: boolean) => void;
   setGameStarted: (gameStarted: boolean) => void;
   setAnswer: (answer: ElementType | null) => void;
+  setAnswerElementName: (name: ElementType["name"] | null) => void;
+  setPlayerAnswer: (answer: string | null) => void;
 }
 
 export interface uiSlice {
@@ -44,6 +48,9 @@ export const useGameStore = create<GameState>((set) => ({
   error: false,
   gameStarted: false,
   answer: null,
+  playerAnswer: null,
+  answerElementName: "",
+  setPlayerAnswer: (playerAnswer) => set({ playerAnswer: playerAnswer }),
   setLoading: (loading) => set({ loading }),
   setError: (error) => set({ error }),
   setGameMode: (mode) => set({ gameMode: mode }),
@@ -52,6 +59,7 @@ export const useGameStore = create<GameState>((set) => ({
       score: typeof update === "function" ? update(state.score) : update,
     })),
   setElements: (elements) => set({ elements }),
+  setAnswerElementName: (name) => set({ answerElementName: name }),
   setGameStarted: (gameStarted) => set({ gameStarted }),
   setAnswer: (answer) => set({ answer }),
 }));
