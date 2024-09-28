@@ -57,7 +57,7 @@ export default function Answer() {
 
     if (gameStarted && gameMode === "open") {
       return (
-        <form onSubmit={handleSubmit}>
+        <form className="form-control" onSubmit={handleSubmit}>
           <input
             type="text"
             name="answer"

@@ -7,8 +7,8 @@ export default function Faq({}: Props) {
     <div className="flex flex-col gap-y-10 width-[1000px]">
       <h1 className="text-xl font-bold">FAQ</h1>
 
-      <div className="items-start w-[500px] text-left flex flex-col gap-y-8">
-        <section className="flex flex-col gap-y-4">
+      <section className="items-start w-[500px] text-left flex flex-col gap-y-8">
+        <div className="flex flex-col gap-y-4">
           <span className="text-left font-bold text-xl">
             How do I play the game?
           </span>
@@ -21,8 +21,8 @@ export default function Faq({}: Props) {
             from, while Open Answer will allow you to freely type in what you
             think the element being shown to you is.
           </p>
-        </section>
-        <section className="flex flex-col gap-y-4">
+        </div>
+        <div className="flex flex-col gap-y-4">
           <span className="text-left font-bold text-xl">
             Are you planning on implementing x-feature?
           </span>
@@ -32,8 +32,8 @@ export default function Faq({}: Props) {
             maintain the <span className="italic">uncompetitiveness</span> of
             the game.
           </p>
-        </section>
-      </div>
+        </div>
+      </section>
     </div>
   );
 }

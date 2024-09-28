@@ -24,6 +24,7 @@ export default function Element() {
     answer,
     setAnswer,
     setGameStarted,
+    score,
   } = useGameStore();
 
   // async GET api call
@@ -51,7 +52,7 @@ export default function Element() {
       }
     };
     fetchData();
-  }, [gameStarted, setLoading, setElements, setAnswer, setError]);
+  }, [gameStarted, setLoading, setElements, setAnswer, setError, score]);
 
   if (gameStarted) {
     // conditional rendering for loading and errors
