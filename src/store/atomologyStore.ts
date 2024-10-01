@@ -24,6 +24,7 @@ export interface GameState {
   answer: ElementType | null;
   answerElementName: ElementType["name"] | null;
   playerAnswer: string | null;
+  fetchTrigger: number;
   setGameMode: (mode: string) => void;
   setScore: (update: number | ((prevScore: number) => number)) => void;
   setElements: (elements: ElementType[]) => void;
@@ -33,6 +34,7 @@ export interface GameState {
   setAnswer: (answer: ElementType | null) => void;
   setAnswerElementName: (name: ElementType["name"] | null) => void;
   setPlayerAnswer: (answer: string | null) => void;
+  setFetchTrigger: () => void;
 }
 
 export interface uiSlice {
@@ -50,6 +52,7 @@ export const useGameStore = create<GameState>((set) => ({
   answer: null,
   playerAnswer: null,
   answerElementName: "",
+  fetchTrigger: 0,
   setPlayerAnswer: (playerAnswer) => set({ playerAnswer: playerAnswer }),
   setLoading: (loading) => set({ loading }),
   setError: (error) => set({ error }),
@@ -62,6 +65,8 @@ export const useGameStore = create<GameState>((set) => ({
   setAnswerElementName: (name) => set({ answerElementName: name }),
   setGameStarted: (gameStarted) => set({ gameStarted }),
   setAnswer: (answer) => set({ answer }),
+  setFetchTrigger: () =>
+    set((state) => ({ fetchTrigger: state.fetchTrigger + 1 })),
 }));
 
 export const useUIStore = create<uiSlice>((set) => ({

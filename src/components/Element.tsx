@@ -23,9 +23,8 @@ export default function Element() {
     gameStarted,
     answer,
     setAnswer,
-    setGameStarted,
-    score,
     setAnswerElementName,
+    fetchTrigger,
   } = useGameStore();
 
   // async GET api call
@@ -46,7 +45,6 @@ export default function Element() {
         setAnswer(randomElements[randomCorrectIndex]);
         setAnswerElementName(answer && answer.name);
 
-        setGameStarted(true);
         setLoading(false);
       } catch (error) {
         setError(error.message);
@@ -54,7 +52,7 @@ export default function Element() {
       }
     };
     fetchData();
-  }, [gameStarted, setLoading, setElements, setAnswer, setError, score]);
+  }, [gameStarted, fetchTrigger]);
 
   if (gameStarted) {
     // conditional rendering for loading and errors
@@ -78,4 +76,6 @@ export default function Element() {
       </div>
     );
   }
+
+  return null;
 }

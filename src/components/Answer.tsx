@@ -6,6 +6,7 @@ import { sanitiseAnswer } from "../utils/answerSanitiser";
 
 export default function Answer() {
   const {
+    loading,
     answer,
     setScore,
     gameMode,
@@ -14,6 +15,7 @@ export default function Answer() {
     playerAnswer,
     setPlayerAnswer,
     answerElementName,
+    setFetchTrigger,
   } = useGameStore();
   const [input, setInput] = useState("");
 
@@ -40,6 +42,7 @@ export default function Answer() {
     if (answer && givenAnswer == answer.name) {
       setScore((prevScore: number) => prevScore + 1);
       setInput("");
+      setFetchTrigger();
     }
   };
 
@@ -75,9 +78,9 @@ export default function Answer() {
             onChange={handleChange}
             placeholder="What's that element..."
           />
-          {playerAnswer && playerAnswer !== answerElementName ? (
-            <div className="label relative">
-              <span className="label-text-alt text-red-500">
+          {!loading && playerAnswer !== answerElementName ? (
+            <div className="label">
+              <span className="label-text-alt text-red-500 relative pt-2">
                 Incorrect, try again!
               </span>
             </div>
