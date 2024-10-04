@@ -19,16 +19,26 @@ export default function Answer() {
   } = useGameStore();
   const [input, setInput] = useState("");
 
-  const handleMultiButtonSubmit = () => {
-    console.log("you clicked a multi choice button!");
-  };
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
     console.log(e.target.value);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleMultiSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
+    console.log("you submitted your guess!");
+
+    // game logic
+    const selectedAnswer = e.currentTarget.value;
+    setPlayerAnswer(selectedAnswer);
+
+    if (answer && selectedAnswer === answer.name) {
+      setScore((prevScore: number) => prevScore + 1);
+      setInput("");
+      setFetchTrigger();
+    }
+  };
+
+  const handleOpenSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("you submitted your guess!");
 
@@ -49,12 +59,14 @@ export default function Answer() {
   if (elements.length === 4) {
     if (gameStarted && gameMode === "multi") {
       return (
-        <div className="my-10 flex flex-col gap-y-2 w-[200px]">
+        <div className="my-10 w-[200px] flex flex-col gap-y-2">
           {elements.map((e, idx) => {
             return (
               <button
-                onClick={handleMultiButtonSubmit}
+                onClick={handleMultiSubmit}
                 className="btn btn-outline rounded-full"
+                value={e.name}
+                id="answer"
                 key={e.name}
               >
                 <span>{idx + 1}.</span>
@@ -68,7 +80,7 @@ export default function Answer() {
 
     if (gameStarted && gameMode === "open") {
       return (
-        <form className="form-control" onSubmit={handleSubmit}>
+        <form className="form-control" onSubmit={handleOpenSubmit}>
           <input
             type="text"
             name="answer"
