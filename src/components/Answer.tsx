@@ -75,7 +75,7 @@ export default function Answer() {
             );
           })}
           {!loading && playerAnswer !== answerElementName ? (
-            <div className="label">
+            <div className="label" style={{ minHeight: "24px" }}>
               <span className="label-text-alt text-red-500 relative pt-2 font-semibold text-[16px] m-auto">
                 Incorrect, try again!
               </span>
@@ -98,7 +98,7 @@ export default function Answer() {
             placeholder="What's that element..."
           />
           {!loading && playerAnswer !== answerElementName ? (
-            <div className="label">
+            <div className="label" style={{ minHeight: "24px" }}>
               <span className="label-text-alt text-red-500 relative pt-2 font-semibold text-[16px] m-auto">
                 Incorrect, try again!
               </span>
