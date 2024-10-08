@@ -74,6 +74,13 @@ export default function Answer() {
               </button>
             );
           })}
+          {!loading && playerAnswer !== answerElementName ? (
+            <div className="label">
+              <span className="label-text-alt text-red-500 relative pt-2">
+                Incorrect, try again!
+              </span>
+            </div>
+          ) : null}
         </div>
       );
     }
