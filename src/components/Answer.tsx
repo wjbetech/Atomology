@@ -76,7 +76,7 @@ export default function Answer() {
           })}
           {!loading && playerAnswer !== answerElementName ? (
             <div className="label">
-              <span className="label-text-alt text-red-500 relative pt-2">
+              <span className="label-text-alt text-red-500 relative pt-2 font-semibold text-[16px] m-auto">
                 Incorrect, try again!
               </span>
             </div>
@@ -99,7 +99,7 @@ export default function Answer() {
           />
           {!loading && playerAnswer !== answerElementName ? (
             <div className="label">
-              <span className="label-text-alt text-red-500 relative pt-2">
+              <span className="label-text-alt text-red-500 relative pt-2 font-semibold text-[16px] m-auto">
                 Incorrect, try again!
               </span>
             </div>
