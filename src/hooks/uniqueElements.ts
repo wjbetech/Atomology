@@ -1,36 +1,45 @@
-// grab our zustand store
-import { ElementType, useGameStore } from "../store/atomologyStore";
-
-// get our API func
+import { ElementType } from "../store/atomologyStore";
 import { GET } from "../data/fetch";
 
-// fix count: any at some point
 export const fetchUniqueElements = async (
   count: number
 ): Promise<ElementType[]> => {
-  // ensure we have four unique ElementType shaped array
-  const uniqueElements = new Set<ElementType>();
+  // Fetch all elements in a single API call
+  const response = await GET();
+  const allElements = response.data.data;
 
-  while (uniqueElements.size < count) {
-    const randomIndex = Math.floor(Math.random() * 119);
-    const response = await GET();
-    const data = response.data.data[randomIndex];
+  // // -- blocked out what I think is useless --
+  // // Ensure we get at least the number of required unique elements
+  // if (allElements.length < count) {
+  //   throw new Error("Not enough elements available to select from.");
+  // }
 
-    const elementData: ElementType = {
-      atomicMass: data.atomic_mass,
-      category: data.category,
-      density: data.density,
-      discoveredBy: data.discovered_by,
-      melt: data.melt,
-      name: data.name,
-      number: data.number,
-      period: data.period,
-      phase: data.phase,
-      symbol: data.symbol,
-    };
+  // Randomly pick unique elements from the fetched data
+  const uniqueElements: ElementType[] = [];
+  const indices = new Set<number>();
 
-    // Add the element only if it's not already in the set
-    uniqueElements.add(elementData);
+  while (indices.size < count) {
+    const randomIndex = Math.floor(Math.random() * allElements.length);
+    if (!indices.has(randomIndex)) {
+      const data = allElements[randomIndex];
+      indices.add(randomIndex);
+
+      const elementData: ElementType = {
+        atomicMass: data.atomic_mass,
+        category: data.category,
+        density: data.density,
+        discoveredBy: data.discovered_by,
+        melt: data.melt,
+        name: data.name,
+        number: data.number,
+        period: data.period,
+        phase: data.phase,
+        symbol: data.symbol,
+      };
+
+      uniqueElements.push(elementData);
+    }
   }
-  return Array.from(uniqueElements);
+
+  return uniqueElements;
 };
