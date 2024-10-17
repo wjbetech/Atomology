@@ -7,7 +7,13 @@ import atoms from "../assets/atoms.svg";
 import { useGameStore } from "../store/atomologyStore";
 
 export default function GameMode() {
-  const { gameMode, setGameMode, gameStarted, setGameStarted } = useGameStore();
+  const {
+    gameMode,
+    setGameMode,
+    gameStarted,
+    setGameStarted,
+    setPlayerAnswer,
+  } = useGameStore();
 
   console.log(gameMode);
 
@@ -26,6 +32,7 @@ export default function GameMode() {
           onClick={() => {
             if (gameMode === "open") {
               setGameStarted(true);
+              setPlayerAnswer("");
               setGameMode("multi");
             }
             if (gameStarted === false) {
@@ -42,6 +49,7 @@ export default function GameMode() {
           onClick={() => {
             if (gameMode === "multi") {
               setGameStarted(true);
+              setPlayerAnswer("");
               setGameMode("open");
             }
             if (gameStarted === false) {

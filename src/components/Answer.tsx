@@ -57,7 +57,7 @@ export default function Answer() {
   };
 
   if (elements.length === 4) {
-    if (gameStarted && gameMode === "multi") {
+    if (gameStarted && gameMode === "multi" && !loading) {
       return (
         <div className="my-10 w-[200px] flex flex-col gap-y-2">
           {elements.map((e, idx) => {
@@ -74,7 +74,9 @@ export default function Answer() {
               </button>
             );
           })}
-          {!loading && playerAnswer !== answerElementName ? (
+          {!loading &&
+          playerAnswer !== answerElementName &&
+          playerAnswer !== "" ? (
             <div className="label" style={{ minHeight: "24px" }}>
               <span className="label-text-alt text-red-500 relative pt-2 font-semibold text-[16px] m-auto">
                 Incorrect, try again!
@@ -97,7 +99,9 @@ export default function Answer() {
             onChange={handleChange}
             placeholder="What's that element..."
           />
-          {!loading && playerAnswer !== answerElementName ? (
+          {!loading &&
+          playerAnswer !== answerElementName &&
+          playerAnswer !== "" ? (
             <div className="label" style={{ minHeight: "24px" }}>
               <span className="label-text-alt text-red-500 relative pt-2 font-semibold text-[16px] m-auto">
                 Incorrect, try again!
