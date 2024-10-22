@@ -8,9 +8,9 @@ export default {
   },
   plugins: [daisyui],
   daisyui: {
-    themes: ["retro", "business"],
-    lightTheme: "retro",
-    darkTheme: "business",
+    themes: ["light", "dark"],
+    // lightTheme: "retro",
+    // darkTheme: "business",
     base: true,
     styled: true,
     utils: true,

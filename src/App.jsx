@@ -6,6 +6,7 @@ import Score from "./components/Score";
 import Answer from "./components/Answer";
 import About from "./components/About";
 import Faq from "./components/Faq";
+import Footer from "./components/Footer";
 
 // react-router
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -34,6 +35,7 @@ function App() {
             />
           </Routes>
         </div>
+        <Footer />
       </div>
     </Router>
   );
