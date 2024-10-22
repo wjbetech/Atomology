@@ -95,7 +95,7 @@ export default function Answer() {
             name="answer"
             id="answer"
             value={input}
-            className="rounded-full mt-[100px] input input-bordered placeholder:text-gray-400/50 placeholder:italic"
+            className="rounded-full input input-bordered placeholder:text-gray-400/50 placeholder:italic"
             onChange={handleChange}
             placeholder="What's that element..."
           />

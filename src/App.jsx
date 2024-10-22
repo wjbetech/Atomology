@@ -23,14 +23,14 @@ function App() {
             <Route
               path="/"
               element={
-                <>
+                <div className="flex flex-col gap-y-10">
                   <GameMode />
                   <Element />
                   <div>
                     <Answer />
                   </div>
                   <Score />
-                </>
+                </div>
               }
             />
           </Routes>
