@@ -1,17 +1,17 @@
 import React from "react";
 
+import arrow from "../assets/arrow-left.svg";
+
 type Props = {};
 
 export default function Faq({}: Props) {
   return (
-    <div className="flex flex-col gap-y-10 width-[1000px]">
-      <h1 className="text-xl font-bold">FAQ</h1>
+    <div className="flex flex-col gap-y-10 width-[1000px] text-center justify-center items-center">
+      <h1 className="text-2xl font-bold mb-10">FAQ</h1>
 
-      <section className="items-start w-[500px] text-left flex flex-col gap-y-8">
+      <section className="items-start w-[500px] flex flex-col gap-y-8">
         <div className="flex flex-col gap-y-4">
-          <span className="text-left font-bold text-xl">
-            How do I play the game?
-          </span>
+          <span className="t font-bold text-xl">How do I play the game?</span>
           <p>
             On the home, or main page, you can select either multiple choice or
             open answer methods to play Atomology.
@@ -23,8 +23,9 @@ export default function Faq({}: Props) {
           </p>
         </div>
         <div className="flex flex-col gap-y-4">
-          <span className="text-left font-bold text-xl">
-            Are you planning on implementing x-feature?
+          <span className="font-bold text-xl">
+            Are you planning on implementing{" "}
+            <span className="italic">x feature?</span>
           </span>
           <p>
             I will happily look at any requests for features sent to
@@ -32,6 +33,11 @@ export default function Faq({}: Props) {
             maintain the <span className="italic">uncompetitiveness</span> of
             the game.
           </p>
+        </div>
+        <div className="flex justify-center m-auto">
+          <a href="/" className="flex flex-row">
+            <img className="" width={20} height={20} src={arrow}></img> Back
+          </a>
         </div>
       </section>
     </div>

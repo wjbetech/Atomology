@@ -1,5 +1,7 @@
 import React from "react";
 
+import arrow from "../assets/arrow-left.svg";
+
 type Props = {};
 
 export default function About({}: Props) {
@@ -23,6 +25,11 @@ export default function About({}: Props) {
         incorrectly.
       </p>
       <p>Have fun everyone!</p>
+      <div className="flex justify-center">
+        <a href="/" className="flex flex-row">
+          <img className="" width={20} height={20} src={arrow}></img> Back
+        </a>
+      </div>
     </div>
   );
 }
