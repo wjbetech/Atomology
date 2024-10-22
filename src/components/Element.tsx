@@ -61,12 +61,12 @@ export default function Element() {
 
     return (
       <div className="relative p-8 place-self-center rounded-lg bg-opacity-50 bg-gradient-to-rshadow-lg backdrop-blur-md transition-all duration-500 w-[125px]">
-        <div className="absolute -inset-1 rounded-lg bg-gradient-to-r from-white to-transparent blur opacity-20"></div>
+        <div className="absolute -inset-1 rounded-lg bg-gradient-to-r from-black to-transparent blur opacity-20"></div>
 
         {/* Main content with number and symbol */}
         <div className="relative z-10 flex flex-col items-center justify-center">
-          <span className="text-white drop-shadow-lg">{answer?.number}</span>
-          <h1 className="font-semibold text-5xl text-white drop-shadow-lg tracking-wider">
+          <span className="drop-shadow-lg">{answer?.number}</span>
+          <h1 className="font-semibold text-5xl drop-shadow-lg tracking-wider">
             {answer?.symbol}
           </h1>
         </div>
