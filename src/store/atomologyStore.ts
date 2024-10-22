@@ -70,6 +70,6 @@ export const useGameStore = create<GameState>((set) => ({
 }));
 
 export const useUIStore = create<uiSlice>((set) => ({
-  theme: "dark",
+  theme: "light",
   setTheme: (theme) => set({ theme }),
 }));

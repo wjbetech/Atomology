@@ -9,8 +9,8 @@ export default {
   plugins: [daisyui],
   daisyui: {
     themes: ["light", "dark"],
-    // lightTheme: "retro",
-    // darkTheme: "business",
+    lightTheme: "light",
+    darkTheme: "business",
     base: true,
     styled: true,
     utils: true,
