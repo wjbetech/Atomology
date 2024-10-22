@@ -25,7 +25,7 @@ export default function GameMode() {
     <div className="flex flex-col gap-8 justif items-center transition-all duration-1000">
       <img src={atoms} alt="" className="rotate w-16 h-16" />
       <h1 className="font-serif text-5xl">Atomology</h1>
-      <div className="flex gap-6">
+      <div className="flex gap-6 justify-center">
         <button
           id="multiple"
           value="multiple"
