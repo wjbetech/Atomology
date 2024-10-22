@@ -35,6 +35,7 @@ export interface GameState {
   setAnswerElementName: (name: ElementType["name"] | null) => void;
   setPlayerAnswer: (answer: string | null) => void;
   setFetchTrigger: () => void;
+  resetAnswerInput: () => void;
 }
 
 export interface uiSlice {
@@ -67,6 +68,10 @@ export const useGameStore = create<GameState>((set) => ({
   setAnswer: (answer) => set({ answer }),
   setFetchTrigger: () =>
     set((state) => ({ fetchTrigger: state.fetchTrigger + 1 })),
+  resetAnswerInput: () =>
+    set({
+      playerAnswer: "",
+    }),
 }));
 
 export const useUIStore = create<uiSlice>((set) => ({

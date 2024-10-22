@@ -7,11 +7,13 @@ import { Link } from "react-router-dom";
 import { useGameStore } from "../store/atomologyStore";
 
 export default function Score() {
-  const { score, setScore, gameStarted, setGameStarted } = useGameStore();
+  const { score, setScore, gameStarted, setGameStarted, resetAnswerInput } =
+    useGameStore();
 
   const handleGameMode = () => {
     setGameStarted(false);
     setScore(0);
+    resetAnswerInput();
   };
 
   if (gameStarted) {

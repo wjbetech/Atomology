@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useGameStore } from "../store/atomologyStore";
 
 // sanitiser hook
@@ -18,6 +18,12 @@ export default function Answer() {
     setFetchTrigger,
   } = useGameStore();
   const [input, setInput] = useState("");
+
+  useEffect(() => {
+    if (!gameStarted) {
+      setInput("");
+    }
+  }, [gameStarted]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
