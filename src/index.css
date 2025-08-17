@@ -26,3 +26,27 @@
     transform: rotate(359deg);
   }
 }
+
+/* Responsive overall scaling wrapper for very small screens */
+.atomology-scale-wrap {
+  transform-origin: top center;
+}
+
+/* iPhone SE-ish and small phones: scale down */
+@media (max-width: 380px) {
+  .atomology-scale-wrap {
+    transform: scale(0.82);
+  }
+}
+
+/* small tablets and large phones: a bit less scaling */
+@media (min-width: 381px) and (max-width: 640px) {
+  .atomology-scale-wrap {
+    transform: scale(0.92);
+  }
+}
+
+/* smooth scale transition when resizing */
+.atomology-scale-wrap {
+  transition: transform 180ms ease;
+}

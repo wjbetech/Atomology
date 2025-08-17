@@ -22,15 +22,17 @@ function App() {
           <Route
             path="/"
             element={
-              <div className="flex flex-col gap-y-10 justify-center items-center">
-                <GameMode />
-                <div className="flex flex-col gap-y-10">
-                  <Element />
-                  <Answer />
-                </div>
-                {/* spacing needs fixing */}
-                <div className="absolute bottom-20">
-                  <Score />
+              <div className="atomology-scale-wrap">
+                <div className="flex flex-col gap-y-10 justify-center items-center">
+                  <GameMode />
+                  <div className="flex flex-col gap-y-10 mt-20 lg:mt-0">
+                    <Element />
+                    <Answer />
+                  </div>
+                  {/* spacing: keep score in normal flow on small screens to avoid overlap; absolute on large screens */}
+                  <div className="static lg:absolute lg:bottom-20">
+                    <Score />
+                  </div>
                 </div>
               </div>
             }

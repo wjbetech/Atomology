@@ -32,11 +32,11 @@ export default function Score() {
   if (gameStarted) {
     return (
       <>
-        <div className="font-semibold bottom-6 flex flex-col gap-2">
+        <div className="font-semibold my-4 flex flex-col items-center gap-2">
           <span>Score: {score}</span>
           <button
             onClick={() => setShowConfirm(true)}
-            className="btn btn-outline w-[15%] min-w-[175px] rounded-full place-self-center"
+            className="btn btn-outline w-full sm:w-auto sm:min-w-[175px] rounded-full self-center"
           >
             Return to Main
           </button>

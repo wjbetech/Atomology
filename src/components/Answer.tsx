@@ -58,8 +58,8 @@ export default function Answer() {
     }, duration) as unknown as number;
   };
 
+  // Handle multi-choice button click
   const handleMultiSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
-    // game logic
     const selectedAnswer = e.currentTarget.value;
     setPlayerAnswer(selectedAnswer);
     // ignore if already disabled or the round is already locked
@@ -132,7 +132,7 @@ export default function Answer() {
 
     if (gameStarted && gameMode === "multi" && !loading) {
       return (
-        <div className="my-10 w-[200px] flex flex-col gap-y-2">
+        <div className="my-10 w-full px-1 sm:px-4 lg:px-0 lg:max-w-[640px] mx-auto grid grid-cols-2 lg:grid-cols-1 justify-center gap-3">
           {elements.map((e, idx) => {
             // Disabled state: previously chosen wrong answers stay disabled for the round.
             const wasPickedWrong = disabledAnswers.has(e.name);
@@ -140,7 +140,7 @@ export default function Answer() {
             // should be disabled (but we still want to highlight the correct one).
             const isThisDisabled = wasPickedWrong || answeredCorrect;
             let btnClass =
-              "btn btn-outline rounded-full transition-all duration-300";
+              "btn btn-outline rounded-full overflow-hidden shadow-sm transition-all duration-300 w-full min-w-[110px] h-14 lg:h-12 flex items-center gap-3 px-4 lg:px-3 text-sm lg:text-base";
             // If the round is locked and this is the correct answer, show deep green with white text
             if (answeredCorrect && answer && e.name === answer.name) {
               btnClass += " bg-green-800 text-white border-green-900";
@@ -165,15 +165,27 @@ export default function Answer() {
                 key={e.name}
                 disabled={isThisDisabled}
               >
-                <span>{idx + 1}.</span>
-                {e.name}
+                <span className="font-semibold w-6 text-left text-sm lg:text-base">
+                  {idx + 1}.
+                </span>
+                <span className="text-left truncate text-sm lg:text-base">
+                  {e.name}
+                </span>
               </button>
             );
           })}
           <div
-            className="label relative flex items-center justify-center"
+            className="label relative flex items-center justify-center col-span-2 lg:col-span-1"
             style={{ minHeight: "24px", height: "24px" }}
           >
+            {/* screen-reader live region; kept visually hidden but updates when message changes */}
+            <span className="sr-only" role="status" aria-live="polite">
+              {message === "incorrect"
+                ? "Incorrect, try again!"
+                : message === "correct"
+                ? "Correct!"
+                : ""}
+            </span>
             <AnimatePresence>
               {message === "incorrect" && !loading ? (
                 <motion.span

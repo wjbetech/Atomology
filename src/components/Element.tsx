@@ -26,6 +26,7 @@ export default function Element() {
     setAnswer,
     setAnswerElementName,
     playerAnswer,
+    setPlayerAnswer,
     fetchTrigger,
   } = useGameStore();
 
@@ -100,8 +101,7 @@ export default function Element() {
           setAnswer(correctElement as any);
           setAnswerElementName(correctElement.name);
           // clear playerAnswer so UI resets
-          // store setter available via useGameStore; call directly to avoid importing again
-          // useGameStore.getState().setPlayerAnswer(""); // avoid direct getState here
+          setPlayerAnswer("");
           setPrefetching(false);
         }, 2000) as unknown as number;
       } catch (err) {
