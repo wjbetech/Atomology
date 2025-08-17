@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useGameStore } from "../store/atomologyStore";
 
 // sanitiser hook
@@ -19,6 +20,10 @@ export default function Answer() {
   } = useGameStore();
   const [input, setInput] = useState("");
   const [showIncorrect, setShowIncorrect] = useState(false);
+  // Track wrong answers that have been disabled for the current round
+  const [disabledAnswers, setDisabledAnswers] = useState<Set<string>>(
+    new Set()
+  );
 
   useEffect(() => {
     if (!gameStarted) {
@@ -35,14 +40,20 @@ export default function Answer() {
     // game logic
     const selectedAnswer = e.currentTarget.value;
     setPlayerAnswer(selectedAnswer);
+    // ignore if already disabled
+    if (disabledAnswers.has(selectedAnswer)) return;
 
     if (answer && selectedAnswer === answer.name) {
       setScore((prevScore: number) => prevScore + 1);
       setInput("");
+      // reset disabled answers for next round
+      setDisabledAnswers(new Set());
       setFetchTrigger();
     } else {
+      // add this wrong answer to the disabled set for the round
+      setDisabledAnswers((prev) => new Set(prev).add(selectedAnswer));
       setShowIncorrect(true);
-      setTimeout(() => setShowIncorrect(false), 6000);
+      setTimeout(() => setShowIncorrect(false), 4000);
     }
   };
 
@@ -61,6 +72,9 @@ export default function Answer() {
       setScore((prevScore: number) => prevScore + 1);
       setInput("");
       setFetchTrigger();
+    } else {
+      setShowIncorrect(true);
+      setTimeout(() => setShowIncorrect(false), 4000);
     }
   };
 
@@ -74,13 +88,13 @@ export default function Answer() {
       return (
         <div className="my-10 w-[200px] flex flex-col gap-y-2">
           {elements.map((e, idx) => {
-            // Muted/disabled for incorrect
-            const isThisIncorrect = isIncorrect && playerAnswer === e.name;
+            // Disabled state: any previously chosen wrong answer stays disabled for the round
+            const isThisDisabled = disabledAnswers.has(e.name);
             let btnClass =
               "btn btn-outline rounded-full transition-all duration-300";
             if (isCorrect && playerAnswer === e.name)
               btnClass += " bg-green-200 border-green-500 animate-pulse";
-            if (isThisIncorrect)
+            if (isThisDisabled)
               btnClass +=
                 " bg-gray-100 border-red-300 text-gray-500 opacity-80 cursor-not-allowed ring-1 ring-red-200";
             return (
@@ -90,27 +104,44 @@ export default function Answer() {
                 value={e.name}
                 id="answer"
                 key={e.name}
-                disabled={isThisIncorrect}
+                disabled={isThisDisabled}
               >
                 <span>{idx + 1}.</span>
                 {e.name}
               </button>
             );
           })}
-          <div className="label" style={{ minHeight: "24px", height: "24px" }}>
-            {showIncorrect && !loading ? (
-              <span
-                className="label-text-alt text-red-500 relative pt-2 font-semibold text-[16px] m-auto animate-shake"
-                style={{ position: "absolute" }}
-              >
-                Incorrect, try again!
-              </span>
-            ) : null}
-            {!loading && isCorrect ? (
-              <span className="label-text-alt text-green-600 relative pt-2 font-semibold text-[16px] m-auto animate-pulse">
-                Correct!
-              </span>
-            ) : null}
+          <div
+            className="label relative flex items-center justify-center"
+            style={{ minHeight: "24px", height: "24px" }}
+          >
+            <AnimatePresence>
+              {showIncorrect && !loading ? (
+                <motion.span
+                  key="incorrect"
+                  initial={{ opacity: 0, y: -6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -6 }}
+                  transition={{ duration: 0.3 }}
+                  className="label-text-alt text-red-500 pt-2 font-semibold text-[16px] absolute inset-x-0 top-3 text-center whitespace-nowrap"
+                >
+                  Incorrect, try again!
+                </motion.span>
+              ) : null}
+
+              {!loading && isCorrect ? (
+                <motion.span
+                  key="correct"
+                  initial={{ opacity: 0, y: -6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -6 }}
+                  transition={{ duration: 0.3 }}
+                  className="label-text-alt text-green-600 pt-2 font-semibold text-[16px] absolute inset-x-0 top-3 text-center whitespace-nowrap"
+                >
+                  Correct!
+                </motion.span>
+              ) : null}
+            </AnimatePresence>
           </div>
         </div>
       );
@@ -130,20 +161,38 @@ export default function Answer() {
             onChange={handleChange}
             placeholder="What's that element..."
           />
-          {!loading && isIncorrect ? (
-            <div className="label" style={{ minHeight: "24px" }}>
-              <span className="label-text-alt text-red-500 relative pt-2 font-semibold text-[16px] m-auto animate-shake">
-                Incorrect, try again!
-              </span>
-            </div>
-          ) : null}
-          {!loading && isCorrect ? (
-            <div className="label" style={{ minHeight: "24px" }}>
-              <span className="label-text-alt text-green-600 relative pt-2 font-semibold text-[16px] m-auto animate-pulse">
-                Correct!
-              </span>
-            </div>
-          ) : null}
+          <div
+            className="label relative flex items-center justify-center"
+            style={{ minHeight: "24px" }}
+          >
+            <AnimatePresence>
+              {!loading && isIncorrect ? (
+                <motion.span
+                  key="open-incorrect"
+                  initial={{ opacity: 0, y: -6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -6 }}
+                  transition={{ duration: 0.3 }}
+                  className="label-text-alt text-red-500 pt-2 font-semibold text-[16px] absolute inset-x-0 top-3 text-center whitespace-nowrap"
+                >
+                  Incorrect, try again!
+                </motion.span>
+              ) : null}
+
+              {!loading && isCorrect ? (
+                <motion.span
+                  key="open-correct"
+                  initial={{ opacity: 0, y: -6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -6 }}
+                  transition={{ duration: 0.3 }}
+                  className="label-text-alt text-green-600 pt-2 font-semibold text-[16px] absolute inset-x-0 top-3 text-center whitespace-nowrap"
+                >
+                  Correct!
+                </motion.span>
+              ) : null}
+            </AnimatePresence>
+          </div>
         </form>
       );
     }
