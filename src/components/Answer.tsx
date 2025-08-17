@@ -19,11 +19,19 @@ export default function Answer() {
     setFetchTrigger,
   } = useGameStore();
   const [input, setInput] = useState("");
-  const [showIncorrect, setShowIncorrect] = useState(false);
+  // unified message state: 'none' | 'incorrect' | 'correct'
+  const [message, setMessage] = useState<"none" | "incorrect" | "correct">(
+    "none"
+  );
+  // timer ref used to cancel and prevent overlapping messages
+  const messageTimer = React.useRef<number | null>(null);
   // Track wrong answers that have been disabled for the current round
   const [disabledAnswers, setDisabledAnswers] = useState<Set<string>>(
     new Set()
   );
+  // When true the round is locked because the correct answer was picked;
+  // used to disable all buttons and show the deep-green celebration style.
+  const [answeredCorrect, setAnsweredCorrect] = useState(false);
 
   useEffect(() => {
     if (!gameStarted) {
@@ -36,24 +44,45 @@ export default function Answer() {
     console.log(e.target.value);
   };
 
+  const showMessage = (type: "incorrect" | "correct", duration = 3000) => {
+    // cancel any existing message timer
+    if (messageTimer.current) {
+      clearTimeout(messageTimer.current);
+      messageTimer.current = null;
+    }
+    setMessage(type);
+    // schedule clear
+    messageTimer.current = window.setTimeout(() => {
+      setMessage("none");
+      messageTimer.current = null;
+    }, duration) as unknown as number;
+  };
+
   const handleMultiSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
     // game logic
     const selectedAnswer = e.currentTarget.value;
     setPlayerAnswer(selectedAnswer);
-    // ignore if already disabled
-    if (disabledAnswers.has(selectedAnswer)) return;
+    // ignore if already disabled or the round is already locked
+    if (disabledAnswers.has(selectedAnswer) || answeredCorrect) return;
 
     if (answer && selectedAnswer === answer.name) {
       setScore((prevScore: number) => prevScore + 1);
       setInput("");
-      // reset disabled answers for next round
-      setDisabledAnswers(new Set());
-      setFetchTrigger();
+      // lock the round: disable all buttons and show celebration style
+      setAnsweredCorrect(true);
+      // show correct message (this cancels any 'incorrect' message instantly)
+      showMessage("correct", 2000);
+      // clear disabled answers and unlock after celebration (2s)
+      setTimeout(() => {
+        setDisabledAnswers(new Set());
+        setAnsweredCorrect(false);
+        // trigger a fresh fetch for the next round
+        setFetchTrigger();
+      }, 2000);
     } else {
       // add this wrong answer to the disabled set for the round
       setDisabledAnswers((prev) => new Set(prev).add(selectedAnswer));
-      setShowIncorrect(true);
-      setTimeout(() => setShowIncorrect(false), 4000);
+      showMessage("incorrect", 4000);
     }
   };
 
@@ -71,12 +100,29 @@ export default function Answer() {
     if (answer && givenAnswer == answer.name) {
       setScore((prevScore: number) => prevScore + 1);
       setInput("");
-      setFetchTrigger();
+      // lock round and show deep-green celebration; clear disabled after celebration
+      setAnsweredCorrect(true);
+      showMessage("correct", 2000);
+      setTimeout(() => {
+        setDisabledAnswers(new Set());
+        setAnsweredCorrect(false);
+        // trigger a fresh fetch for the next round
+        setFetchTrigger();
+      }, 2000);
     } else {
-      setShowIncorrect(true);
-      setTimeout(() => setShowIncorrect(false), 4000);
+      showMessage("incorrect", 4000);
     }
   };
+
+  // cleanup message timer on unmount
+  useEffect(() => {
+    return () => {
+      if (messageTimer.current) {
+        clearTimeout(messageTimer.current);
+        messageTimer.current = null;
+      }
+    };
+  }, []);
 
   if (elements.length === 4) {
     // Visual feedback state
@@ -88,15 +134,28 @@ export default function Answer() {
       return (
         <div className="my-10 w-[200px] flex flex-col gap-y-2">
           {elements.map((e, idx) => {
-            // Disabled state: any previously chosen wrong answer stays disabled for the round
-            const isThisDisabled = disabledAnswers.has(e.name);
+            // Disabled state: previously chosen wrong answers stay disabled for the round.
+            const wasPickedWrong = disabledAnswers.has(e.name);
+            // When answeredCorrect is true the entire round is locked and all buttons
+            // should be disabled (but we still want to highlight the correct one).
+            const isThisDisabled = wasPickedWrong || answeredCorrect;
             let btnClass =
               "btn btn-outline rounded-full transition-all duration-300";
-            if (isCorrect && playerAnswer === e.name)
-              btnClass += " bg-green-200 border-green-500 animate-pulse";
-            if (isThisDisabled)
+            // If the round is locked and this is the correct answer, show deep green with white text
+            if (answeredCorrect && answer && e.name === answer.name) {
+              btnClass += " bg-green-800 text-white border-green-900";
+            } else if (wasPickedWrong) {
+              // previously picked wrong answer: muted red style
               btnClass +=
                 " bg-gray-100 border-red-300 text-gray-500 opacity-80 cursor-not-allowed ring-1 ring-red-200";
+            } else if (isThisDisabled) {
+              // other disabled (due to round lock): neutral muted
+              btnClass +=
+                " bg-gray-100 border-gray-300 text-gray-500 opacity-80 cursor-not-allowed ring-1 ring-gray-200";
+            } else if (isCorrect && playerAnswer === e.name) {
+              // transient correct indicator before round lock
+              btnClass += " bg-green-200 border-green-500 animate-pulse";
+            }
             return (
               <button
                 onClick={handleMultiSubmit}
@@ -116,7 +175,7 @@ export default function Answer() {
             style={{ minHeight: "24px", height: "24px" }}
           >
             <AnimatePresence>
-              {showIncorrect && !loading ? (
+              {message === "incorrect" && !loading ? (
                 <motion.span
                   key="incorrect"
                   initial={{ opacity: 0, y: -6 }}
@@ -129,7 +188,7 @@ export default function Answer() {
                 </motion.span>
               ) : null}
 
-              {!loading && isCorrect ? (
+              {!loading && message === "correct" ? (
                 <motion.span
                   key="correct"
                   initial={{ opacity: 0, y: -6 }}
@@ -166,7 +225,7 @@ export default function Answer() {
             style={{ minHeight: "24px" }}
           >
             <AnimatePresence>
-              {!loading && isIncorrect ? (
+              {!loading && message === "incorrect" ? (
                 <motion.span
                   key="open-incorrect"
                   initial={{ opacity: 0, y: -6 }}
@@ -179,7 +238,7 @@ export default function Answer() {
                 </motion.span>
               ) : null}
 
-              {!loading && isCorrect ? (
+              {!loading && message === "correct" ? (
                 <motion.span
                   key="open-correct"
                   initial={{ opacity: 0, y: -6 }}
