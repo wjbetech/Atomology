@@ -38,12 +38,16 @@ export default function Element() {
 
         // call fetchUniqueElements to get answers
         const randomElements = await fetchUniqueElements(4);
-        setElements(randomElements);
+        // Pick the correct answer and set all state in one go
+        const randomCorrectIndex = Math.floor(
+          Math.random() * randomElements.length
+        );
+        const correctElement = randomElements[randomCorrectIndex];
 
-        // set a randomElement[x] as correct answer
-        const randomCorrectIndex = Math.floor(Math.random() * 3);
-        setAnswer(randomElements[randomCorrectIndex]);
-        setAnswerElementName(answer && answer.name);
+        // Set all state together to ensure sync
+        setElements(randomElements);
+        setAnswer(correctElement);
+        setAnswerElementName(correctElement.name);
 
         setLoading(false);
       } catch (error) {

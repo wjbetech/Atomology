@@ -1,6 +1,8 @@
-import axios from "axios";
-const baseURL = "https://kineticzephyr.onrender.com/periodictable";
-
+// Fetch elements from local JSON file
 export const GET = async () => {
-  return axios.get(`${baseURL}`);
+  const response = await fetch("/src/data/elements.json");
+  if (!response.ok) {
+    throw new Error("Failed to load elements data");
+  }
+  return response.json();
 };

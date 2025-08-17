@@ -6,7 +6,8 @@ export const fetchUniqueElements = async (
 ): Promise<ElementType[]> => {
   // Fetch all elements in a single API call
   const response = await GET();
-  const allElements = response.data.data;
+  // For local JSON, elements are under response.elements
+  const allElements = response.elements;
 
   // // -- blocked out what I think is useless --
   // // Ensure we get at least the number of required unique elements
@@ -33,7 +34,7 @@ export const fetchUniqueElements = async (
         name: data.name,
         number: data.number,
         period: data.period,
-        phase: data.phase,
+        phase: data.phase || data.phase?.toLowerCase() || "",
         symbol: data.symbol,
       };
 

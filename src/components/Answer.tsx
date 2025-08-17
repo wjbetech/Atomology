@@ -18,6 +18,7 @@ export default function Answer() {
     setFetchTrigger,
   } = useGameStore();
   const [input, setInput] = useState("");
+  const [showIncorrect, setShowIncorrect] = useState(false);
 
   useEffect(() => {
     if (!gameStarted) {
@@ -31,8 +32,6 @@ export default function Answer() {
   };
 
   const handleMultiSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
-    console.log("you submitted your guess!");
-
     // game logic
     const selectedAnswer = e.currentTarget.value;
     setPlayerAnswer(selectedAnswer);
@@ -41,6 +40,9 @@ export default function Answer() {
       setScore((prevScore: number) => prevScore + 1);
       setInput("");
       setFetchTrigger();
+    } else {
+      setShowIncorrect(true);
+      setTimeout(() => setShowIncorrect(false), 6000);
     }
   };
 
@@ -63,32 +65,53 @@ export default function Answer() {
   };
 
   if (elements.length === 4) {
+    // Visual feedback state
+    const isCorrect = playerAnswer === answerElementName && playerAnswer !== "";
+    const isIncorrect =
+      playerAnswer !== answerElementName && playerAnswer !== "";
+
     if (gameStarted && gameMode === "multi" && !loading) {
       return (
         <div className="my-10 w-[200px] flex flex-col gap-y-2">
           {elements.map((e, idx) => {
+            // Muted/disabled for incorrect
+            const isThisIncorrect = isIncorrect && playerAnswer === e.name;
+            let btnClass =
+              "btn btn-outline rounded-full transition-all duration-300";
+            if (isCorrect && playerAnswer === e.name)
+              btnClass += " bg-green-200 border-green-500 animate-pulse";
+            if (isThisIncorrect)
+              btnClass +=
+                " bg-gray-100 border-red-300 text-gray-500 opacity-80 cursor-not-allowed ring-1 ring-red-200";
             return (
               <button
                 onClick={handleMultiSubmit}
-                className="btn btn-outline rounded-full"
+                className={btnClass}
                 value={e.name}
                 id="answer"
                 key={e.name}
+                disabled={isThisIncorrect}
               >
                 <span>{idx + 1}.</span>
                 {e.name}
               </button>
             );
           })}
-          {!loading &&
-          playerAnswer !== answerElementName &&
-          playerAnswer !== "" ? (
-            <div className="label" style={{ minHeight: "24px" }}>
-              <span className="label-text-alt text-red-500 relative pt-2 font-semibold text-[16px] m-auto">
+          <div className="label" style={{ minHeight: "24px", height: "24px" }}>
+            {showIncorrect && !loading ? (
+              <span
+                className="label-text-alt text-red-500 relative pt-2 font-semibold text-[16px] m-auto animate-shake"
+                style={{ position: "absolute" }}
+              >
                 Incorrect, try again!
               </span>
-            </div>
-          ) : null}
+            ) : null}
+            {!loading && isCorrect ? (
+              <span className="label-text-alt text-green-600 relative pt-2 font-semibold text-[16px] m-auto animate-pulse">
+                Correct!
+              </span>
+            ) : null}
+          </div>
         </div>
       );
     }
@@ -101,16 +124,23 @@ export default function Answer() {
             name="answer"
             id="answer"
             value={input}
-            className="rounded-full input input-bordered placeholder:text-gray-400/50 placeholder:italic"
+            className={`rounded-full input input-bordered placeholder:text-gray-400/50 placeholder:italic transition-all duration-300 ${
+              isCorrect ? "bg-green-200 border-green-500 animate-pulse" : ""
+            } ${isIncorrect ? "bg-red-200 border-red-500 shake" : ""}`}
             onChange={handleChange}
             placeholder="What's that element..."
           />
-          {!loading &&
-          playerAnswer !== answerElementName &&
-          playerAnswer !== "" ? (
+          {!loading && isIncorrect ? (
             <div className="label" style={{ minHeight: "24px" }}>
-              <span className="label-text-alt text-red-500 relative pt-2 font-semibold text-[16px] m-auto">
+              <span className="label-text-alt text-red-500 relative pt-2 font-semibold text-[16px] m-auto animate-shake">
                 Incorrect, try again!
+              </span>
+            </div>
+          ) : null}
+          {!loading && isCorrect ? (
+            <div className="label" style={{ minHeight: "24px" }}>
+              <span className="label-text-alt text-green-600 relative pt-2 font-semibold text-[16px] m-auto animate-pulse">
+                Correct!
               </span>
             </div>
           ) : null}
