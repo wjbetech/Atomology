@@ -43,36 +43,93 @@ export interface uiSlice {
   setTheme: (theme: string) => void;
 }
 
-export const useGameStore = create<GameState>((set) => ({
-  gameMode: "multi",
-  score: 0,
-  elements: [],
-  loading: false,
-  error: false,
-  gameStarted: false,
-  answer: null,
-  playerAnswer: null,
-  answerElementName: "",
-  fetchTrigger: 0,
-  setPlayerAnswer: (playerAnswer) => set({ playerAnswer: playerAnswer }),
-  setLoading: (loading) => set({ loading }),
-  setError: (error) => set({ error }),
-  setGameMode: (mode) => set({ gameMode: mode }),
-  setScore: (update) =>
-    set((state) => ({
-      score: typeof update === "function" ? update(state.score) : update,
-    })),
-  setElements: (elements) => set({ elements }),
-  setAnswerElementName: (name) => set({ answerElementName: name }),
-  setGameStarted: (gameStarted) => set({ gameStarted }),
-  setAnswer: (answer) => set({ answer }),
-  setFetchTrigger: () =>
-    set((state) => ({ fetchTrigger: state.fetchTrigger + 1 })),
-  resetAnswerInput: () =>
-    set({
-      playerAnswer: "",
-    }),
-}));
+export const useGameStore = create<GameState>((set, get) => {
+  // helper to load persisted session
+  const loadSession = (): Partial<GameState> | null => {
+    try {
+      const raw = localStorage.getItem("atomology.session");
+      if (!raw) return null;
+      return JSON.parse(raw) as Partial<GameState>;
+    } catch (err) {
+      return null;
+    }
+  };
+
+  // helper to persist selected parts of the state
+  const persist = () => {
+    try {
+      const s = get();
+      const toSave = {
+        score: s.score,
+        elements: s.elements,
+        answer: s.answer,
+        answerElementName: s.answerElementName,
+        playerAnswer: s.playerAnswer,
+        gameMode: s.gameMode,
+        gameStarted: s.gameStarted,
+      };
+      localStorage.setItem("atomology.session", JSON.stringify(toSave));
+    } catch (err) {
+      // ignore persistence errors
+    }
+  };
+
+  const persisted = loadSession();
+
+  return {
+    gameMode: persisted?.gameMode ?? "multi",
+    score: persisted?.score ?? 0,
+    elements: (persisted?.elements as any) ?? [],
+    loading: false,
+    error: false,
+    gameStarted: persisted?.gameStarted ?? false,
+    answer: (persisted?.answer as any) ?? null,
+    playerAnswer: (persisted?.playerAnswer as any) ?? null,
+    answerElementName: (persisted?.answerElementName as any) ?? "",
+    fetchTrigger: 0,
+    setPlayerAnswer: (playerAnswer) => {
+      set({ playerAnswer: playerAnswer });
+      persist();
+    },
+    setLoading: (loading) => set({ loading }),
+    setError: (error) => set({ error }),
+    setGameMode: (mode) => {
+      set({ gameMode: mode });
+      persist();
+    },
+    setScore: (update) =>
+      set((state) => {
+        const next =
+          typeof update === "function" ? update(state.score) : update;
+        const ret = { score: next } as any;
+        // update then persist
+        persist();
+        return ret;
+      }),
+    setElements: (elements) => {
+      set({ elements });
+      persist();
+    },
+    setAnswerElementName: (name) => {
+      set({ answerElementName: name });
+      persist();
+    },
+    setGameStarted: (gameStarted) => {
+      set({ gameStarted });
+      persist();
+    },
+    setAnswer: (answer) => {
+      set({ answer });
+      persist();
+    },
+    setFetchTrigger: () =>
+      set((state) => ({ fetchTrigger: state.fetchTrigger + 1 })),
+    resetAnswerInput: () =>
+      set({
+        playerAnswer: "",
+      }),
+  } as GameState;
+});
 
 export const useUIStore = create<uiSlice>((set) => ({
   theme: window.matchMedia("(prefers-color-scheme: dark)").matches
