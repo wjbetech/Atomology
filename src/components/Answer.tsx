@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import AnswerButton from "./AnswerButton";
 import { motion, AnimatePresence } from "framer-motion";
 import { useGameStore } from "../store/atomologyStore";
 
@@ -132,46 +133,24 @@ export default function Answer() {
 
     if (gameStarted && gameMode === "multi" && !loading) {
       return (
-        <div className="my-10 w-full px-1 sm:px-4 lg:px-0 lg:max-w-[640px] mx-auto grid grid-cols-2 lg:grid-cols-1 justify-center gap-3">
+        <div className="w-full lg:mb-10 px-4 lg:px-20 lg:max-w-none mx-auto grid grid-cols-2 justify-center gap-3">
           {elements.map((e, idx) => {
-            // Disabled state: previously chosen wrong answers stay disabled for the round.
             const wasPickedWrong = disabledAnswers.has(e.name);
-            // When answeredCorrect is true the entire round is locked and all buttons
-            // should be disabled (but we still want to highlight the correct one).
             const isThisDisabled = wasPickedWrong || answeredCorrect;
-            let btnClass =
-              "btn btn-outline rounded-full overflow-hidden shadow-sm transition-all duration-300 w-full min-w-[110px] h-14 lg:h-12 flex items-center gap-3 px-4 lg:px-3 text-sm lg:text-base";
-            // If the round is locked and this is the correct answer, show deep green with white text
-            if (answeredCorrect && answer && e.name === answer.name) {
-              btnClass += " bg-green-800 text-white border-green-900";
-            } else if (wasPickedWrong) {
-              // previously picked wrong answer: muted red style
-              btnClass +=
-                " bg-gray-100 border-red-300 text-gray-500 opacity-80 cursor-not-allowed ring-1 ring-red-200";
-            } else if (isThisDisabled) {
-              // other disabled (due to round lock): neutral muted
-              btnClass +=
-                " bg-gray-100 border-gray-300 text-gray-500 opacity-80 cursor-not-allowed ring-1 ring-gray-200";
-            } else if (isCorrect && playerAnswer === e.name) {
-              // transient correct indicator before round lock
-              btnClass += " bg-green-200 border-green-500 animate-pulse";
-            }
+            const isCorrectBtn = !!answer && e.name === answer.name;
+            const isSelected = playerAnswer === e.name;
             return (
-              <button
-                onClick={handleMultiSubmit}
-                className={btnClass}
-                value={e.name}
-                id="answer"
+              <AnswerButton
                 key={e.name}
+                idx={idx}
+                label={e.name}
                 disabled={isThisDisabled}
-              >
-                <span className="font-semibold w-6 text-left text-sm lg:text-base">
-                  {idx + 1}.
-                </span>
-                <span className="text-left truncate text-sm lg:text-base">
-                  {e.name}
-                </span>
-              </button>
+                isCorrect={isCorrectBtn}
+                isPickedWrong={wasPickedWrong}
+                isRoundLocked={answeredCorrect}
+                isSelected={isSelected && isCorrect}
+                onClick={handleMultiSubmit}
+              />
             );
           })}
           <div
@@ -179,7 +158,7 @@ export default function Answer() {
             style={{ minHeight: "24px", height: "24px" }}
           >
             {/* screen-reader live region; kept visually hidden but updates when message changes */}
-            <span className="sr-only" role="status" aria-live="polite">
+            <span className="sr-only text-xl" role="status" aria-live="polite">
               {message === "incorrect"
                 ? "Incorrect, try again!"
                 : message === "correct"
@@ -194,7 +173,7 @@ export default function Answer() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -6 }}
                   transition={{ duration: 0.3 }}
-                  className="label-text-alt text-red-500 pt-2 font-semibold text-[16px] absolute inset-x-0 top-3 text-center whitespace-nowrap"
+                  className="label-text-alt text-red-500 font-semibold text-lg absolute inset-x-0 top-3 text-center whitespace-nowrap place-content-center"
                 >
                   Incorrect, try again!
                 </motion.span>
@@ -207,7 +186,7 @@ export default function Answer() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -6 }}
                   transition={{ duration: 0.3 }}
-                  className="label-text-alt text-green-600 pt-2 font-semibold text-[16px] absolute inset-x-0 top-3 text-center whitespace-nowrap"
+                  className="label-text-alt text-green-600 font-semibold text-lg absolute inset-x-0 top-3 text-center whitespace-nowrap place-content-center"
                 >
                   Correct!
                 </motion.span>

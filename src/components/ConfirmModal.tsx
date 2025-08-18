@@ -67,7 +67,7 @@ export default function ConfirmModal({
         aria-modal="true"
         aria-labelledby="confirm-title"
         aria-describedby="confirm-desc"
-        className="bg-content rounded-lg p-6 w-[90%] max-w-md"
+        className="bg-[#101a2c] border border-blue-900 rounded-lg p-6 w-[90%] max-w-md shadow-lg"
         onClick={(e) => e.stopPropagation()}
       >
         <h2 id="confirm-title" className="font-bold text-lg mb-2">
