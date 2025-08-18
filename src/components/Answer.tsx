@@ -154,7 +154,7 @@ export default function Answer() {
             );
           })}
           <div
-            className="label relative flex items-center justify-center col-span-2 lg:col-span-1"
+            className="label relative flex items-center justify-center col-span-2 lg:col-span-1 mt-6"
             style={{ minHeight: "24px", height: "24px" }}
           >
             {/* screen-reader live region; kept visually hidden but updates when message changes */}
