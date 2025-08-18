@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import ConfettiSparks from "./ConfettiSparks";
 import { messages } from "../utils/loadingMessages";
 
 // zustand store
@@ -125,84 +126,47 @@ export default function Element() {
     if (error) return <p className="mt-24">Error: {error}</p>;
 
     return (
-      <div className="relative p-8 place-self-center rounded-lg bg-opacity-50 bg-gradient-to-rshadow-lg backdrop-blur-md transition-all duration-500 w-[125px]">
-        <AnimatePresence>
-          {celebrate && (
-            <motion.div
-              key="arrow"
-              // fill parent and center arrow so it originates from element center
-              className="absolute inset-0 pointer-events-none flex items-center justify-center"
-              initial={{ opacity: 0, y: 12, scale: 0.95 }}
-              animate={{
-                opacity: 1,
-                // rise from center upward only
-                y: -180,
-                // no rotation — arrow rises straight up
-                scale: [1, 1.25],
-              }}
-              exit={{ opacity: 0, y: -220, scale: 1.3 }}
-              transition={{ duration: 1.2, ease: "easeOut" }}
-            >
-              {/* solid green spiralling arrow (shaft + head) */}
-              <svg
-                width="36"
-                height="56"
-                viewBox="0 0 36 56"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                aria-hidden
-                className="drop-shadow-lg"
+      <div className="relative place-self-center">
+        {/* Confetti/sparks celebration effect overlays the entire element box */}
+        <ConfettiSparks trigger={celebrate} />
+        <div className="relative p-8 rounded-lg bg-opacity-50 bg-gradient-to-rshadow-lg backdrop-blur-md transition-all duration-500 w-[125px]">
+          {/* static blurred background */}
+          <div className="absolute -inset-1 rounded-lg bg-gradient-to-r from-black to-transparent blur opacity-20"></div>
+
+          {/* glow overlay separate from content so border doesn't scale */}
+          <AnimatePresence>
+            {celebrate && (
+              <motion.div
+                key="glow"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.6 }}
+                className="absolute inset-0 pointer-events-none rounded-lg"
               >
-                <rect
-                  x="15"
-                  y="12"
-                  width="6"
-                  height="28"
-                  rx="3"
-                  fill="#16A34A"
+                <div
+                  style={{ boxShadow: "0 12px 32px rgba(34,197,94,0.18)" }}
+                  className="w-full h-full rounded-lg"
                 />
-                <polygon points="18,0 6,18 30,18" fill="#16A34A" />
-              </svg>
-            </motion.div>
-          )}
-        </AnimatePresence>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
-        {/* static blurred background */}
-        <div className="absolute -inset-1 rounded-lg bg-gradient-to-r from-black to-transparent blur opacity-20"></div>
+          {/* Main content scaled independently */}
+          <motion.div
+            animate={celebrate ? { scale: [1, 1.12, 1] } : { scale: 1 }}
+            transition={{ duration: 0.9 }}
+            className="relative z-10 flex flex-col items-center justify-center"
+          >
+            <span className="drop-shadow-lg">{answer?.number}</span>
+            <h1 className="font-semibold text-5xl drop-shadow-lg tracking-wider">
+              {answer?.symbol}
+            </h1>
+          </motion.div>
 
-        {/* glow overlay separate from content so border doesn't scale */}
-        <AnimatePresence>
-          {celebrate && (
-            <motion.div
-              key="glow"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.6 }}
-              className="absolute inset-0 pointer-events-none rounded-lg"
-            >
-              <div
-                style={{ boxShadow: "0 12px 32px rgba(34,197,94,0.18)" }}
-                className="w-full h-full rounded-lg"
-              />
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Main content scaled independently */}
-        <motion.div
-          animate={celebrate ? { scale: [1, 1.12, 1] } : { scale: 1 }}
-          transition={{ duration: 0.9 }}
-          className="relative z-10 flex flex-col items-center justify-center"
-        >
-          <span className="drop-shadow-lg">{answer?.number}</span>
-          <h1 className="font-semibold text-5xl drop-shadow-lg tracking-wider">
-            {answer?.symbol}
-          </h1>
-        </motion.div>
-
-        {/* Glowing animated border (not scaled) */}
-        <div className="absolute inset-0 rounded-lg border-2 animate-pulse"></div>
+          {/* Glowing animated border (not scaled) */}
+          <div className="absolute inset-0 rounded-lg border-2 animate-pulse"></div>
+        </div>
       </div>
     );
   }
