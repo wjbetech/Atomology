@@ -22,7 +22,7 @@ export default function AnswerButton({
   onClick,
 }: AnswerButtonProps) {
   let btnClass =
-    "btn btn-outline border-2 rounded-full overflow-hidden shadow-sm transition-all duration-300 w-full h-14 lg:h-14 flex items-center gap-3 lg:gap-2 px-4 lg:px-8 text-sm lg:text-base";
+    "btn btn-outline border-2 rounded-full overflow-hidden shadow-sm transition-all duration-300 w-full min-h-12 h-auto flex items-center justify-center gap-2 px-3 sm:px-5 md:px-8 text-base md:text-lg lg:text-xl whitespace-nowrap";
   if (isRoundLocked && isCorrect) {
     btnClass += " bg-green-800 text-white border-green-900";
   } else if (isPickedWrong) {
@@ -41,11 +41,14 @@ export default function AnswerButton({
       value={label}
       id="answer"
       disabled={disabled}
+      style={{ minWidth: 0 }}
     >
-      <span className="font-semibold w-6 lg:w-4 text-left text-sm lg:text-base">
-        {idx + 1}.
+      <span className="flex-1 flex items-center font-semibold text-base md:text-lg lg:text-xl truncate">
+        <span className="mr-2 text-gray-500 text-base md:text-lg lg:text-xl font-bold flex-shrink-0">
+          {idx + 1}.
+        </span>
+        <span className="truncate">{label}</span>
       </span>
-      <span className="text-left truncate text-sm lg:text-base">{label}</span>
     </button>
   );
 }
