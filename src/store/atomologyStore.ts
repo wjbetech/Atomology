@@ -25,6 +25,7 @@ export interface GameState {
   answerElementName: ElementType["name"] | null;
   playerAnswer: string | null;
   fetchTrigger: number;
+  guessedElements: string[];
   setGameMode: (mode: string) => void;
   setScore: (update: number | ((prevScore: number) => number)) => void;
   setElements: (elements: ElementType[]) => void;
@@ -36,6 +37,7 @@ export interface GameState {
   setPlayerAnswer: (answer: string | null) => void;
   setFetchTrigger: () => void;
   resetAnswerInput: () => void;
+  addGuessedElement: (symbol: string) => void;
 }
 
 export interface uiSlice {
@@ -87,6 +89,14 @@ export const useGameStore = create<GameState>((set, get) => {
     playerAnswer: (persisted?.playerAnswer as any) ?? null,
     answerElementName: (persisted?.answerElementName as any) ?? "",
     fetchTrigger: 0,
+    guessedElements: [],
+    addGuessedElement: (symbol) =>
+      set((state) => {
+        if (state.guessedElements.includes(symbol)) return {};
+        const updated = [...state.guessedElements, symbol];
+        persist();
+        return { guessedElements: updated };
+      }),
     setPlayerAnswer: (playerAnswer) => {
       set({ playerAnswer: playerAnswer });
       persist();

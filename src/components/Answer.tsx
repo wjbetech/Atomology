@@ -18,6 +18,7 @@ export default function Answer() {
     setPlayerAnswer,
     answerElementName,
     setFetchTrigger,
+    addGuessedElement,
   } = useGameStore();
   const [input, setInput] = useState("");
   // unified message state: 'none' | 'incorrect' | 'correct'
@@ -69,6 +70,8 @@ export default function Answer() {
     if (answer && selectedAnswer === answer.name) {
       setScore((prevScore: number) => prevScore + 1);
       setInput("");
+      // Add guessed element symbol to HUD
+      if (answer.symbol) addGuessedElement(answer.symbol);
       // lock the round: disable all buttons and show celebration style
       setAnsweredCorrect(true);
       // show correct message (this cancels any 'incorrect' message instantly)
@@ -101,6 +104,8 @@ export default function Answer() {
     if (answer && givenAnswer == answer.name) {
       setScore((prevScore: number) => prevScore + 1);
       setInput("");
+      // Add guessed element symbol to HUD
+      if (answer.symbol) addGuessedElement(answer.symbol);
       // lock round and show deep-green celebration; clear disabled after celebration
       setAnsweredCorrect(true);
       showMessage("correct", 2000);
