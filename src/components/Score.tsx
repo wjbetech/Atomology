@@ -42,15 +42,23 @@ export default function Score() {
     }
   }, [playerAnswer, answer]);
 
-  const scoreRef = useRef<HTMLSpanElement>(null);
-  const [arrowTop, setArrowTop] = useState<number | null>(null);
-
+  // Score scaling animation state
+  const [scoreBump, setScoreBump] = useState(false);
+  const prevScore = useRef(score);
   useEffect(() => {
-    if (showArrow && scoreRef.current) {
-      const rect = scoreRef.current.getBoundingClientRect();
-      setArrowTop(window.scrollY + rect.top - 56); // 56px above the score
+    if (
+      playerAnswer &&
+      answer &&
+      playerAnswer === answer.name &&
+      score > prevScore.current
+    ) {
+      setScoreBump(true);
+      const t = setTimeout(() => setScoreBump(false), 1200);
+      prevScore.current = score;
+      return () => clearTimeout(t);
     }
-  }, [showArrow, scoreRef]);
+    prevScore.current = score;
+  }, [score, playerAnswer, answer]);
 
   if (gameStarted) {
     return (
@@ -60,12 +68,19 @@ export default function Score() {
           <div className="flex flex-col items-center justify-center w-full place-content-center place-items-center">
             <div className="relative inline-block">
               <div className="flex justify-center m-auto place-content-center place-items-center">
-                <span
-                  ref={scoreRef}
+                <motion.span
                   className="text-md lg:text-xl font-bold text-center block mb-2"
+                  animate={
+                    scoreBump ? { scale: [1, 1.25, 0.95, 1] } : { scale: 1 }
+                  }
+                  transition={{
+                    duration: 1.2,
+                    times: [0, 0.3, 0.7, 1],
+                    ease: "easeOut",
+                  }}
                 >
                   Score: {score}
-                </span>
+                </motion.span>
               </div>
             </div>
             <button
