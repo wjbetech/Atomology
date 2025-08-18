@@ -14,10 +14,14 @@ export default function ConfettiSparks({ trigger }: { trigger: boolean }) {
     "bg-lime-300",
   ];
   const sparks = Array.from({ length: 18 });
+  // Randomly choose direction: 1 (clockwise) or -1 (counterclockwise)
+  const direction = Math.random() < 0.5 ? 1 : -1;
   return (
     <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
       {sparks.map((_, i) => {
-        const angle = (i / sparks.length) * 2 * Math.PI + Math.random() * 0.2;
+        // Multiply angle by direction for clockwise/counterclockwise
+        const angle =
+          direction * ((i / sparks.length) * 2 * Math.PI + Math.random() * 0.2);
         const radius = 140 + Math.random() * 40;
         const x = Math.cos(angle) * radius;
         const y = Math.sin(angle) * radius;
