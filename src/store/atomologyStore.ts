@@ -34,10 +34,14 @@ export interface GameState {
   setGameStarted: (gameStarted: boolean) => void;
   setAnswer: (answer: ElementType | null) => void;
   setAnswerElementName: (name: ElementType["name"] | null) => void;
+}
+
+export interface GameState {
   setPlayerAnswer: (answer: string | null) => void;
   setFetchTrigger: () => void;
   resetAnswerInput: () => void;
   addGuessedElement: (symbol: string) => void;
+  resetGuessedElements: () => void;
 }
 
 export interface uiSlice {
@@ -97,6 +101,10 @@ export const useGameStore = create<GameState>((set, get) => {
         persist();
         return { guessedElements: updated };
       }),
+    resetGuessedElements: () => {
+      set({ guessedElements: [] });
+      persist();
+    },
     setPlayerAnswer: (playerAnswer) => {
       set({ playerAnswer: playerAnswer });
       persist();

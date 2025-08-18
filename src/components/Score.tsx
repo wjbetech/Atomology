@@ -11,8 +11,14 @@ import ConfirmModal from "./ConfirmModal";
 import { useNavigate } from "react-router-dom";
 
 export default function Score() {
-  const { score, setScore, gameStarted, setGameStarted, resetAnswerInput } =
-    useGameStore();
+  const {
+    score,
+    setScore,
+    gameStarted,
+    setGameStarted,
+    resetAnswerInput,
+    resetGuessedElements,
+  } = useGameStore();
 
   const handleGameMode = () => {
     // clear persisted session and navigate home
@@ -20,6 +26,7 @@ export default function Score() {
     setGameStarted(false);
     setScore(0);
     resetAnswerInput();
+    resetGuessedElements();
   };
 
   const [showConfirm, setShowConfirm] = useState(false);
