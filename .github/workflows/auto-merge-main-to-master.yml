@@ -1,5 +1,0 @@
-"# Auto-merge workflow intentionally disabled.
-This file used to automatically create and merge PRs from main→master.
-Per repository owner's request, auto-merge has been disabled; please create PRs manually.
-Remove or delete this file to re-enable automation.
-" > /dev/null
