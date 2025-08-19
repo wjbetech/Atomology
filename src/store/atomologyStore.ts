@@ -150,9 +150,12 @@ export const useGameStore = create<GameState>((set, get) => {
 });
 
 export const useUIStore = create<uiSlice>((set) => ({
-  theme: window.matchMedia("(prefers-color-scheme: dark)").matches
-    ? "dark"
-    : "light",
+  theme:
+    typeof window !== "undefined" &&
+    typeof window.matchMedia === "function" &&
+    window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light",
   setTheme: (theme) => {
     set({ theme }), document.documentElement.setAttribute("data-theme", theme);
   },

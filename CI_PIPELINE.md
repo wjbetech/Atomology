@@ -55,3 +55,13 @@ jobs:
 ---
 
 _This file is a living document. Update as the pipeline evolves!_
+
+## Testing Configuration
+
+For projects using Jest and React Testing Library, add the following to your Jest configuration:
+
+```json
+{
+  "setupFilesAfterEnv": ["@testing-library/jest-dom"]
+}
+```
