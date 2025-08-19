@@ -239,7 +239,37 @@ By splitting the components this way, you'll maintain cleaner code and separatio
 - Add basic analytics to understand user behavior (page views, game completions, etc.).
 - Provide a feedback form or link for users to report bugs or suggest features.
 
-## Deployment & PWA
+# CI/CD, Code Quality & Automation
+
+## Continuous Integration (CI)
+
+- Set up GitHub Actions (or another CI provider) to run on every pull request and push to main:
+  - Install dependencies
+  - Run `npm run lint` to enforce code style and catch errors
+  - Run `npm run build` to ensure the app builds successfully
+  - (When available) Run automated tests (e.g., `npm test`)
+- Add status badges to the README for build/lint/test status
+
+## Continuous Deployment (CD)
+
+- Automate deployment to Vercel, Netlify, or GitHub Pages on successful build of the main branch
+- Optionally, set up preview deployments for pull requests
+
+## Code Quality & Security
+
+- Add static analysis tools (e.g., ESLint, Prettier, TypeScript strict mode)
+- (Optional) Add code coverage reporting and enforce minimum thresholds
+- (Optional) Add security scanning for dependencies
+
+## Example Workflow Steps
+
+- Checkout code
+- Set up Node.js
+- Install dependencies
+- Run lint, build, and test scripts
+- Deploy if on main branch
+
+# Deployment & PWA
 
 - Make the app installable as a Progressive Web App (PWA) for offline play.
 - Set up automated deployment (e.g., Vercel, Netlify, or GitHub Pages).
