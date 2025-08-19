@@ -11,20 +11,28 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main' }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout main at workflow commit
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_branch }}
 
-      - name: Create or update PR main → master
+      - name: Create a sync branch from main
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b sync/main-to-master-${{ github.run_id }}
+          git push --set-upstream origin sync/main-to-master-${{ github.run_id }}
+
+      - name: Create PR main → master from sync branch
         id: create-pr
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: 'chore: sync changes from main to master'
-          branch: master
+          commit-message: "chore: sync changes from main to master"
+          branch: sync/main-to-master-${{ github.run_id }}
           base: master
-          head: main
-          title: 'Sync main → master'
-          body: 'Automated sync of changes from main after successful CI.'
+          title: "Sync main → master"
+          body: "Automated sync of changes from main after successful CI."
 
       - name: Enable auto-merge for the PR
         uses: peter-evans/enable-pull-request-automerge@v2
