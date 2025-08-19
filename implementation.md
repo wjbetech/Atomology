@@ -1,3 +1,9 @@
+# Data Quality & Periodic Table Mapping
+
+- Verify that `elements.json` contains all 118 elements.
+- Ensure every element has both `period` and `group` properties for correct mapping in the HUD/grid.
+- Add missing `period`/`group` values to any elements that lack them, so every element is represented by a box in the periodic table HUD.
+
 # Expanded Implementation Plan & Tasks
 
 ## 1. Speed Up API Loading
