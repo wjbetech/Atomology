@@ -1,13 +1,13 @@
 
 name: CI
 
-      # - run: npm test # Uncomment if tests are added
+on:
   push:
     branches: [main]
   pull_request:
     branches: [main]
 
->>>>>>> master
+jobs:
   build-and-lint:
     runs-on: ubuntu-latest
     steps:
@@ -23,5 +23,5 @@ name: CI
         run: npm run lint
       - name: Build
         run: npm run build
-      # - name: Test (uncomment when tests are added)
-      #   run: npm test
+      - name: Test
+        run: npm test
