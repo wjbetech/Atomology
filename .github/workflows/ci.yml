@@ -1,12 +1,13 @@
+
 name: CI
 
-on:
+      # - run: npm test # Uncomment if tests are added
   push:
     branches: [main]
   pull_request:
     branches: [main]
 
-jobs:
+>>>>>>> master
   build-and-lint:
     runs-on: ubuntu-latest
     steps:
@@ -15,7 +16,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
       - name: Install dependencies
         run: npm ci
       - name: Lint
