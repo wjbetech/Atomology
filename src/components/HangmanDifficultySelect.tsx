@@ -23,11 +23,13 @@ export default function HangmanDifficultySelect() {
     setHangmanWord(random.name);
   };
 
+  const setGameMode = useGameStore((s) => s.setGameMode);
+  const setGameStarted = useGameStore((s) => s.setGameStarted);
   return (
-    <div className="flex flex-col items-center gap-4 mt-8">
+    <div className="flex flex-col items-center gap-4">
       <h2 className="text-xl font-bold mb-2">Select Difficulty</h2>
       <select
-        className="select select-bordered w-64 mb-2"
+        className="select select-bordered rounded-full w-64 mb-2"
         value={selected}
         onChange={(e) => setSelected(e.target.value as DifficultyLevel)}
       >
@@ -38,10 +40,19 @@ export default function HangmanDifficultySelect() {
         ))}
       </select>
       <button
-        className="btn btn-primary btn-sm rounded-full w-64"
+        className="btn btn-primary btn-md rounded-full w-64 mb-2"
         onClick={handleStart}
       >
         Start
+      </button>
+      <button
+        className="btn btn-outline btn-md rounded-full w-64 "
+        onClick={() => {
+          setGameMode("");
+          setGameStarted(false);
+        }}
+      >
+        Return to Main
       </button>
     </div>
   );

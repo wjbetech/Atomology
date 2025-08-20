@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useGameStore } from "../store/atomologyStore";
+import ConfettiSparks from "./ConfettiSparks";
+import ReturnToMainButton from "./ReturnToMainButton";
 
 export default function HangmanGame() {
   const hangmanWord = useGameStore((s) => s.hangmanWord);
@@ -27,7 +29,7 @@ export default function HangmanGame() {
     return (
       <span
         key={i}
-        className="border-b-2 border-gray-400 w-6 inline-block text-center mx-1 text-2xl"
+        className="border-b-2 border-gray-400 w-5 inline-block text-center mx-0.5 text-lg"
       >
         {guessed.includes(char.toLowerCase()) ? upper : ""}
       </span>
@@ -56,7 +58,8 @@ export default function HangmanGame() {
   };
 
   return (
-    <div className="flex flex-col items-center gap-4 mt-6 w-full max-w-xs mx-auto">
+    <div className="flex flex-col items-center gap-4 mt-6 w-full max-w-xs mx-auto relative">
+      <ConfettiSparks trigger={wordGuessResult === "correct"} />
       <form
         onSubmit={handleGuess}
         className="flex gap-2 w-full justify-center mb-2"
@@ -65,7 +68,7 @@ export default function HangmanGame() {
           type="text"
           inputMode="text"
           maxLength={1}
-          className="input input-bordered w-16 text-center text-xl h-10 rounded-full"
+          className="input input-bordered w-24 text-center text-xl h-12 rounded-full"
           value={input}
           onChange={(e) =>
             setInput(e.target.value.replace(/[^a-zA-Z]/g, "").slice(0, 1))
@@ -74,7 +77,7 @@ export default function HangmanGame() {
         />
         <button
           type="submit"
-          className="btn btn-primary btn-sm rounded-full h-10 min-h-0 px-4"
+          className="btn btn-primary btn-sm rounded-full h-12 min-h-0 px-6 text-base"
         >
           Guess
         </button>
@@ -89,37 +92,46 @@ export default function HangmanGame() {
         <input
           type="text"
           inputMode="text"
-          className="input input-bordered w-32 text-center text-xs h-10 rounded-full placeholder:text-xs"
-          placeholder="element"
+          className="input input-bordered w-40 text-center text-xs h-12 rounded-full placeholder:text-xs placeholder:italic"
+          placeholder="Element name..."
           value={wordGuess}
           onChange={(e) => setWordGuess(e.target.value)}
         />
         <button
           type="submit"
-          className="btn btn-outline btn-xs rounded-full h-10 min-h-0 px-4"
+          className="btn btn-outline btn-xs rounded-full h-12 min-h-0 px-6 text-base"
         >
           Guess Word
         </button>
       </form>
-      {wordGuessResult === "correct" && (
-        <div className="text-green-600 font-bold">Correct! 🎉</div>
-      )}
-      {wordGuessResult === "incorrect" && (
-        <div className="text-red-500 font-bold">Incorrect</div>
+      {wordGuessResult && (
+        <>
+          {wordGuessResult === "correct" ? (
+            <div className="text-green-600 font-bold">Correct! 🎉</div>
+          ) : (
+            <div className="text-red-500 font-bold">Incorrect</div>
+          )}
+          <div className="text-xs text-gray-500 mt-1">
+            Answer: <span className="font-semibold">{hangmanWord}</span>
+          </div>
+          <button
+            className="btn btn-primary btn-sm rounded-full mt-3 px-6"
+            onClick={() => {
+              setWordGuessResult(null);
+              setInput("");
+              setWordGuess("");
+              // TODO: Add logic to move to the next element (advance game state)
+            }}
+          >
+            Next Element
+          </button>
+        </>
       )}
       <div className="text-sm">Guessed: {guessed.join(", ")}</div>
-      <div className="text-sm">
+      <div className="text-sm mb-8">
         Lives left: <span className="font-bold">{maxAttempts - incorrect}</span>
       </div>
-      <button
-        className="btn btn-outline btn-sm rounded-full w-full mt-4"
-        onClick={() => {
-          setGameMode("");
-          setGameStarted(false);
-        }}
-      >
-        Return to Main
-      </button>
+      <ReturnToMainButton />
     </div>
   );
 }
