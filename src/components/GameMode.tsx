@@ -1,68 +1,21 @@
 import React from "react";
-import { useState } from "react";
-
-import atoms from "../assets/atoms.svg";
-
-// import zustand store
+import GameModeTitle from "./GameModeTitle";
+import GameModeButtons from "./GameModeButtons";
 import { useGameStore } from "../store/atomologyStore";
 
 export default function GameMode() {
-  const {
-    gameMode,
-    setGameMode,
-    gameStarted,
-    setGameStarted,
-    setPlayerAnswer,
-  } = useGameStore();
+  const { gameStarted } = useGameStore();
 
-  console.log(gameMode);
-
-  if (gameStarted) {
-    return null;
-  }
+  if (gameStarted) return null;
 
   return (
-    <div className="flex flex-col gap-8 justif items-center transition-all duration-1000 mt-24 max-h-screen overflow-auto">
-      <img src={atoms} alt="" className="rotate w-16 h-16" />
-      <h1 className="font-serif text-5xl mb-8">Atomology</h1>
-      <div className="flex flex-col gap-5 justify-center w-full max-w-md mx-auto mt-12">
-        <button
-          id="multiple"
-          value="multiple"
-          onClick={() => {
-            setGameMode("multi");
-            setPlayerAnswer("");
-            setGameStarted(true);
-          }}
-          className="btn btn-outline btn-sm lg:btn-md border-2 font-[400] rounded-full w-full h-12"
-        >
-          Multiple Choice
-        </button>
-        <button
-          id="open"
-          value="open"
-          onClick={() => {
-            setGameMode("open");
-            setPlayerAnswer("");
-            setGameStarted(true);
-          }}
-          className="btn btn-outline btn-sm lg:btn-md border-2 font-[400] rounded-full w-full h-12"
-        >
-          Open Answer
-        </button>
-        <button
-          id="hangman"
-          value="hangman"
-          onClick={() => {
-            setGameMode("hangman");
-            setGameStarted(true);
-            setPlayerAnswer("");
-          }}
-          className="btn btn-outline btn-sm lg:btn-md border-2 font-[400] rounded-full w-full h-12"
-        >
-          Hangman Mode
-        </button>
-      </div>
+    // fixed height container to avoid any jumps when child components render
+    <div
+      className="flex flex-col items-center transition-all duration-500 mt-24"
+      style={{ minHeight: 320 }}
+    >
+      <GameModeTitle />
+      <GameModeButtons />
     </div>
   );
 }

@@ -33,7 +33,7 @@ export default function ReturnToMainButton() {
   return (
     <>
       <button
-        className="btn btn-outline btn-sm lg:btn-md w-40 rounded-full"
+        className="btn btn-outline rounded-full h-10 min-h-0 text-sm whitespace-nowrap px-6 min-w-[160px]"
         onClick={() => setShowModal(true)}
       >
         Return to Main

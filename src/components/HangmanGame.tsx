@@ -39,19 +39,21 @@ export default function HangmanGame() {
 
   // Build display for blanks and correct letters, all capitalized
   const display = hangmanWord.split("").map((char, i) => {
-    if (char === " ")
-      return (
-        <span key={i} className="mx-1">
-          {" "}
-        </span>
-      );
+    if (char === " ") return <span key={i} className="w-3 inline-block" />;
     const upper = char.toUpperCase();
+    const revealed = guessed.includes(char.toLowerCase());
     return (
       <span
         key={i}
-        className="border-b-2 border-gray-400 w-5 inline-block text-center mx-0.5 text-lg"
+        className={
+          "inline-flex items-center justify-center w-9 h-9 mx-0.5 text-lg font-semibold rounded-sm border-2 transition-colors duration-200 " +
+          (revealed
+            ? "bg-green-700 border-green-700 text-white"
+            : "border-gray-400 text-transparent bg-transparent")
+        }
+        aria-hidden={!revealed}
       >
-        {guessed.includes(char.toLowerCase()) ? upper : ""}
+        {revealed ? upper : "\u00A0"}
       </span>
     );
   });
@@ -82,7 +84,7 @@ export default function HangmanGame() {
       <ConfettiSparks trigger={wordGuessResult === "correct"} />
       {/* Label above letter input */}
       <div className="w-full flex justify-center mb-1">
-        <label className="text-center text-base font-semibold text-gray-400">
+        <label className="text-center text-sm font-semibold text-gray-400">
           Enter a letter
         </label>
       </div>
@@ -95,7 +97,7 @@ export default function HangmanGame() {
           inputMode="text"
           maxLength={1}
           pattern="[a-zA-Z]"
-          className="w-32 text-center text-xl h-10 rounded-full bg-gray-900/80 text-white border border-gray-500 focus:border-blue-400 placeholder-gray-400"
+          className="w-32 text-center text-lg h-10 rounded-full bg-gray-900/80 text-white border border-gray-500 focus:border-blue-400 placeholder-gray-400"
           value={input}
           onChange={(e) => {
             // Only allow a single letter (a-z or A-Z)
@@ -108,37 +110,39 @@ export default function HangmanGame() {
       <div className="flex flex-wrap justify-center mb-2 min-h-[48px]">
         {display}
       </div>
-      <form
-        onSubmit={handleWordGuess}
-        className="flex gap-2 w-full justify-center mt-2"
-      >
-        <input
-          type="text"
-          inputMode="text"
-          className="input input-bordered w-32 text-center text-xs h-10 rounded-full placeholder:italic placeholder:text-xs"
-          placeholder="Element"
-          value={wordGuess}
-          onChange={(e) => setWordGuess(e.target.value)}
-        />
-        <button
-          type="submit"
-          className="btn btn-outline btn-xs rounded-full h-12 min-h-0 px-6 text-base"
+      <div className="w-full flex justify-center mt-2">
+        <form
+          onSubmit={handleWordGuess}
+          className="flex flex-col sm:flex-row items-center gap-3 w-full max-w-xl"
         >
-          Guess
-        </button>
-      </form>
+          <label
+            htmlFor="element-guess"
+            className="w-full text-center sm:text-left sm:w-auto text-sm text-gray-300 mb-1 sm:mb-0 sm:mr-2 font-semibold"
+          >
+            Element name
+          </label>
+          <input
+            id="element-guess"
+            type="text"
+            inputMode="text"
+            className="flex-1 w-full text-center text-lg h-10 leading-10 py-0 rounded-full bg-gray-900/80 text-white border border-gray-500 focus:border-blue-400 px-4"
+            value={wordGuess}
+            onChange={(e) => setWordGuess(e.target.value)}
+          />
+        </form>
+      </div>
       {wordGuessResult && (
         <>
           {wordGuessResult === "correct" ? (
-            <div className="text-green-600 font-bold">Correct! 🎉</div>
+            <div className="text-green-600 font-bold text-sm">Correct! 🎉</div>
           ) : (
-            <div className="text-red-500 font-bold">Incorrect</div>
+            <div className="text-red-500 font-bold text-sm">Incorrect</div>
           )}
           <div className="text-xs text-gray-500 mt-1">
             Answer: <span className="font-semibold">{hangmanWord}</span>
           </div>
           <button
-            className="btn btn-primary btn-sm rounded-full mt-3 px-6"
+            className="btn btn-primary rounded-full w-32 h-10 min-h-0 mt-3 text-sm"
             onClick={() => {
               setWordGuessResult(null);
               setInput("");
@@ -180,7 +184,7 @@ export default function HangmanGame() {
             animate={{ scale: [1.2, 0.95, 1.1, 1] }}
             exit={{ scale: 1 }}
             transition={{ duration: 0.5, times: [0, 0.2, 0.7, 1] }}
-            className="font-extrabold text-4xl md:text-5xl drop-shadow-lg select-none"
+            className="font-extrabold text-3xl md:text-4xl drop-shadow-lg select-none"
             style={{
               color: getLivesColor(maxAttempts - incorrect, maxAttempts),
             }}
