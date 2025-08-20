@@ -30,7 +30,8 @@ html,
 body,
 #root {
   width: 100%;
-  overflow-x: hidden;
+  height: 100%;
+  overflow: hidden; /* root-level scrolling disabled; app will scroll internally */
 }
 
 /* Ensure persistent bottom controls don't push content off-screen */

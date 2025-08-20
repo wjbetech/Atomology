@@ -129,7 +129,7 @@ export default function Element() {
       <div className="relative place-self-center">
         {/* Confetti/sparks celebration effect overlays the entire element box */}
         <ConfettiSparks trigger={celebrate} />
-        <div className="relative p-8 rounded-lg bg-opacity-50 bg-gradient-to-rshadow-lg backdrop-blur-md transition-all duration-500 w-[125px]">
+        <div className="relative p-8 rounded-lg bg-opacity-50 bg-gradient-to-rshadow-lg backdrop-blur-md transition-all duration-500 w-[125px] overflow-hidden">
           {/* static blurred background */}
           <div className="absolute -inset-1 rounded-lg bg-gradient-to-r from-black to-transparent blur opacity-20"></div>
 
@@ -157,6 +157,7 @@ export default function Element() {
             animate={celebrate ? { scale: [1, 1.12, 1] } : { scale: 1 }}
             transition={{ duration: 0.9 }}
             className="relative z-10 flex flex-col items-center justify-center"
+            style={{ willChange: "transform" }}
           >
             <span className="drop-shadow-lg">{answer?.number}</span>
             <h1 className="font-semibold text-5xl drop-shadow-lg tracking-wider">

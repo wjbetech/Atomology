@@ -179,6 +179,7 @@ export default function Answer() {
                   exit={{ opacity: 0, y: -6 }}
                   transition={{ duration: 0.3 }}
                   className="label-text-alt text-red-500 font-semibold text-lg text-center whitespace-nowrap"
+                  style={{ willChange: "transform, opacity" }}
                 >
                   Incorrect, try again!
                 </motion.span>
@@ -192,6 +193,7 @@ export default function Answer() {
                   exit={{ opacity: 0, y: -6 }}
                   transition={{ duration: 0.3 }}
                   className="label-text-alt text-green-600 font-semibold text-lg text-center whitespace-nowrap"
+                  style={{ willChange: "transform, opacity" }}
                 >
                   Correct!
                 </motion.span>

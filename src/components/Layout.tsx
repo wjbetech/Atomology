@@ -12,10 +12,10 @@ export default function Layout({ children }: Props) {
   return (
     <div
       className="flex flex-col w-full relative overflow-x-hidden"
-      style={{ minHeight: "100dvh" }}
+      style={{ minHeight: "calc(var(--vh, 1vh) * 100)" }}
     >
       <Navbar />
-      <main className="flex flex-1 flex-col items-center justify-center max-w-full m-auto pt-20 lg:pt-24">
+      <main className="flex flex-1 flex-col items-center justify-center max-w-full m-auto pt-20 lg:pt-24 overflow-y-auto w-full">
         {children}
       </main>
       <Footer />
