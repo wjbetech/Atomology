@@ -1,6 +1,6 @@
 import React from "react";
 
-import arrow from "../assets/arrow-left.svg";
+// ...existing code...
 
 type Props = {};
 
@@ -35,8 +35,26 @@ export default function Faq({}: Props) {
           </p>
         </div>
         <div className="flex justify-center m-auto">
-          <a href="/" className="flex flex-row">
-            <img className="" width={20} height={20} src={arrow}></img> Back
+          <a
+            href="/"
+            className="flex flex-row items-center text-slate-700 hover:text-slate-900"
+          >
+            <svg
+              className="w-5 h-5 mr-2"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+            >
+              <path
+                d="M6 12H18M6 12L11 7M6 12L11 17"
+                stroke="currentColor"
+                strokeWidth={2}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+            Back
           </a>
         </div>
       </section>
