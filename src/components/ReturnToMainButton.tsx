@@ -22,8 +22,10 @@ export default function ReturnToMainButton() {
     const state = (useGameStore as any).getState?.();
     if (state) {
       if (typeof state.setScore === "function") state.setScore(0);
-      if (typeof state.resetAnswerInput === "function") state.resetAnswerInput();
-      if (typeof state.resetGuessedElements === "function") state.resetGuessedElements();
+      if (typeof state.resetAnswerInput === "function")
+        state.resetAnswerInput();
+      if (typeof state.resetGuessedElements === "function")
+        state.resetGuessedElements();
     }
     navigate("/");
   };
