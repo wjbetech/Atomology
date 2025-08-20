@@ -1,3 +1,14 @@
+/* Remove active/focus border effect on all input elements */
+input:focus,
+input:active,
+select:focus,
+select:active,
+textarea:focus,
+textarea:active {
+  outline: none !important;
+  box-shadow: none !important;
+  border-color: inherit !important;
+}
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

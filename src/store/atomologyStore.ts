@@ -26,6 +26,13 @@ export interface GameState {
   playerAnswer: string | null;
   fetchTrigger: number;
   guessedElements: string[];
+  // Hangman mode state
+  hangmanWord: string | null;
+  hangmanGuessedLetters: string[];
+  hangmanIncorrectGuesses: number;
+  hangmanMaxAttempts: number;
+  hangmanDifficulty: string | null;
+  // Actions
   setGameMode: (mode: string) => void;
   setScore: (update: number | ((prevScore: number) => number)) => void;
   setElements: (elements: ElementType[]) => void;
@@ -34,6 +41,11 @@ export interface GameState {
   setGameStarted: (gameStarted: boolean) => void;
   setAnswer: (answer: ElementType | null) => void;
   setAnswerElementName: (name: ElementType["name"] | null) => void;
+  // Hangman actions
+  setHangmanWord: (word: string) => void;
+  guessHangmanLetter: (letter: string) => void;
+  resetHangman: () => void;
+  setHangmanDifficulty: (difficulty: string) => void;
 }
 
 export interface GameState {
@@ -94,6 +106,48 @@ export const useGameStore = create<GameState>((set, get) => {
     answerElementName: (persisted?.answerElementName as any) ?? "",
     fetchTrigger: 0,
     guessedElements: [],
+    // Hangman state
+    hangmanWord: null,
+    hangmanGuessedLetters: [],
+    hangmanIncorrectGuesses: 0,
+    hangmanMaxAttempts: 6,
+    hangmanDifficulty: null,
+
+    // Hangman actions
+    setHangmanWord: (word) =>
+      set({
+        hangmanWord: word,
+        hangmanGuessedLetters: [],
+        hangmanIncorrectGuesses: 0,
+      }),
+    guessHangmanLetter: (letter) =>
+      set((state) => {
+        if (!state.hangmanWord || state.hangmanGuessedLetters.includes(letter))
+          return {};
+        const isCorrect = state.hangmanWord
+          .toLowerCase()
+          .includes(letter.toLowerCase());
+        const newGuessed = [
+          ...state.hangmanGuessedLetters,
+          letter.toLowerCase(),
+        ];
+        const newIncorrect = isCorrect
+          ? state.hangmanIncorrectGuesses
+          : state.hangmanIncorrectGuesses + 1;
+        return {
+          hangmanGuessedLetters: newGuessed,
+          hangmanIncorrectGuesses: newIncorrect,
+        };
+      }),
+    resetHangman: () =>
+      set({
+        hangmanWord: null,
+        hangmanGuessedLetters: [],
+        hangmanIncorrectGuesses: 0,
+      }),
+    setHangmanDifficulty: (difficulty) =>
+      set({ hangmanDifficulty: difficulty }),
+
     addGuessedElement: (symbol) =>
       set((state) => {
         if (state.guessedElements.includes(symbol)) return {};

@@ -273,3 +273,16 @@ By splitting the components this way, you'll maintain cleaner code and separatio
 
 - Make the app installable as a Progressive Web App (PWA) for offline play.
 - Set up automated deployment (e.g., Vercel, Netlify, or GitHub Pages).
+
+# Hangman Mode Improvements & UI/UX Tasks
+
+1. Make the input+guess buttons a bit wider
+2. Reduce the size of the atom name text and the margin between the letters and the lines
+3. Fix the placeholder element text to look better, italicize it too
+4. Animate correct answers with confetti
+5. Display what the correct answer was
+6. Add a button to move to the next element
+7. Display the guessed letters more visibly
+8. Add the HUD and the HUD toggle to this game mode too
+9. Consider fixing the routing, and ensure that players can return to the same game spot if they accidentally refresh
+10. Make the Return to Main button the same width across all pages (refactor to its own component)
