@@ -6,12 +6,6 @@
 
 # Expanded Implementation Plan & Tasks
 
-## 1. Speed Up API Loading
-
-- Investigate why the current API is slow (30-40s startup). Is it due to serverless cold starts or another issue?
-- Evaluate the feasibility and benefits of building a local API or caching data locally for faster access.
-- Consider pre-fetching or storing the periodic table data in the app for instant access.
-
 ## 2. Improve Feedback (Sounds & Visualizations)
 
 - Add sound effects for correct and incorrect answers.

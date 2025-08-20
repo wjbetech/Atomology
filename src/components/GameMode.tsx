@@ -22,10 +22,10 @@ export default function GameMode() {
   }
 
   return (
-    <div className="flex flex-col gap-8 justif items-center transition-all duration-1000">
+    <div className="flex flex-col gap-8 justif items-center transition-all duration-1000 mt-24 max-h-screen overflow-auto">
       <img src={atoms} alt="" className="rotate w-16 h-16" />
-      <h1 className="font-serif text-5xl">Atomology</h1>
-      <div className="flex gap-4 lg:gap-6 justify-center">
+      <h1 className="font-serif text-5xl mb-8">Atomology</h1>
+      <div className="flex flex-col gap-5 justify-center w-full max-w-md mx-auto mt-12">
         <button
           id="multiple"
           value="multiple"
@@ -39,13 +39,13 @@ export default function GameMode() {
               setGameStarted(true);
             }
           }}
-          className="btn btn-outline btn-md w-1/2 lg:btn-lg border-2 font-[400] rounded-full"
+          className="btn btn-outline btn-sm lg:btn-md border-2 font-[400] rounded-full w-full h-12"
         >
           Multiple Choice
         </button>
         <button
           id="open"
-          value="multiple"
+          value="open"
           onClick={() => {
             if (gameMode === "multi") {
               setGameStarted(true);
@@ -56,9 +56,21 @@ export default function GameMode() {
               setGameStarted(true);
             }
           }}
-          className="btn btn-outline w-1/2 btn-md lg:btn-lg border-2 font-[400] rounded-full"
+          className="btn btn-outline btn-sm lg:btn-md border-2 font-[400] rounded-full w-full h-12"
         >
           Open Answer
+        </button>
+        <button
+          id="hangman"
+          value="hangman"
+          onClick={() => {
+            setGameMode("hangman");
+            setGameStarted(true);
+            setPlayerAnswer("");
+          }}
+          className="btn btn-outline btn-sm lg:btn-md border-2 font-[400] rounded-full w-full h-12"
+        >
+          Hangman Mode
         </button>
       </div>
     </div>
