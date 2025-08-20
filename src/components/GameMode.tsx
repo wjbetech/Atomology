@@ -30,14 +30,9 @@ export default function GameMode() {
           id="multiple"
           value="multiple"
           onClick={() => {
-            if (gameMode === "open") {
-              setGameStarted(true);
-              setPlayerAnswer("");
-              setGameMode("multi");
-            }
-            if (gameStarted === false) {
-              setGameStarted(true);
-            }
+            setGameMode("multi");
+            setPlayerAnswer("");
+            setGameStarted(true);
           }}
           className="btn btn-outline btn-sm lg:btn-md border-2 font-[400] rounded-full w-full h-12"
         >
@@ -47,14 +42,9 @@ export default function GameMode() {
           id="open"
           value="open"
           onClick={() => {
-            if (gameMode === "multi") {
-              setGameStarted(true);
-              setPlayerAnswer("");
-              setGameMode("open");
-            }
-            if (gameStarted === false) {
-              setGameStarted(true);
-            }
+            setGameMode("open");
+            setPlayerAnswer("");
+            setGameStarted(true);
           }}
           className="btn btn-outline btn-sm lg:btn-md border-2 font-[400] rounded-full w-full h-12"
         >

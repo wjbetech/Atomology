@@ -68,19 +68,14 @@ export default function HangmanGame() {
           type="text"
           inputMode="text"
           maxLength={1}
-          className="input input-bordered w-24 text-center text-xl h-12 rounded-full"
+          className="input input-bordered w-40 text-center text-xl h-10 rounded-full"
           value={input}
           onChange={(e) =>
             setInput(e.target.value.replace(/[^a-zA-Z]/g, "").slice(0, 1))
           }
           autoFocus
         />
-        <button
-          type="submit"
-          className="btn btn-primary btn-sm rounded-full h-12 min-h-0 px-6 text-base"
-        >
-          Guess
-        </button>
+        {/* Guess button removed; submit by pressing Enter */}
       </form>
       <div className="flex flex-wrap justify-center mb-2 min-h-[48px]">
         {display}
@@ -92,8 +87,8 @@ export default function HangmanGame() {
         <input
           type="text"
           inputMode="text"
-          className="input input-bordered w-40 text-center text-xs h-12 rounded-full placeholder:text-xs placeholder:italic"
-          placeholder="Element name..."
+          className="input input-bordered w-32 text-center text-xs h-10 rounded-full placeholder:italic placeholder:text-xs"
+          placeholder="Element"
           value={wordGuess}
           onChange={(e) => setWordGuess(e.target.value)}
         />
@@ -101,7 +96,7 @@ export default function HangmanGame() {
           type="submit"
           className="btn btn-outline btn-xs rounded-full h-12 min-h-0 px-6 text-base"
         >
-          Guess Word
+          Guess
         </button>
       </form>
       {wordGuessResult && (

@@ -10,7 +10,13 @@ export default function Navbar({}: Props) {
   const location = useLocation();
 
   return (
-    <nav className="p-6 flex fixed w-screen justify-center gap-4">
+    <nav
+      className="p-6 flex fixed inset-x-0 w-full justify-center gap-4 bg-transparent"
+      style={{
+        paddingLeft: "env(safe-area-inset-left)",
+        paddingRight: "env(safe-area-inset-right)",
+      }}
+    >
       {/* make sure pages don't load links to themselves */}
       {location.pathname !== "/" && <Link to="/">Main</Link>}
       {location.pathname !== "/about" && <Link to="/about">About</Link>}

@@ -25,6 +25,19 @@ textarea:active {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Prevent transient horizontal scrollbar by clamping body overflow */
+html,
+body,
+#root {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* Ensure persistent bottom controls don't push content off-screen */
+body {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
 .rotate {
   animation: rotation 8s infinite linear;
 }

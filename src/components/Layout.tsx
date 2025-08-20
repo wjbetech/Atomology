@@ -10,7 +10,10 @@ type Props = {
 
 export default function Layout({ children }: Props) {
   return (
-    <div className="flex flex-col min-h-screen w-screen relative">
+    <div
+      className="flex flex-col w-full relative overflow-x-hidden"
+      style={{ minHeight: "100dvh" }}
+    >
       <Navbar />
       <main className="flex flex-1 flex-col items-center justify-center max-w-full m-auto pt-20 lg:pt-24">
         {children}

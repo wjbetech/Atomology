@@ -1,5 +1,6 @@
 import React from "react";
 import { useGameStore } from "../store/atomologyStore";
+import ReturnToMainButton from "./ReturnToMainButton";
 import {
   getElementsByDifficulty,
   DifficultyLevel,
@@ -23,8 +24,6 @@ export default function HangmanDifficultySelect() {
     setHangmanWord(random.name);
   };
 
-  const setGameMode = useGameStore((s) => s.setGameMode);
-  const setGameStarted = useGameStore((s) => s.setGameStarted);
   return (
     <div className="flex flex-col items-center gap-4">
       <h2 className="text-xl font-bold mb-2">Select Difficulty</h2>
@@ -45,15 +44,9 @@ export default function HangmanDifficultySelect() {
       >
         Start
       </button>
-      <button
-        className="btn btn-outline btn-md rounded-full w-64 "
-        onClick={() => {
-          setGameMode("");
-          setGameStarted(false);
-        }}
-      >
-        Return to Main
-      </button>
+      <div className="mt-4">
+        <ReturnToMainButton />
+      </div>
     </div>
   );
 }

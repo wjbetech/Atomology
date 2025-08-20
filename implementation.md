@@ -234,6 +234,23 @@ By splitting the components this way, you'll maintain cleaner code and separatio
 - Add loading skeletons, error boundaries, and robust input validation.
 - Fix any UI/UX bugs, edge cases, or performance bottlenecks.
 
+### UI Bug: transient scrollbar flicker on navigation/reload
+
+- Symptom: when returning to or reloading the main page the page briefly displays vertical and/or horizontal scrollbars (flicker) until the layout stabilizes.
+- Steps to reproduce: load or reload the app on mobile/desktop, or navigate back to the main route; observe transient scrollbars during initial render/resize.
+- Suspected causes: 100vh vs viewport chrome behavior, fixed header/footer heights not reserved, `w-screen`/100vw usage, or initial animations/margins causing a temporary overflow.
+- Proposed fixes to try (in priority order):
+  1. Use dynamic viewport height (`100dvh`) for root containers instead of `100vh`.
+
+2.  Replace `w-screen` with `w-full` and use `inset-x-0` for fixed elements to avoid 100vw scrollbar issues.
+3.  Make header/footer heights explicit and set main min-height to `calc(100dvh - <header> - <footer>)` so content never exceeds viewport height.
+4.  Add `overflow-x: hidden` at root and `overflow-y: auto` on the main content area so only content scrolls when necessary.
+5.  Debounce/disable heavy animations during initial mount to avoid transient layout shifts.
+
+- Acceptance criteria:
+  - On reload and when navigating back to the main page, no vertical or horizontal scrollbar should appear briefly on common desktop and mobile browsers (Chrome, Safari, and mobile WebViews) in typical viewport sizes.
+  - Any fix must preserve accessibility (no hidden content) and not break fixed header/footer controls.
+
 ## Analytics & Feedback
 
 - Add basic analytics to understand user behavior (page views, game completions, etc.).

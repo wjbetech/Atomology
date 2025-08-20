@@ -2,28 +2,40 @@ import React, { useState } from "react";
 import { createPortal } from "react-dom";
 import { useGameStore } from "../store/atomologyStore";
 import ConfirmModal from "./ConfirmModal";
+import { useNavigate } from "react-router-dom";
 
 export default function ReturnToMainButton() {
   const setGameMode = useGameStore((s) => s.setGameMode);
   const setGameStarted = useGameStore((s) => s.setGameStarted);
   const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
 
   const handleConfirm = () => {
     setShowModal(false);
+    // clear persisted session and reset game state, then navigate home
+    try {
+      localStorage.removeItem("atomology.session");
+    } catch {}
     setGameMode("");
     setGameStarted(false);
+    // attempt to reset score and input state if available on store
+    const state = (useGameStore as any).getState?.();
+    if (state) {
+      if (typeof state.setScore === "function") state.setScore(0);
+      if (typeof state.resetAnswerInput === "function") state.resetAnswerInput();
+      if (typeof state.resetGuessedElements === "function") state.resetGuessedElements();
+    }
+    navigate("/");
   };
 
   return (
     <>
-      <div className="fixed bottom-20 inset-x-0 flex justify-center z-30">
-        <button
-          className="btn btn-outline btn-sm lg:btn-md w-40 rounded-full"
-          onClick={() => setShowModal(true)}
-        >
-          Return to Main
-        </button>
-      </div>
+      <button
+        className="btn btn-outline btn-sm lg:btn-md w-40 rounded-full"
+        onClick={() => setShowModal(true)}
+      >
+        Return to Main
+      </button>
       {showModal &&
         createPortal(
           <ConfirmModal
