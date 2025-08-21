@@ -18,11 +18,24 @@ export default function HangmanDifficultySelect() {
   const setHangmanIndex = useGameStore((s) => s.setHangmanIndex);
   const [selected, setSelected] = React.useState<DifficultyLevel>("easy10");
 
+  // Fisher-Yates shuffle
+  function shuffle<T>(array: T[]): T[] {
+    const arr = [...array];
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
   const handleStart = () => {
     setHangmanDifficulty(selected);
-    const pool = getElementsByDifficulty(selected);
-    const random = pool[Math.floor(Math.random() * pool.length)];
-    // start at index 0 for deterministic progress
+    const pool = shuffle(getElementsByDifficulty(selected));
+    // Store the shuffled pool in sessionStorage for this session
+    sessionStorage.setItem(
+      "hangmanPool",
+      JSON.stringify(pool.map((e) => e.name))
+    );
     setHangmanIndex(0);
     setHangmanWord(pool[0].name);
   };
