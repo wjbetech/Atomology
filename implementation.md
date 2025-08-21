@@ -211,6 +211,28 @@ By splitting the components this way, you'll maintain cleaner code and separatio
 - Let users pick color themes, backgrounds, or UI layouts.
 - Offer unlockable themes as rewards for achievements.
 
+### Theme toggle — current state & follow-ups
+
+- Current state (code pointers):
+
+  - `useGameStore` (src/store/atomologyStore.ts) exposes `theme` and `setTheme` and already writes `data-theme` on `document.documentElement` when called.
+  - `index.html` contains `html data-theme="system"` so the app starts in a system-driven mode by default.
+  - `tailwind.config.js` lists theme names (`night`, `winter`) and `themeRoot: ":root"` which the CSS theme system uses.
+
+- Known gaps / fixes to complete:
+  1. Persist user selection: `setTheme` should persist the chosen theme to `localStorage` (and read it on store init) so toggles survive refresh.
+
+2.  UI wiring: add a visible toggle control (e.g., in `Navbar` or a Settings panel) that calls `setTheme("light"|"dark"|"system")` and reflects current state.
+3.  System preference handling: when user selects `system`, the app should follow `window.matchMedia("(prefers-color-scheme: dark)")` and update on changes.
+4.  Accessibility: the toggle needs an accessible label, role, and keyboard handling; announce changes where appropriate for assistive tech.
+5.  SSR / hydration safety: guard `document`/`window` access (store init) to avoid runtime errors in SSR/frontend tests.
+6.  Visual QA: verify all theme-dependent elements (Navbar badges, buttons, modal borders, text contrast) across themes; add a small visual test matrix in README or CI notes.
+
+- Acceptance criteria:
+  - Theme selection persists across reloads and is controllable from the UI.
+  - `data-theme` attribute always matches the visible theme and updates when `system` preference changes.
+  - Contrast and accessibility checks pass for each theme (manual/automated checklist).
+
 ## Localization & Internationalization
 
 - Support multiple languages for broader reach.

@@ -1,10 +1,10 @@
 import React from "react";
-import { useGameStore } from "../store/atomologyStore";
-import ReturnToMainButton from "./ReturnToMainButton";
+import { useGameStore } from "../../store/atomologyStore";
+import ReturnToMainButton from "../ReturnToMainButton";
 import {
   getElementsByDifficulty,
   DifficultyLevel,
-} from "../utils/hangmanDifficulty";
+} from "../../utils/hangmanDifficulty";
 
 const DIFFICULTY_LABELS: Record<DifficultyLevel, string> = {
   easy10: "10 Easiest Elements",

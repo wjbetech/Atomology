@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { useGameStore } from "../store/atomologyStore";
+import { useGameStore } from "../../store/atomologyStore";
 import { motion, AnimatePresence } from "framer-motion";
-import ConfettiSparks from "./ConfettiSparks";
-import ReturnToMainButton from "./ReturnToMainButton";
-import HangmanLetters from "./HangmanLetters";
-import HangmanGuessInput from "./HangmanGuessInput";
-import HangmanKeyboard from "./HangmanKeyboard";
-import HangmanGameOverModal from "./HangmanGameOverModal";
-import { getElementsByDifficulty } from "../utils/hangmanDifficulty";
+import ConfettiSparks from "../ConfettiSparks";
+import ReturnToMainButton from "../ReturnToMainButton";
+import HangmanLetters from "./HangmanLetters.tsx";
+import HangmanGuessInput from "./HangmanGuessInput.tsx";
+import HangmanKeyboard from "./HangmanKeyboard.tsx";
+import HangmanGameOverModal from "./HangmanGameOverModal.tsx";
+import { getElementsByDifficulty } from "../../utils/hangmanDifficulty";
 
 export default function HangmanGame() {
   const hangmanWord = useGameStore((s) => s.hangmanWord);

@@ -9,8 +9,8 @@ import HUDWrapper from "./components/HUDWrapper";
 import Answer from "./components/Answer";
 import About from "./components/About";
 import Faq from "./components/Faq";
-import HangmanDifficultySelect from "./components/HangmanDifficultySelect";
-import HangmanGame from "./components/HangmanGame";
+import HangmanDifficultySelect from "./components/hangman/HangmanDifficultySelect";
+import HangmanGame from "./components/hangman/HangmanGame";
 
 // react-router
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";

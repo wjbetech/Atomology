@@ -60,7 +60,7 @@ export default function Navbar({}: Props) {
   if (gameMode === "hangman" && gameStarted) {
     return (
       <nav
-        className="p-4 flex fixed inset-x-0 w-full items-center justify-between bg-transparent"
+        className="p-4 flex fixed inset-x-0 w-full items-start justify-between bg-transparent"
         style={{
           paddingLeft: "env(safe-area-inset-left)",
           paddingRight: "env(safe-area-inset-right)",
@@ -72,11 +72,11 @@ export default function Navbar({}: Props) {
               LEVEL:
             </div>
             <div className="font-bold text-2xl md:text-4xl lg:text-5xl xl:text-6xl">
-              {current}/{total}
+              {total > 0 ? `${current}/${total}` : "--/--"}
             </div>
           </div>
         </div>
-        <div className="text-center mx-auto font-semibold text-lg">
+        <div className="absolute left-1/2 transform -translate-x-1/2 font-semibold text-lg text-center">
           Hangman Mode
         </div>
         <div className="px-4">
@@ -105,7 +105,7 @@ export default function Navbar({}: Props) {
   // default navbar with links
   return (
     <nav
-      className="p-6 flex fixed inset-x-0 w-full justify-center gap-4 bg-transparent"
+      className="p-6 flex fixed inset-x-0 w-full items-start justify-center gap-4 bg-transparent"
       style={{
         paddingLeft: "env(safe-area-inset-left)",
         paddingRight: "env(safe-area-inset-right)",
