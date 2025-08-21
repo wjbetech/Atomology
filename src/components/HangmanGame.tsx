@@ -173,25 +173,28 @@ export default function HangmanGame() {
           )}
         </div>
       </div>
-      <div className="w-full flex flex-col items-center mb-8">
-        <span className="text-xs text-gray-400 mb-1 tracking-wide uppercase font-semibold">
-          Lives left
-        </span>
-        <AnimatePresence mode="wait">
-          <motion.span
-            key={livesAnimKey}
-            initial={{ scale: 1 }}
-            animate={{ scale: [1.2, 0.95, 1.1, 1] }}
-            exit={{ scale: 1 }}
-            transition={{ duration: 0.5, times: [0, 0.2, 0.7, 1] }}
-            className="font-extrabold text-3xl md:text-4xl drop-shadow-lg select-none"
-            style={{
-              color: getLivesColor(maxAttempts - incorrect, maxAttempts),
-            }}
-          >
-            {maxAttempts - incorrect}
-          </motion.span>
-        </AnimatePresence>
+      {/* Lives counter fixed to top-right of viewport */}
+      <div className="fixed top-4 right-4 z-50 pointer-events-none">
+        <div className="flex flex-col items-center">
+          <span className="text-xs text-gray-400 mb-1 tracking-wide uppercase font-semibold">
+            Lives
+          </span>
+          <AnimatePresence mode="wait">
+            <motion.span
+              key={livesAnimKey}
+              initial={{ scale: 1 }}
+              animate={{ scale: [1.2, 0.95, 1.1, 1] }}
+              exit={{ scale: 1 }}
+              transition={{ duration: 0.5, times: [0, 0.2, 0.7, 1] }}
+              className="font-extrabold text-2xl sm:text-3xl md:text-4xl drop-shadow-lg select-none"
+              style={{
+                color: getLivesColor(maxAttempts - incorrect, maxAttempts),
+              }}
+            >
+              {maxAttempts - incorrect}
+            </motion.span>
+          </AnimatePresence>
+        </div>
       </div>
       <ReturnToMainButton />
     </div>
