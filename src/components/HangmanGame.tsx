@@ -80,33 +80,10 @@ export default function HangmanGame() {
   };
 
   return (
-    <div className="flex flex-col items-center gap-4 mt-6 w-full max-w-xs mx-auto relative">
+    <div className="flex flex-col items-center gap-4 mt-6 w-full max-w-[420px] mx-auto relative">
       <ConfettiSparks trigger={wordGuessResult === "correct"} />
-      {/* Label above letter input */}
-      <div className="w-full flex justify-center mb-1">
-        <label className="text-center text-sm font-semibold text-gray-400">
-          Enter a letter
-        </label>
-      </div>
-      <form
-        onSubmit={handleGuess}
-        className="flex gap-2 w-full justify-center mb-2"
-      >
-        <input
-          type="text"
-          inputMode="text"
-          maxLength={1}
-          pattern="[a-zA-Z]"
-          className="w-32 text-center text-lg h-10 rounded-full bg-gray-900/80 text-white border border-gray-500 focus:border-blue-400 placeholder-gray-400"
-          value={input}
-          onChange={(e) => {
-            // Only allow a single letter (a-z or A-Z)
-            const val = e.target.value.replace(/[^a-zA-Z]/g, "").slice(0, 1);
-            setInput(val);
-          }}
-          autoFocus
-        />
-      </form>
+      <h2 className="mt-10 text-center text-2xl md:text-3xl">Hangman Mode</h2>
+      {/* (Alphabet keyboard moved below blanks and guess form) */}
       <div className="flex flex-wrap justify-center mb-2 min-h-[48px]">
         {display}
       </div>
@@ -115,21 +92,48 @@ export default function HangmanGame() {
           onSubmit={handleWordGuess}
           className="flex flex-col sm:flex-row items-center gap-3 w-full max-w-xl"
         >
-          <label
-            htmlFor="element-guess"
-            className="w-full text-center sm:text-left sm:w-auto text-sm text-gray-300 mb-1 sm:mb-0 sm:mr-2 font-semibold"
-          >
-            Element name
-          </label>
           <input
             id="element-guess"
             type="text"
             inputMode="text"
-            className="flex-1 w-full text-center text-lg h-10 leading-10 py-0 rounded-full bg-gray-900/80 text-white border border-gray-500 focus:border-blue-400 px-4"
+            placeholder="Guess the element"
+            className="flex-1 w-full text-center text-lg h-10 leading-10 py-0 rounded-full bg-gray-900/80 text-white border border-gray-500 focus:border-blue-400 px-4 placeholder:text-sm placeholder:italic placeholder:text-gray-400"
             value={wordGuess}
             onChange={(e) => setWordGuess(e.target.value)}
           />
         </form>
+      </div>
+      {/* Alphabet keyboard: click letters to guess (Wordle-like) - moved here */}
+      <div className="w-full flex justify-center mb-2 mt-4">
+        <div className="flex flex-wrap justify-center gap-1 w-full max-w-[420px]">
+          {"ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").map((L) => {
+            const l = L.toLowerCase();
+            const used = guessed.includes(l);
+            const inWord = hangmanWord.toLowerCase().includes(l);
+            const base =
+              "inline-flex items-center justify-center w-8 h-8 text-sm font-semibold rounded-sm transition-colors";
+            const classes = used
+              ? inWord
+                ? base +
+                  " bg-green-700 text-white border-0 disabled:opacity-100"
+                : base + " bg-gray-400/50 text-gray-700 border-0 opacity-60"
+              : base +
+                " bg-gray-800 border-gray-700 text-white hover:bg-gray-700 cursor-pointer disabled:opacity-60";
+            return (
+              <button
+                key={L}
+                aria-label={`Guess ${L}`}
+                disabled={used}
+                onClick={() => {
+                  if (!used) guessLetter(l);
+                }}
+                className={classes}
+              >
+                {L}
+              </button>
+            );
+          })}
+        </div>
       </div>
       {wordGuessResult && (
         <>
@@ -154,25 +158,7 @@ export default function HangmanGame() {
           </button>
         </>
       )}
-      <div className="w-full flex flex-col items-center my-2">
-        <span className="text-xs text-gray-400 mb-3 tracking-wide uppercase font-semibold">
-          Used Letters
-        </span>
-        <div className="flex flex-wrap gap-2 justify-center min-h-[32px]">
-          {guessed.length === 0 ? (
-            <span className="text-gray-400 italic">None yet</span>
-          ) : (
-            guessed.map((letter) => (
-              <span
-                key={letter}
-                className="bg-gray-200 text-gray-700 rounded-full px-2.5 py-1 text-sm font-bold border border-gray-400 shadow-sm"
-              >
-                {letter.toUpperCase()}
-              </span>
-            ))
-          )}
-        </div>
-      </div>
+      {/* Used letters removed: keyboard now indicates used state */}
       {/* Lives counter fixed to top-right of viewport */}
       <div className="fixed top-4 right-4 z-50 pointer-events-none">
         <div className="flex flex-col items-center">
@@ -196,7 +182,10 @@ export default function HangmanGame() {
           </AnimatePresence>
         </div>
       </div>
-      <ReturnToMainButton />
+      {/* Return button fixed near bottom center of viewport (72px above bottom) */}
+      <div className="fixed left-1/2 transform -translate-x-1/2 bottom-[72px] z-50 pointer-events-auto">
+        <ReturnToMainButton />
+      </div>
     </div>
   );
 }
