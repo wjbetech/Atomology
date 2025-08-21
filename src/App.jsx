@@ -40,7 +40,7 @@ function MainGameContent() {
   return (
     <>
       <HUDWrapper />
-      <div className="atomology-scale-wrap">
+      <div className="atomology-scale-wrap ">
         <div className="flex flex-col gap-y-10 justify-center items-center">
           <GameMode />
           <div className="flex flex-col gap-y-10 mt-20 lg:mt-0">
@@ -60,13 +60,16 @@ function MainGameContent() {
 function App() {
   return (
     <Router>
-      <Layout>
-        <Routes>
-          <Route path="/about" element={<About />} />
-          <Route path="/faq" element={<Faq />} />
-          <Route path="/" element={<MainGameContent />} />
-        </Routes>
-      </Layout>
+      {/* Single source of truth for app background and base text color */}
+      <div className="min-h-screen min-w-screen bg-content text-base-content">
+        <Layout>
+          <Routes>
+            <Route path="/about" element={<About />} />
+            <Route path="/faq" element={<Faq />} />
+            <Route path="/" element={<MainGameContent />} />
+          </Routes>
+        </Layout>
+      </div>
     </Router>
   );
 }

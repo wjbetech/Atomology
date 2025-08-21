@@ -47,6 +47,24 @@ export default function Navbar({}: Props) {
       return palette[rem] ?? palette[0];
     }
 
+    // If max is 10, use an 11-step palette with red at low, orange mid, green high
+    if (max === 10) {
+      const palette = [
+        "#ff1744", // 0 - red
+        "#ff3d00", // 1
+        "#ff7043", // 2
+        "#ff8a33", // 3
+        "#ffb347", // 4 - orange
+        "#ffcc33", // 5 - amber
+        "#ffdd55", // 6 - yellowish
+        "#ccff33", // 7 - lime
+        "#9cff3a", // 8 - greenish
+        "#66ff66", // 9 - light green
+        "#00e676", // 10 - vivid green
+      ];
+      return palette[rem] ?? palette[0];
+    }
+
     // Fallback: brighter interpolation for non-standard max values
     const percent = Math.max(0, Math.min(1, lives / max));
     const green = { r: 56, g: 230, b: 120 };
@@ -71,7 +89,7 @@ export default function Navbar({}: Props) {
           <div className="bg-transparent px-3 py-3 rounded-full text-lg md:text-xl font-semibold text-center">
             <div
               className={
-                "text-base md:text-lg lg:text-xl uppercase tracking-wider " +
+                "text-base md:text-lg lg:text-xl uppercase tracking-wider hangman-level " +
                 (isDark ? "text-gray-300" : "text-gray-800")
               }
             >
@@ -82,7 +100,7 @@ export default function Navbar({}: Props) {
             </div>
           </div>
         </div>
-        <div className="absolute left-1/2 transform -translate-x-1/2 font-semibold text-lg text-center">
+        <div className="absolute left-1/2 transform -translate-x-1/2 font-semibold text-lg text-center hangman-title">
           Hangman Mode
         </div>
         <div className="px-4">

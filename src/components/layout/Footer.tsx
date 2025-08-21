@@ -14,10 +14,11 @@ export default function Footer({}: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const toggle = () => {
-    // use 'cupcake' as the light theme, 'night' as the dark theme
-    if (theme === "night") setTheme("cupcake");
-    else setTheme("night");
+  // Deterministically set theme from the checkbox checked state so
+  // we always write daisyUI tokens ('cupcake' for light, 'night' for dark).
+  const onToggleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const checked = e.target.checked;
+    setTheme(checked ? "cupcake" : "night");
   };
 
   const isLight = theme === "cupcake" || theme === "light";
@@ -39,7 +40,7 @@ export default function Footer({}: Props) {
             type="checkbox"
             className="toggle toggle-sm"
             checked={isLight}
-            onChange={toggle}
+            onChange={onToggleChange}
             aria-label="Toggle theme"
           />
         </label>

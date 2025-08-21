@@ -13,6 +13,10 @@ textarea:active {
 @tailwind components;
 @tailwind utilities;
 
+@plugin "daisyui" {
+  themes: light --cupcake, dark --night;
+}
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -74,4 +78,62 @@ body {
 /* smooth scale transition when resizing */
 .atomology-scale-wrap {
   transition: transform 180ms ease;
+}
+
+/* Use daisyUI theme tokens via Tailwind utility classes so themes drive colors.
+   Avoid hard-coded hex values here; instead apply daisyUI utilities which map to
+   the active themeRoot (configured in tailwind.config.js as [data-theme]).
+*/
+
+/* App component (src/App.jsx) is the single source of truth for background and text color.
+  That wrapper applies `bg-base-100 text-base-content` so we avoid duplicating
+  styling here which could conflict with component-scoped classes.
+*/
+
+/* Inputs, selects, textareas and buttons should use base surface tokens */
+[data-theme] input,
+[data-theme] textarea,
+[data-theme] select,
+[data-theme] .btn {
+  @apply bg-base-200 text-base-content border border-base-300;
+}
+
+[data-theme] input::placeholder,
+[data-theme] textarea::placeholder {
+  @apply text-base-content/60;
+}
+
+/* Dialogs should use the base surface and content tokens as well */
+[data-theme] [role="dialog"] {
+  @apply bg-base-100 text-base-content border;
+}
+
+/* Specific helper: hangman input */
+#element-guess {
+  @apply rounded-full px-4 h-10 leading-10;
+}
+
+/* Ensure hangman labels inherit theme content color and are legible */
+.hangman-title,
+.hangman-level,
+.hangman-select-title {
+  @apply text-base-content;
+}
+
+/* Theme-aware atom logo tweak: make the mid (previously white) shape dark gray in light mode */
+[data-theme="cupcake"] .atoms-fill-2 {
+  fill: #b91c1c !important; /* deep red (red-700) */
+}
+
+/* Make the outer yellow teardrop a deep orange in light mode */
+[data-theme="cupcake"] .atoms-fill-1 {
+  fill: #fb923c !important; /* lighter orange (orange-400) */
+}
+
+[data-theme="night"] .atoms-fill-1 {
+  fill: #FCD462 !important; /* original light yellow for night */
+}
+
+[data-theme="night"] .atoms-fill-2 {
+  fill: #ebf0f3 !important; /* original light fill for night */
 }

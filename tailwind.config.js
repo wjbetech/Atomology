@@ -12,6 +12,7 @@ export default {
     base: true,
     styled: true,
     utils: true,
-    themeRoot: ":root",
+    // use the data-theme attribute on elements (e.g., <html data-theme="cupcake">)
+    themeRoot: "[data-theme]",
   },
 };

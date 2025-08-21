@@ -42,7 +42,9 @@ export default function HangmanDifficultySelect() {
 
   return (
     <div className="flex flex-col items-center gap-4">
-      <h2 className="text-xl font-bold mb-2">Select Difficulty</h2>
+      <h2 className="text-xl font-bold mb-2 hangman-select-title">
+        Select Difficulty
+      </h2>
       <select
         className="select select-bordered rounded-full w-64 mb-2"
         value={selected}

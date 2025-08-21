@@ -112,7 +112,7 @@ export const useGameStore = create<GameState>((set, get) => {
     hangmanWord: null,
     hangmanGuessedLetters: [],
     hangmanIncorrectGuesses: 0,
-    hangmanMaxAttempts: 6,
+    hangmanMaxAttempts: 10,
     hangmanIndex: 0,
     hangmanDifficulty: null,
 
@@ -224,7 +224,9 @@ export const useUIStore = create<uiSlice>((set) => ({
           window.matchMedia("(prefers-color-scheme: dark)").matches
         ? "dark"
         : "cupcake";
+      // normalize friendly names: map legacy values to the theme tokens
       if (initial === "light") initial = "cupcake";
+      if (initial === "dark") initial = "night";
       try {
         if (typeof document !== "undefined")
           document.documentElement.setAttribute("data-theme", initial);
