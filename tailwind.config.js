@@ -8,7 +8,7 @@ export default {
   },
   plugins: [daisyui],
   daisyui: {
-    themes: ["night", "winter"],
+    themes: ["cupcake", "dark", "night", "winter"],
     base: true,
     styled: true,
     utils: true,

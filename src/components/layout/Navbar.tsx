@@ -1,6 +1,5 @@
-import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { useGameStore } from "../../store/atomologyStore";
+import { useGameStore, useUIStore } from "../../store/atomologyStore";
 import { getElementsByDifficulty } from "../../utils/hangmanDifficulty";
 
 type Props = {};
@@ -15,6 +14,8 @@ export default function Navbar({}: Props) {
   );
   const hangmanIncorrect = useGameStore((s) => s.hangmanIncorrectGuesses);
   const hangmanMaxAttempts = useGameStore((s) => s.hangmanMaxAttempts);
+  const theme = useUIStore((s) => s.theme);
+  const isDark = theme === "dark" || theme === "night";
 
   // compute pool total and current for hangman
   let total = 0;
@@ -67,8 +68,13 @@ export default function Navbar({}: Props) {
         }}
       >
         <div className="px-4">
-          <div className="bg-gray-900/80 text-white px-3 py-3 rounded-full text-lg md:text-xl font-semibold text-center">
-            <div className="text-base md:text-lg lg:text-xl text-gray-300 uppercase tracking-wider">
+          <div className="bg-transparent px-3 py-3 rounded-full text-lg md:text-xl font-semibold text-center">
+            <div
+              className={
+                "text-base md:text-lg lg:text-xl uppercase tracking-wider " +
+                (isDark ? "text-gray-300" : "text-gray-800")
+              }
+            >
               LEVEL:
             </div>
             <div className="font-bold text-2xl md:text-4xl lg:text-5xl xl:text-6xl">
@@ -81,7 +87,12 @@ export default function Navbar({}: Props) {
         </div>
         <div className="px-4">
           <div className="text-right text-lg md:text-xl font-semibold">
-            <span className="text-base md:text-lg lg:text-xl text-gray-300 uppercase tracking-wider block">
+            <span
+              className={
+                "text-base md:text-lg lg:text-xl uppercase tracking-wider block " +
+                (isDark ? "text-gray-300" : "text-gray-800")
+              }
+            >
               LIVES:
             </span>
             <span
