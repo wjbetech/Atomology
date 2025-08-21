@@ -1,5 +1,5 @@
-import { useGameStore } from "../store/atomologyStore";
-import Score from "./Score";
+import { useGameStore } from "../../store/atomologyStore";
+import Score from "../sub-components/Score";
 
 export default function OpenAnswer() {
   const gameStarted = useGameStore((s) => s.gameStarted);

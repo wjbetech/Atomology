@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { createPortal } from "react-dom";
-import { useGameStore } from "../store/atomologyStore";
-import ConfirmModal from "./ConfirmModal";
+import { useGameStore } from "../../store/atomologyStore";
+import ConfirmModal from "../ConfirmModal";
 import { useNavigate } from "react-router-dom";
 
 export default function ReturnToMainButton() {

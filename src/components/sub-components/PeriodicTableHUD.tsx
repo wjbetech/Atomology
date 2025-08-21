@@ -1,5 +1,5 @@
 import React from "react";
-import elementsData from "../data/elements.json";
+import elementsData from "../../data/elements.json";
 
 interface PeriodicTableHUDProps {
   guessed: Set<string>;

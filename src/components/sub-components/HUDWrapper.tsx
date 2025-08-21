@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { PeriodicTableHUD } from "./PeriodicTableHUD";
-import { useGameStore } from "../store/atomologyStore";
+import { useGameStore } from "../../store/atomologyStore";
 
 const HUDWrapper = (props) => {
   const [showHUD, setShowHUD] = useState(true);

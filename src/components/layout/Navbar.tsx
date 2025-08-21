@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { useGameStore } from "../store/atomologyStore";
-import { getElementsByDifficulty } from "../utils/hangmanDifficulty";
+import { useGameStore } from "../../store/atomologyStore";
+import { getElementsByDifficulty } from "../../utils/hangmanDifficulty";
 
 type Props = {};
 

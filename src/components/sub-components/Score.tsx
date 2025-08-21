@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useGameStore } from "../store/atomologyStore";
+import { useGameStore } from "../../store/atomologyStore";
 
 // routing back to main page to reset/exit game
 import { Link } from "react-router-dom";
 
 // import zustand store
 // ...existing code...
-import ConfirmModal from "./ConfirmModal";
+import ConfirmModal from "../ConfirmModal";
 import { useNavigate } from "react-router-dom";
 
 export default function Score() {

@@ -1,6 +1,6 @@
 import React from "react";
 import { useGameStore } from "../../store/atomologyStore";
-import ReturnToMainButton from "../ReturnToMainButton";
+import ReturnToMainButton from "../sub-components/ReturnToMainButton";
 import {
   getElementsByDifficulty,
   DifficultyLevel,

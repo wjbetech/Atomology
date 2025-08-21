@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ConfettiSparks from "./ConfettiSparks";
-import { messages } from "../utils/loadingMessages";
+import { messages } from "../../utils/loadingMessages";
 
 // zustand store
-import { useGameStore } from "../store/atomologyStore";
+import { useGameStore } from "../../store/atomologyStore";
 
 // API hook
-import { fetchUniqueElements } from "../hooks/uniqueElements";
+import { fetchUniqueElements } from "../../hooks/uniqueElements";
 
 export default function Element() {
   // get random loading message

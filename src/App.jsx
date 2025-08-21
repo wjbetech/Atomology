@@ -1,14 +1,14 @@
 import "./App.css";
 
 // components
-import Layout from "./components/Layout";
+import Layout from "./components/layout/Layout";
 import GameMode from "./components/GameMode";
-import Element from "./components/Element";
-import Score from "./components/Score";
-import HUDWrapper from "./components/HUDWrapper";
+import Element from "./components/sub-components/Element";
+import Score from "./components/sub-components/Score";
+import HUDWrapper from "./components/sub-components/HUDWrapper";
 import Answer from "./components/Answer";
-import About from "./components/About";
-import Faq from "./components/Faq";
+import About from "./components/pages/About";
+import Faq from "./components/pages/Faq";
 import HangmanDifficultySelect from "./components/hangman/HangmanDifficultySelect";
 import HangmanGame from "./components/hangman/HangmanGame";
 
