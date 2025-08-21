@@ -151,6 +151,36 @@ export default function HangmanGame() {
     }
     prevCompleteRef.current = isWordComplete;
   }, [isWordComplete, hangmanWord, disabled, showGameOver]);
+
+  // UI-facing guess wrapper: predicts completion using current guessed + new letter
+  const guessAndCheck = (letter: string) => {
+    if (!hangmanWord) return;
+    const l = letter.toLowerCase();
+    if (guessed.includes(l)) return;
+
+    const unique = Array.from(
+      new Set(
+        hangmanWord
+          .replace(/[^a-zA-Z]/g, "")
+          .toLowerCase()
+          .split("")
+      )
+    );
+    const nextGuessed = [...guessed, l];
+    const willComplete =
+      unique.length > 0 && unique.every((c) => nextGuessed.includes(c));
+
+    // call store action to register guess
+    guessLetter(l);
+
+    // if this guess will complete the word, trigger advance (guarded)
+    if (willComplete && !advancingRef.current) {
+      // small timeout so UI shows last letter before confetti
+      window.setTimeout(() => {
+        handleAdvance();
+      }, 40);
+    }
+  };
   const totalGuesses = incorrect + guessed.length;
   const remainingAttempts = Math.max(0, maxAttempts - incorrect);
 
@@ -209,7 +239,7 @@ export default function HangmanGame() {
         <HangmanKeyboard
           guessed={guessed}
           hangmanWord={hangmanWord}
-          guessLetter={guessLetter}
+          guessLetter={guessAndCheck}
           disabled={disabled}
         />
       </div>
