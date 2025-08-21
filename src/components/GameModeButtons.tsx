@@ -2,7 +2,8 @@ import React from "react";
 import { useGameStore } from "../store/atomologyStore";
 
 export default function GameModeButtons() {
-  const { setGameMode, setPlayerAnswer, setGameStarted } = useGameStore();
+  const { setGameMode, setPlayerAnswer, setGameStarted, resetHangman } =
+    useGameStore();
 
   return (
     <div className="flex flex-col gap-5 justify-center w-full max-w-md mx-auto mt-4 md:mt-6 mb-4 md:mb-6 lg:mb-10">
@@ -34,6 +35,12 @@ export default function GameModeButtons() {
         id="hangman"
         value="hangman"
         onClick={() => {
+          // reset any previous hangman state so user lands on difficulty select
+          resetHangman && resetHangman();
+          // attempt to clear previous difficulty safely
+          try {
+            (useGameStore as any).getState?.().setHangmanDifficulty(null);
+          } catch {}
           setGameMode("hangman");
           setGameStarted(true);
           setPlayerAnswer("");

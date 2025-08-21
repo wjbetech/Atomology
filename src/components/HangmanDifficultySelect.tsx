@@ -15,13 +15,16 @@ const DIFFICULTY_LABELS: Record<DifficultyLevel, string> = {
 export default function HangmanDifficultySelect() {
   const setHangmanDifficulty = useGameStore((s) => s.setHangmanDifficulty);
   const setHangmanWord = useGameStore((s) => s.setHangmanWord);
+  const setHangmanIndex = useGameStore((s) => s.setHangmanIndex);
   const [selected, setSelected] = React.useState<DifficultyLevel>("easy10");
 
   const handleStart = () => {
     setHangmanDifficulty(selected);
     const pool = getElementsByDifficulty(selected);
     const random = pool[Math.floor(Math.random() * pool.length)];
-    setHangmanWord(random.name);
+    // start at index 0 for deterministic progress
+    setHangmanIndex(0);
+    setHangmanWord(pool[0].name);
   };
 
   return (

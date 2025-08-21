@@ -46,6 +46,24 @@
 
 - A simple functional component that renders the navigation bar, e.g., game title or links to home/about pages.
 
+## Top Section — Game-focused header
+
+- When a player is "in a game" the top area of the app should switch from a generic navbar to a game-focused header.
+- Layout (desktop / responsive):
+  - Left: level/progress indicator (e.g., "1/10"). This should be fixed to the left edge and clearly readable.
+  - Center: the game mode title (e.g., "Hangman") — visually prominent, centered horizontally.
+  - Right: live counter (e.g., heart or numeric lives left) — fixed to the right edge and animated on change.
+- Behaviour and accessibility:
+  - The header should be fixed at the top (or reserved height) so the rest of the game content flows beneath it.
+  - All three regions must be responsive: on small screens consider stacking or reducing font sizes, but keep the title centered.
+  - Use semantic markup and ARIA where appropriate (e.g., `role="status"` for live count changes) so screen readers announce important changes.
+  - Keep the header lightweight and avoid heavy animations that cause layout shifts; use transform/opacity for visual transitions.
+- Implementation notes:
+  - Create a small, reusable `GameHeader` component that reads from the game store: progress/index, difficulty/total, lives, and current mode.
+  - For Hangman specifically, compute `current/total` from the difficulty pool and `hangmanIndex` stored in the store so progress is deterministic.
+  - Animate the lives counter with a small scale/opacity animation on change (use `framer-motion` or CSS transitions).
+  - Respect focus and keyboard navigation; the header should not trap focus but should be announced when important changes occur.
+
 # GameMode Component:
 
 - Manages switching between different game modes: typing or multiple choice.

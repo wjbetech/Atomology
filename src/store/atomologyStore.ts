@@ -31,6 +31,7 @@ export interface GameState {
   hangmanGuessedLetters: string[];
   hangmanIncorrectGuesses: number;
   hangmanMaxAttempts: number;
+  hangmanIndex: number;
   hangmanDifficulty: string | null;
   // Actions
   setGameMode: (mode: string) => void;
@@ -45,6 +46,7 @@ export interface GameState {
   setHangmanWord: (word: string) => void;
   guessHangmanLetter: (letter: string) => void;
   resetHangman: () => void;
+  setHangmanIndex: (index: number) => void;
   setHangmanDifficulty: (difficulty: string) => void;
 }
 
@@ -111,6 +113,7 @@ export const useGameStore = create<GameState>((set, get) => {
     hangmanGuessedLetters: [],
     hangmanIncorrectGuesses: 0,
     hangmanMaxAttempts: 6,
+    hangmanIndex: 0,
     hangmanDifficulty: null,
 
     // Hangman actions
@@ -144,7 +147,9 @@ export const useGameStore = create<GameState>((set, get) => {
         hangmanWord: null,
         hangmanGuessedLetters: [],
         hangmanIncorrectGuesses: 0,
+        hangmanIndex: 0,
       }),
+    setHangmanIndex: (index) => set({ hangmanIndex: index }),
     setHangmanDifficulty: (difficulty) =>
       set({ hangmanDifficulty: difficulty }),
 

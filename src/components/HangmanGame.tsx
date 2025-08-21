@@ -3,18 +3,17 @@ import { useGameStore } from "../store/atomologyStore";
 import { motion, AnimatePresence } from "framer-motion";
 import ConfettiSparks from "./ConfettiSparks";
 import ReturnToMainButton from "./ReturnToMainButton";
+import HangmanLetters from "./HangmanLetters";
+import HangmanGuessInput from "./HangmanGuessInput";
+import HangmanKeyboard from "./HangmanKeyboard";
+import HangmanGameOverModal from "./HangmanGameOverModal";
+import { getElementsByDifficulty } from "../utils/hangmanDifficulty";
 
 export default function HangmanGame() {
-  // Color interpolation: green (#22c55e) to red (#ef4444)
-  function getLivesColor(lives: number, max: number) {
-    const percent = Math.max(0, Math.min(1, lives / max));
-    // Interpolate between green and red
-    const r = Math.round(34 * percent + 239 * (1 - percent));
-    const g = Math.round(197 * percent + 68 * (1 - percent));
-    const b = Math.round(94 * percent + 68 * (1 - percent));
-    return `rgb(${r},${g},${b})`;
-  }
   const hangmanWord = useGameStore((s) => s.hangmanWord);
+  const hangmanDifficulty = useGameStore((s) => s.hangmanDifficulty);
+  const hangmanIndex = useGameStore((s) => (s as any).hangmanIndex ?? 0);
+  const setHangmanIndex = useGameStore((s) => (s as any).setHangmanIndex);
   const guessed = useGameStore((s) => s.hangmanGuessedLetters);
   const incorrect = useGameStore((s) => s.hangmanIncorrectGuesses);
   const maxAttempts = useGameStore((s) => s.hangmanMaxAttempts);
@@ -24,16 +23,67 @@ export default function HangmanGame() {
   const [input, setInput] = useState("");
   const [wordGuess, setWordGuess] = useState("");
   const [wordGuessResult, setWordGuessResult] = useState<string | null>(null);
+  const [showGameOver, setShowGameOver] = useState(false);
+  const [disabled, setDisabled] = useState(false);
+  const resultTimeoutRef = React.useRef<number | null>(null);
+  const advanceTimeoutRef = React.useRef<number | null>(null);
 
-  // For animating lives left
-  const [prevIncorrect, setPrevIncorrect] = useState(incorrect);
-  const [livesAnimKey, setLivesAnimKey] = useState(0);
+  // Trigger game over when incorrect guesses reach maxAttempts
   useEffect(() => {
-    if (incorrect !== prevIncorrect) {
-      setLivesAnimKey((k) => k + 1);
-      setPrevIncorrect(incorrect);
+    if (incorrect >= maxAttempts) {
+      setShowGameOver(true);
+      setDisabled(true);
     }
-  }, [incorrect, prevIncorrect]);
+  }, [incorrect, maxAttempts]);
+
+  // progress counter: compute current index and total from difficulty pool
+  const pool = React.useMemo(() => {
+    try {
+      if (!hangmanDifficulty) return [] as any[];
+      return getElementsByDifficulty(hangmanDifficulty as any);
+    } catch (err) {
+      return [] as any[];
+    }
+  }, [hangmanDifficulty]);
+  const total = pool.length;
+  const current = total > 0 ? hangmanIndex + 1 : 0;
+
+  // keyboard support: press A-Z to guess letters
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (disabled || showGameOver) return;
+      const active = document.activeElement as HTMLElement | null;
+      if (active) {
+        const tag = active.tagName;
+        if (tag === "INPUT" || tag === "TEXTAREA" || active.isContentEditable)
+          return;
+      }
+      const k = e.key;
+      if (!k || k.length !== 1) return;
+      const m = k.match(/^[a-zA-Z]$/);
+      if (!m) return;
+      if (e.repeat) return; // ignore held keys
+      const letter = k.toLowerCase();
+      if (guessed.includes(letter)) return;
+      // only allow letters that exist in alphabet pool
+      if (/[a-z]/.test(letter)) {
+        guessLetter(letter);
+      }
+    }
+
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [disabled, showGameOver, guessed, guessLetter]);
+
+  // cleanup timers on unmount
+  useEffect(() => {
+    return () => {
+      if (resultTimeoutRef.current)
+        window.clearTimeout(resultTimeoutRef.current as any);
+      if (advanceTimeoutRef.current)
+        window.clearTimeout(advanceTimeoutRef.current as any);
+    };
+  }, []);
 
   if (!hangmanWord) return null;
 
@@ -58,134 +108,155 @@ export default function HangmanGame() {
     );
   });
 
-  // Handle letter input
-  const handleGuess = (e: React.FormEvent) => {
-    e.preventDefault();
-    const letter = input.trim().toLowerCase();
-    if (!letter || letter.length !== 1 || guessed.includes(letter)) return;
-    guessLetter(letter);
-    setInput("");
-  };
-
+  // Handle word-guess form submission
   const handleWordGuess = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!wordGuess.trim()) return;
-    if (wordGuess.trim().toLowerCase() === hangmanWord.toLowerCase()) {
+    const guess = wordGuess.trim();
+    if (!guess) return;
+    if (guess.toLowerCase() === hangmanWord.toLowerCase()) {
       setWordGuessResult("correct");
-      // Optionally: trigger win logic here
+      // show result for a short time, then fade it out, then advance to next word
+      const DISPLAY_MS = 800;
+      const EXIT_MS = 320;
+      // clear any existing timers
+      if (resultTimeoutRef.current)
+        window.clearTimeout(resultTimeoutRef.current as any);
+      if (advanceTimeoutRef.current)
+        window.clearTimeout(advanceTimeoutRef.current as any);
+      // after DISPLAY_MS, clear the result so AnimatePresence exit runs
+      resultTimeoutRef.current = window.setTimeout(() => {
+        setWordGuessResult(null);
+        // after exit animation, advance to next
+        advanceTimeoutRef.current = window.setTimeout(() => {
+          const nextIndex = (hangmanIndex ?? 0) + 1;
+          if (nextIndex < total) {
+            setHangmanIndex && setHangmanIndex(nextIndex);
+            const nextName = pool[nextIndex]?.name;
+            nextName &&
+              (useGameStore as any).getState().setHangmanWord(nextName);
+          } else {
+            // finished all words -> show finished state/modal
+            setShowGameOver(true);
+            setDisabled(true);
+          }
+        }, EXIT_MS);
+      }, DISPLAY_MS);
     } else {
       setWordGuessResult("incorrect");
     }
-    setWordGuess("");
+    // keep the guess visible for the result display
+    setInput("");
   };
 
   return (
     <div className="flex flex-col items-center gap-4 mt-6 w-full max-w-[420px] mx-auto relative">
       <ConfettiSparks trigger={wordGuessResult === "correct"} />
-      <h2 className="mt-10 text-center text-2xl md:text-3xl">Hangman Mode</h2>
-      {/* (Alphabet keyboard moved below blanks and guess form) */}
-      <div className="flex flex-wrap justify-center mb-2 min-h-[48px]">
-        {display}
+
+      {/* Group display, input, and keyboard with equal vertical spacing */}
+      <div className="w-full flex flex-col items-center gap-6">
+        <HangmanLetters display={display} />
+
+        <HangmanGuessInput
+          wordGuess={wordGuess}
+          setWordGuess={setWordGuess}
+          handleWordGuess={handleWordGuess}
+          disabled={disabled}
+        />
+
+        <HangmanKeyboard
+          guessed={guessed}
+          hangmanWord={hangmanWord}
+          guessLetter={guessLetter}
+          disabled={disabled}
+        />
       </div>
-      <div className="w-full flex justify-center mt-2">
-        <form
-          onSubmit={handleWordGuess}
-          className="flex flex-col sm:flex-row items-center gap-3 w-full max-w-xl"
-        >
-          <input
-            id="element-guess"
-            type="text"
-            inputMode="text"
-            placeholder="Guess the element"
-            className="flex-1 w-full text-center text-lg h-10 leading-10 py-0 rounded-full bg-gray-900/80 text-white border border-gray-500 focus:border-blue-400 px-4 placeholder:text-sm placeholder:italic placeholder:text-gray-400"
-            value={wordGuess}
-            onChange={(e) => setWordGuess(e.target.value)}
-          />
-        </form>
-      </div>
-      {/* Alphabet keyboard: click letters to guess (Wordle-like) - moved here */}
-      <div className="w-full flex justify-center mb-2 mt-4">
-        <div className="flex flex-wrap justify-center gap-1 w-full max-w-[420px]">
-          {"ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").map((L) => {
-            const l = L.toLowerCase();
-            const used = guessed.includes(l);
-            const inWord = hangmanWord.toLowerCase().includes(l);
-            const base =
-              "inline-flex items-center justify-center w-8 h-8 text-sm font-semibold rounded-sm transition-colors";
-            const classes = used
-              ? inWord
-                ? base +
-                  " bg-green-700 text-white border-0 disabled:opacity-100"
-                : base + " bg-gray-400/50 text-gray-700 border-0 opacity-60"
-              : base +
-                " bg-gray-800 border-gray-700 text-white hover:bg-gray-700 cursor-pointer disabled:opacity-60";
-            return (
-              <button
-                key={L}
-                aria-label={`Guess ${L}`}
-                disabled={used}
-                onClick={() => {
-                  if (!used) guessLetter(l);
-                }}
-                className={classes}
-              >
-                {L}
-              </button>
-            );
-          })}
-        </div>
-      </div>
-      {wordGuessResult && (
-        <>
-          {wordGuessResult === "correct" ? (
-            <div className="text-green-600 font-bold text-sm">Correct! 🎉</div>
-          ) : (
-            <div className="text-red-500 font-bold text-sm">Incorrect</div>
-          )}
-          <div className="text-xs text-gray-500 mt-1">
-            Answer: <span className="font-semibold">{hangmanWord}</span>
-          </div>
-          <button
-            className="btn btn-primary rounded-full w-32 h-10 min-h-0 mt-3 text-sm"
-            onClick={() => {
-              setWordGuessResult(null);
-              setInput("");
-              setWordGuess("");
-              // TODO: Add logic to move to the next element (advance game state)
-            }}
+
+      <AnimatePresence>
+        {wordGuessResult && (
+          <motion.div
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.28 }}
+            className="flex flex-col items-center"
           >
-            Next Element
-          </button>
-        </>
-      )}
-      {/* Used letters removed: keyboard now indicates used state */}
-      {/* Lives counter fixed to top-right of viewport */}
-      <div className="fixed top-4 right-4 z-50 pointer-events-none">
-        <div className="flex flex-col items-center">
-          <span className="text-xs text-gray-400 mb-1 tracking-wide uppercase font-semibold">
-            Lives
-          </span>
-          <AnimatePresence mode="wait">
-            <motion.span
-              key={livesAnimKey}
-              initial={{ scale: 1 }}
-              animate={{ scale: [1.2, 0.95, 1.1, 1] }}
-              exit={{ scale: 1 }}
-              transition={{ duration: 0.5, times: [0, 0.2, 0.7, 1] }}
-              className="font-extrabold text-2xl sm:text-3xl md:text-4xl drop-shadow-lg select-none"
-              style={{
-                color: getLivesColor(maxAttempts - incorrect, maxAttempts),
+            {wordGuessResult === "correct" ? (
+              <div className="text-green-600 font-bold text-sm">
+                Correct! 🎉
+              </div>
+            ) : (
+              <div className="text-red-500 font-bold text-sm">Incorrect</div>
+            )}
+            <div className="text-xs text-gray-500 mt-1">
+              Answer: <span className="font-semibold">{hangmanWord}</span>
+            </div>
+            <button
+              className="btn btn-primary rounded-full w-32 h-10 min-h-0 mt-3 text-sm"
+              onClick={() => {
+                setWordGuessResult(null);
+                setInput("");
+                setWordGuess("");
+                // TODO: Add logic to move to the next element (advance game state)
               }}
             >
-              {maxAttempts - incorrect}
-            </motion.span>
-          </AnimatePresence>
-        </div>
-      </div>
+              Next Element
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Return button fixed near bottom center of viewport (72px above bottom) */}
       <div className="fixed left-1/2 transform -translate-x-1/2 bottom-[72px] z-50 pointer-events-auto">
         <ReturnToMainButton />
       </div>
+      {showGameOver && (
+        <HangmanGameOverModal
+          onRestart={() => {
+            // fully reset hangman session and restart at first item of current difficulty
+            const state = (useGameStore as any).getState?.();
+            const diff = state?.hangmanDifficulty ?? "all";
+            try {
+              const pool = getElementsByDifficulty(diff as any);
+              if (pool && pool.length > 0) {
+                // reset guessed letters & incorrect count and index
+                (useGameStore as any).getState().resetHangman &&
+                  (useGameStore as any).getState().resetHangman();
+                (useGameStore as any).getState().setHangmanIndex &&
+                  (useGameStore as any).getState().setHangmanIndex(0);
+                // set first word in pool
+                (useGameStore as any).getState().setHangmanWord(pool[0].name);
+                // ensure difficulty kept
+                (useGameStore as any).getState().setHangmanDifficulty &&
+                  (useGameStore as any).getState().setHangmanDifficulty(diff);
+              } else {
+                // fallback reset only
+                (useGameStore as any).getState().resetHangman &&
+                  (useGameStore as any).getState().resetHangman();
+              }
+            } catch (err) {
+              // fallback reset only
+              (useGameStore as any).getState().resetHangman &&
+                (useGameStore as any).getState().resetHangman();
+            }
+            // clear local UI inputs
+            setWordGuess("");
+            setInput("");
+            setWordGuessResult(null);
+            setShowGameOver(false);
+            setDisabled(false);
+          }}
+          onReturn={() => {
+            // clear session and navigate to main via store
+            try {
+              localStorage.removeItem("atomology.session");
+            } catch {}
+            (useGameStore as any).getState().setGameMode("");
+            (useGameStore as any).getState().setGameStarted(false);
+            setShowGameOver(false);
+            setDisabled(true);
+          }}
+        />
+      )}
     </div>
   );
 }
