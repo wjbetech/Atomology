@@ -31,8 +31,8 @@ export const PeriodicTableHUD: React.FC<PeriodicTableHUDProps> = ({
       className="overflow-x-auto"
       style={{
         position: "absolute",
-        top: 0,
-        left: 0,
+        top: "-2rem",
+        left: "-2rem",
         zIndex: 1000,
         margin: "1rem",
       }}

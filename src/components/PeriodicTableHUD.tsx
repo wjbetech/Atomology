@@ -47,7 +47,9 @@ export const PeriodicTableHUD: React.FC<PeriodicTableHUDProps> = ({
                     <span
                       className={
                         `w-8 h-8 rounded border flex items-center justify-center element-hud-box ` +
-                        (guessed.has(el.symbol) ? "guessed bg-green-400 border-green-600" : "")
+                        (guessed.has(el.symbol)
+                          ? "guessed bg-green-400 border-green-600"
+                          : "")
                       }
                       title={el.name}
                     >

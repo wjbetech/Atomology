@@ -26,8 +26,8 @@ const HUDWrapper = (props) => {
         <div
           style={{
             position: "fixed",
-            bottom: "1rem",
-            left: "1rem",
+            bottom: "0.5rem",
+            left: "0.5rem",
             zIndex: 1100,
             display: "flex",
             alignItems: "center",
@@ -43,7 +43,7 @@ const HUDWrapper = (props) => {
           />
           <label
             htmlFor="hud-toggle"
-            className="ml-2 select-none cursor-pointer text-white text-xs"
+            className="ml-2 select-none cursor-pointer text-content text-xs"
           >
             Periodic table HUD
           </label>
