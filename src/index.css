@@ -2,10 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@plugin "daisyui" {
-  themes: light --cupcake, dark --night;
-}
-
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -72,14 +68,26 @@ body {
 /* Inputs, selects, textareas and buttons should use base surface tokens */
 [data-theme] input:not([type="checkbox"]),
 [data-theme] textarea,
-[data-theme] select,
-[data-theme] .btn {
+[data-theme] select {
   @apply bg-base-200 text-base-content border border-base-300;
 }
 
 [data-theme] input::placeholder,
 [data-theme] textarea::placeholder {
   @apply text-base-content/60;
+}
+
+/* In the light 'cupcake' theme, make plain buttons use a slightly darker base on hover
+   so hovering doesn't jump to a strong primary color. Exclude primary/outline/error
+   buttons so their semantic colors remain intact. */
+[data-theme="cupcake"] .btn {
+  @apply transition-colors;
+}
+[data-theme="cupcake"]
+  .btn:not(.btn-primary):not(.btn-outline):not(.btn-error):hover,
+[data-theme="cupcake"]
+  .btn:not(.btn-primary):not(.btn-outline):not(.btn-error):focus {
+  @apply bg-base-300;
 }
 
 /* Dialogs should use the base surface and content tokens as well */
