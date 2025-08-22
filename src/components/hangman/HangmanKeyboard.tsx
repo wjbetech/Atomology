@@ -25,7 +25,7 @@ export default function HangmanKeyboard({
               ? base + " bg-green-700 text-white border-0 disabled:opacity-100"
               : base + " bg-gray-400/50 text-gray-700 border-0 opacity-60"
             : base +
-              " bg-gray-800 border-gray-700 text-white hover:bg-gray-700 cursor-pointer disabled:opacity-60";
+              " bg-gray-300 border-gray-700 text-black dark:bg-gray-400 dark:hover:bg-gray-300 hover:bg-gray-400 cursor-pointer disabled:opacity-60";
           return (
             <button
               key={L}

@@ -90,6 +90,15 @@ body {
   @apply bg-base-300;
 }
 
+/* Make multiple-choice answer buttons use a light gray hover in cupcake theme */
+[data-theme="cupcake"] .answer-btn:hover,
+[data-theme="cupcake"] .answer-btn:focus {
+  /* slightly darker subtle gray background and dark text to override DaisyUI primary hover */
+  background-color: #e5e7eb !important; /* Tailwind gray-200 */
+  color: #0f172a !important; /* Tailwind gray-900 for readable text */
+  transition: background-color 160ms ease, color 120ms ease;
+}
+
 /* Dialogs should use the base surface and content tokens as well */
 [data-theme] [role="dialog"] {
   @apply bg-base-100 text-base-content border;

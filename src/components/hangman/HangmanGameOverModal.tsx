@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from "react";
+import ReturnToMainButton from "../sub-components/ReturnToMainButton";
 import { createPortal } from "react-dom";
 
 export default function HangmanGameOverModal({
@@ -72,14 +73,14 @@ export default function HangmanGameOverModal({
           >
             Restart Hangman
           </button>
-          <button
-            className="btn btn-sm btn-error w-full light:border-content"
-            onClick={() => {
-              onReturn();
-            }}
-          >
-            Return to Main
-          </button>
+          <div>
+            {/* Use shared ReturnToMainButton but keep error styling */}
+            <ReturnToMainButton
+              buttonClassName="btn btn-sm btn-error w-full light:border-content"
+              title="Return to Main Menu?"
+              description="Are you sure you want to leave this game? Your progress will be lost."
+            />
+          </div>
         </div>
       </div>
     </div>

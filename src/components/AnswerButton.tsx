@@ -48,7 +48,7 @@ export default function AnswerButton({
   return (
     <button
       onClick={onClick}
-      className={btnClass}
+      className={`${btnClass} answer-btn`}
       value={label}
       id={`answer=${idx}`}
       disabled={effectiveDisabled}
