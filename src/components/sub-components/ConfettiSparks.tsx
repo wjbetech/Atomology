@@ -17,7 +17,7 @@ export default function ConfettiSparks({ trigger }: { trigger: boolean }) {
   // Randomly choose direction: 1 (clockwise) or -1 (counterclockwise)
   const direction = Math.random() < 0.5 ? 1 : -1;
   return (
-    <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
+    <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20 overflow-hidden">
       {sparks.map((_, i) => {
         // Multiply angle by direction for clockwise/counterclockwise
         const angle =
@@ -45,7 +45,11 @@ export default function ConfettiSparks({ trigger }: { trigger: boolean }) {
             }}
             transition={{ duration: 1.1, ease: "easeOut" }}
             className={`rounded-full shadow-lg ${color}`}
-            style={{ width: `${size * 6}px`, height: `${size * 6}px` }}
+            style={{
+              width: `${size * 6}px`,
+              height: `${size * 6}px`,
+              willChange: "transform, opacity",
+            }}
           />
         );
       })}

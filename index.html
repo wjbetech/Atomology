@@ -11,6 +11,29 @@
       href="https://fonts.googleapis.com/css2?family=Graduate&display=swap"
       rel="stylesheet"
     />
+    <!-- Inline style to reserve vertical scrollbar immediately to avoid layout shift -->
+    <style>
+      html,
+      body {
+        overflow: hidden; /* Make root full-height with hidden overflow */
+      }
+      /* DEBUG: visual check for data-theme selectors. Remove after verification. */
+      [data-theme="cupcake"] [data-theme="night"] body {
+        background: #0b1220 !important; /* dark navy for night */
+        color: #e6eef8 !important;
+      }
+    </style>
+    <script>
+      // set --vh early so layout using the variable doesn't flicker
+      (function () {
+        try {
+          document.documentElement.style.setProperty(
+            "--vh",
+            window.innerHeight * 0.01 + "px"
+          );
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

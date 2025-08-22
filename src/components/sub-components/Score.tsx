@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useGameStore } from "../store/atomologyStore";
+import { useGameStore } from "../../store/atomologyStore";
 
 // routing back to main page to reset/exit game
 import { Link } from "react-router-dom";
 
 // import zustand store
 // ...existing code...
-import ConfirmModal from "./ConfirmModal";
+import ConfirmModal from "../ConfirmModal";
 import { useNavigate } from "react-router-dom";
 
 export default function Score() {
@@ -71,7 +71,7 @@ export default function Score() {
     return (
       <>
         {/* Arrow animation removed as requested */}
-        <div className="font-semibold my-4 flex flex-col items-center gap-2 relative place-content-center place-items-center">
+        <div className="font-semibold my-2 flex flex-col items-center gap-2 relative place-content-center place-items-center">
           <div className="flex flex-col items-center justify-center w-full place-content-center place-items-center">
             <div className="relative inline-block">
               <div className="flex justify-center m-auto place-content-center place-items-center">
@@ -92,7 +92,7 @@ export default function Score() {
             </div>
             <button
               onClick={() => setShowConfirm(true)}
-              className="btn btn-outline w-full sm:w-auto sm:min-w-[175px] rounded-full self-center"
+              className="btn btn-outline !border-2 w-full sm:w-auto sm:min-w-[175px] rounded-full self-center"
             >
               Return to Main
             </button>

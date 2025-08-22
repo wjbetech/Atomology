@@ -6,12 +6,6 @@
 
 # Expanded Implementation Plan & Tasks
 
-## 1. Speed Up API Loading
-
-- Investigate why the current API is slow (30-40s startup). Is it due to serverless cold starts or another issue?
-- Evaluate the feasibility and benefits of building a local API or caching data locally for faster access.
-- Consider pre-fetching or storing the periodic table data in the app for instant access.
-
 ## 2. Improve Feedback (Sounds & Visualizations)
 
 - Add sound effects for correct and incorrect answers.
@@ -51,6 +45,24 @@
 # Navbar Component:
 
 - A simple functional component that renders the navigation bar, e.g., game title or links to home/about pages.
+
+## Top Section — Game-focused header
+
+- When a player is "in a game" the top area of the app should switch from a generic navbar to a game-focused header.
+- Layout (desktop / responsive):
+  - Left: level/progress indicator (e.g., "1/10"). This should be fixed to the left edge and clearly readable.
+  - Center: the game mode title (e.g., "Hangman") — visually prominent, centered horizontally.
+  - Right: live counter (e.g., heart or numeric lives left) — fixed to the right edge and animated on change.
+- Behaviour and accessibility:
+  - The header should be fixed at the top (or reserved height) so the rest of the game content flows beneath it.
+  - All three regions must be responsive: on small screens consider stacking or reducing font sizes, but keep the title centered.
+  - Use semantic markup and ARIA where appropriate (e.g., `role="status"` for live count changes) so screen readers announce important changes.
+  - Keep the header lightweight and avoid heavy animations that cause layout shifts; use transform/opacity for visual transitions.
+- Implementation notes:
+  - Create a small, reusable `GameHeader` component that reads from the game store: progress/index, difficulty/total, lives, and current mode.
+  - For Hangman specifically, compute `current/total` from the difficulty pool and `hangmanIndex` stored in the store so progress is deterministic.
+  - Animate the lives counter with a small scale/opacity animation on change (use `framer-motion` or CSS transitions).
+  - Respect focus and keyboard navigation; the header should not trap focus but should be announced when important changes occur.
 
 # GameMode Component:
 
@@ -199,6 +211,28 @@ By splitting the components this way, you'll maintain cleaner code and separatio
 - Let users pick color themes, backgrounds, or UI layouts.
 - Offer unlockable themes as rewards for achievements.
 
+### Theme toggle — current state & follow-ups
+
+- Current state (code pointers):
+
+  - `useGameStore` (src/store/atomologyStore.ts) exposes `theme` and `setTheme` and already writes `data-theme` on `document.documentElement` when called.
+  - `index.html` contains `html data-theme="system"` so the app starts in a system-driven mode by default.
+  - `tailwind.config.js` lists theme names (`night`, `winter`) and `themeRoot: ":root"` which the CSS theme system uses.
+
+- Known gaps / fixes to complete:
+  1. Persist user selection: `setTheme` should persist the chosen theme to `localStorage` (and read it on store init) so toggles survive refresh.
+
+2.  UI wiring: add a visible toggle control (e.g., in `Navbar` or a Settings panel) that calls `setTheme("light"|"dark"|"system")` and reflects current state.
+3.  System preference handling: when user selects `system`, the app should follow `window.matchMedia("(prefers-color-scheme: dark)")` and update on changes.
+4.  Accessibility: the toggle needs an accessible label, role, and keyboard handling; announce changes where appropriate for assistive tech.
+5.  SSR / hydration safety: guard `document`/`window` access (store init) to avoid runtime errors in SSR/frontend tests.
+6.  Visual QA: verify all theme-dependent elements (Navbar badges, buttons, modal borders, text contrast) across themes; add a small visual test matrix in README or CI notes.
+
+- Acceptance criteria:
+  - Theme selection persists across reloads and is controllable from the UI.
+  - `data-theme` attribute always matches the visible theme and updates when `system` preference changes.
+  - Contrast and accessibility checks pass for each theme (manual/automated checklist).
+
 ## Localization & Internationalization
 
 - Support multiple languages for broader reach.
@@ -240,6 +274,23 @@ By splitting the components this way, you'll maintain cleaner code and separatio
 - Add loading skeletons, error boundaries, and robust input validation.
 - Fix any UI/UX bugs, edge cases, or performance bottlenecks.
 
+### UI Bug: transient scrollbar flicker on navigation/reload
+
+- Symptom: when returning to or reloading the main page the page briefly displays vertical and/or horizontal scrollbars (flicker) until the layout stabilizes.
+- Steps to reproduce: load or reload the app on mobile/desktop, or navigate back to the main route; observe transient scrollbars during initial render/resize.
+- Suspected causes: 100vh vs viewport chrome behavior, fixed header/footer heights not reserved, `w-screen`/100vw usage, or initial animations/margins causing a temporary overflow.
+- Proposed fixes to try (in priority order):
+  1. Use dynamic viewport height (`100dvh`) for root containers instead of `100vh`.
+
+2.  Replace `w-screen` with `w-full` and use `inset-x-0` for fixed elements to avoid 100vw scrollbar issues.
+3.  Make header/footer heights explicit and set main min-height to `calc(100dvh - <header> - <footer>)` so content never exceeds viewport height.
+4.  Add `overflow-x: hidden` at root and `overflow-y: auto` on the main content area so only content scrolls when necessary.
+5.  Debounce/disable heavy animations during initial mount to avoid transient layout shifts.
+
+- Acceptance criteria:
+  - On reload and when navigating back to the main page, no vertical or horizontal scrollbar should appear briefly on common desktop and mobile browsers (Chrome, Safari, and mobile WebViews) in typical viewport sizes.
+  - Any fix must preserve accessibility (no hidden content) and not break fixed header/footer controls.
+
 ## Analytics & Feedback
 
 - Add basic analytics to understand user behavior (page views, game completions, etc.).
@@ -279,3 +330,16 @@ By splitting the components this way, you'll maintain cleaner code and separatio
 
 - Make the app installable as a Progressive Web App (PWA) for offline play.
 - Set up automated deployment (e.g., Vercel, Netlify, or GitHub Pages).
+
+# Hangman Mode Improvements & UI/UX Tasks
+
+1. Make the input+guess buttons a bit wider
+2. Reduce the size of the atom name text and the margin between the letters and the lines
+3. Fix the placeholder element text to look better, italicize it too
+4. Animate correct answers with confetti
+5. Display what the correct answer was
+6. Add a button to move to the next element
+7. Display the guessed letters more visibly
+8. Add the HUD and the HUD toggle to this game mode too
+9. Consider fixing the routing, and ensure that players can return to the same game spot if they accidentally refresh
+10. Make the Return to Main button the same width across all pages (refactor to its own component)

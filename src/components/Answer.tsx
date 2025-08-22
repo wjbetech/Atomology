@@ -138,30 +138,30 @@ export default function Answer() {
 
     if (gameStarted && gameMode === "multi" && !loading) {
       return (
-        <div className="w-full lg:mb-10 px-4 lg:px-20 lg:max-w-none mx-auto grid grid-cols-2 justify-center gap-3">
-          {elements.map((e, idx) => {
-            const wasPickedWrong = disabledAnswers.has(e.name);
-            const isThisDisabled = wasPickedWrong || answeredCorrect;
-            const isCorrectBtn = !!answer && e.name === answer.name;
-            const isSelected = playerAnswer === e.name;
-            return (
-              <AnswerButton
-                key={e.name}
-                idx={idx}
-                label={e.name}
-                disabled={isThisDisabled}
-                isCorrect={isCorrectBtn}
-                isPickedWrong={wasPickedWrong}
-                isRoundLocked={answeredCorrect}
-                isSelected={isSelected && isCorrect}
-                onClick={handleMultiSubmit}
-              />
-            );
-          })}
-          <div
-            className="label relative flex items-center justify-center col-span-2 lg:col-span-1 mt-6"
-            style={{ minHeight: "24px", height: "24px" }}
-          >
+        <>
+          <div className="w-full lg:mb-10 px-4 lg:px-20 lg:max-w-none mx-auto grid grid-cols-2 justify-center gap-3">
+            {elements.map((e, idx) => {
+              const wasPickedWrong = disabledAnswers.has(e.name);
+              const isThisDisabled = wasPickedWrong || answeredCorrect;
+              const isCorrectBtn = !!answer && e.name === answer.name;
+              const isSelected = playerAnswer === e.name;
+              return (
+                <AnswerButton
+                  key={e.name}
+                  idx={idx}
+                  label={e.name}
+                  disabled={isThisDisabled}
+                  isCorrect={isCorrectBtn}
+                  isPickedWrong={wasPickedWrong}
+                  isRoundLocked={answeredCorrect}
+                  isSelected={isSelected && isCorrect}
+                  onClick={handleMultiSubmit}
+                />
+              );
+            })}
+          </div>
+          {/* Feedback popup hoisted below the grid */}
+          <div className="flex justify-center items-center w-full py-10 h-[40px]">
             {/* screen-reader live region; kept visually hidden but updates when message changes */}
             <span className="sr-only text-xl" role="status" aria-live="polite">
               {message === "incorrect"
@@ -178,7 +178,8 @@ export default function Answer() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -6 }}
                   transition={{ duration: 0.3 }}
-                  className="label-text-alt text-red-500 font-semibold text-lg absolute inset-x-0 top-3 text-center whitespace-nowrap place-content-center"
+                  className="label-text-alt text-red-500 font-semibold text-lg text-center whitespace-nowrap"
+                  style={{ willChange: "transform, opacity" }}
                 >
                   Incorrect, try again!
                 </motion.span>
@@ -191,14 +192,15 @@ export default function Answer() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -6 }}
                   transition={{ duration: 0.3 }}
-                  className="label-text-alt text-green-600 font-semibold text-lg absolute inset-x-0 top-3 text-center whitespace-nowrap place-content-center"
+                  className="label-text-alt text-green-600 font-semibold text-lg text-center whitespace-nowrap"
+                  style={{ willChange: "transform, opacity" }}
                 >
                   Correct!
                 </motion.span>
               ) : null}
             </AnimatePresence>
           </div>
-        </div>
+        </>
       );
     }
 

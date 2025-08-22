@@ -26,6 +26,14 @@ export interface GameState {
   playerAnswer: string | null;
   fetchTrigger: number;
   guessedElements: string[];
+  // Hangman mode state
+  hangmanWord: string | null;
+  hangmanGuessedLetters: string[];
+  hangmanIncorrectGuesses: number;
+  hangmanMaxAttempts: number;
+  hangmanIndex: number;
+  hangmanDifficulty: string | null;
+  // Actions
   setGameMode: (mode: string) => void;
   setScore: (update: number | ((prevScore: number) => number)) => void;
   setElements: (elements: ElementType[]) => void;
@@ -34,6 +42,12 @@ export interface GameState {
   setGameStarted: (gameStarted: boolean) => void;
   setAnswer: (answer: ElementType | null) => void;
   setAnswerElementName: (name: ElementType["name"] | null) => void;
+  // Hangman actions
+  setHangmanWord: (word: string) => void;
+  guessHangmanLetter: (letter: string) => void;
+  resetHangman: () => void;
+  setHangmanIndex: (index: number) => void;
+  setHangmanDifficulty: (difficulty: string) => void;
 }
 
 export interface GameState {
@@ -94,6 +108,51 @@ export const useGameStore = create<GameState>((set, get) => {
     answerElementName: (persisted?.answerElementName as any) ?? "",
     fetchTrigger: 0,
     guessedElements: [],
+    // Hangman state
+    hangmanWord: null,
+    hangmanGuessedLetters: [],
+    hangmanIncorrectGuesses: 0,
+    hangmanMaxAttempts: 10,
+    hangmanIndex: 0,
+    hangmanDifficulty: null,
+
+    // Hangman actions
+    setHangmanWord: (word) =>
+      set({
+        hangmanWord: word,
+        hangmanGuessedLetters: [],
+        hangmanIncorrectGuesses: 0,
+      }),
+    guessHangmanLetter: (letter) =>
+      set((state) => {
+        if (!state.hangmanWord || state.hangmanGuessedLetters.includes(letter))
+          return {};
+        const isCorrect = state.hangmanWord
+          .toLowerCase()
+          .includes(letter.toLowerCase());
+        const newGuessed = [
+          ...state.hangmanGuessedLetters,
+          letter.toLowerCase(),
+        ];
+        const newIncorrect = isCorrect
+          ? state.hangmanIncorrectGuesses
+          : state.hangmanIncorrectGuesses + 1;
+        return {
+          hangmanGuessedLetters: newGuessed,
+          hangmanIncorrectGuesses: newIncorrect,
+        };
+      }),
+    resetHangman: () =>
+      set({
+        hangmanWord: null,
+        hangmanGuessedLetters: [],
+        hangmanIncorrectGuesses: 0,
+        hangmanIndex: 0,
+      }),
+    setHangmanIndex: (index) => set({ hangmanIndex: index }),
+    setHangmanDifficulty: (difficulty) =>
+      set({ hangmanDifficulty: difficulty }),
+
     addGuessedElement: (symbol) =>
       set((state) => {
         if (state.guessedElements.includes(symbol)) return {};
@@ -150,13 +209,49 @@ export const useGameStore = create<GameState>((set, get) => {
 });
 
 export const useUIStore = create<uiSlice>((set) => ({
-  theme:
-    typeof window !== "undefined" &&
-    typeof window.matchMedia === "function" &&
-    window.matchMedia("(prefers-color-scheme: dark)").matches
-      ? "dark"
-      : "light",
+  // prefer persisted theme, otherwise use system preference -> map light to 'cupcake'
+  theme: (() => {
+    try {
+      const stored =
+        typeof window !== "undefined" &&
+        typeof window.localStorage !== "undefined"
+          ? localStorage.getItem("atomology.theme")
+          : null;
+      let initial = stored
+        ? stored
+        : typeof window !== "undefined" &&
+          typeof window.matchMedia === "function" &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? "dark"
+        : "cupcake";
+      // normalize friendly names: map legacy values to the theme tokens
+      if (initial === "light") initial = "cupcake";
+      if (initial === "dark") initial = "night";
+      try {
+        if (typeof document !== "undefined")
+          document.documentElement.setAttribute("data-theme", initial);
+      } catch (err) {}
+      return initial;
+    } catch (err) {
+      return "cupcake";
+    }
+  })(),
   setTheme: (theme) => {
-    set({ theme }), document.documentElement.setAttribute("data-theme", theme);
+    // normalize: 'light' -> 'cupcake', 'dark' -> 'night'
+    const t =
+      theme === "light" ? "cupcake" : theme === "dark" ? "night" : theme;
+    set({ theme: t });
+    try {
+      document.documentElement.setAttribute("data-theme", t);
+      // Set Tailwind dark mode class for dark theme
+      if (t === "night") {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
+    } catch (err) {}
+    try {
+      localStorage.setItem("atomology.theme", t);
+    } catch (err) {}
   },
 }));

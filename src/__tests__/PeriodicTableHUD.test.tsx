@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import { PeriodicTableHUD } from "../components/PeriodicTableHUD";
+import { PeriodicTableHUD } from "../components/sub-components/PeriodicTableHUD";
 
 describe("PeriodicTableHUD", () => {
   it("fills the element box when symbol is in guessed set", () => {
