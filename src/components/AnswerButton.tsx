@@ -22,12 +22,12 @@ export default function AnswerButton({
   onClick,
 }: AnswerButtonProps) {
   let btnClass =
-    "btn btn-outline border-2 rounded-full overflow-hidden shadow-sm transition-all duration-300 w-full min-h-12 h-auto flex items-center justify-center gap-2 px-3 sm:px-5 md:px-8 text-base md:text-lg lg:text-xl whitespace-nowrap";
+    "btn btn-outline btn-primary !border-2 !border-primary rounded-full overflow-hidden shadow-sm transition-all duration-300 w-full min-h-12 h-auto flex items-center justify-center gap-2 px-3 sm:px-5 md:px-8 text-base md:text-lg lg:text-xl whitespace-nowrap";
   if (isRoundLocked && isCorrect) {
     btnClass += " bg-green-800 text-white border-green-900";
   } else if (isPickedWrong) {
     btnClass +=
-      " bg-gray-100 border-red-300 text-gray-500 opacity-80 cursor-not-allowed ring-1 ring-red-200";
+      "!bg-gray-400 !border-red-300 text-gray-500 opacity-80 cursor-not-allowed ring-1 ring-red-200";
   } else if (disabled) {
     btnClass +=
       " bg-gray-100 border-gray-300 text-gray-500 opacity-80 cursor-not-allowed ring-1 ring-gray-200";
@@ -44,7 +44,7 @@ export default function AnswerButton({
       style={{ minWidth: 0 }}
     >
       <span className="flex-1 flex items-center font-semibold text-base md:text-lg lg:text-xl truncate">
-        <span className="mr-2 text-gray-500 text-base md:text-lg lg:text-xl font-bold flex-shrink-0">
+        <span className="mr-2 text-content text-base md:text-lg lg:text-xl font-bold flex-shrink-0">
           {idx + 1}.
         </span>
         <span className="truncate">{label}</span>

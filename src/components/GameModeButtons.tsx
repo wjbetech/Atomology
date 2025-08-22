@@ -15,7 +15,7 @@ export default function GameModeButtons() {
           setPlayerAnswer("");
           setGameStarted(true);
         }}
-        className="btn btn-outline btn-sm lg:btn-md border-2 font-[400] rounded-full w-full h-10 text-sm"
+        className="btn btn-outline btn-sm lg:btn-md !border-2 !border-secondary font-[400] rounded-full w-full h-10 text-sm"
       >
         Multiple Choice
       </button>
@@ -27,7 +27,7 @@ export default function GameModeButtons() {
           setPlayerAnswer("");
           setGameStarted(true);
         }}
-        className="btn btn-outline btn-sm lg:btn-md border-2 font-[400] rounded-full w-full h-10 text-sm"
+        className="btn btn-outline btn-sm lg:btn-md !border-2 !border-secondary font-[400] rounded-full w-full h-10 text-sm"
       >
         Open Answer
       </button>
@@ -45,7 +45,7 @@ export default function GameModeButtons() {
           setGameStarted(true);
           setPlayerAnswer("");
         }}
-        className="btn btn-outline btn-sm lg:btn-md border-2 font-[400] rounded-full w-full h-10 text-sm"
+        className="btn btn-outline btn-sm lg:btn-md !border-2 !border-secondary font-[400] rounded-full w-full h-10 text-sm"
       >
         Hangman Mode
       </button>
