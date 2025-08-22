@@ -1,14 +1,3 @@
-/* Remove active/focus border effect on all input elements */
-input:focus,
-input:active,
-select:focus,
-select:active,
-textarea:focus,
-textarea:active {
-  outline: none !important;
-  box-shadow: none !important;
-  border-color: inherit !important;
-}
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -80,18 +69,8 @@ body {
   transition: transform 180ms ease;
 }
 
-/* Use daisyUI theme tokens via Tailwind utility classes so themes drive colors.
-   Avoid hard-coded hex values here; instead apply daisyUI utilities which map to
-   the active themeRoot (configured in tailwind.config.js as [data-theme]).
-*/
-
-/* App component (src/App.jsx) is the single source of truth for background and text color.
-  That wrapper applies `bg-base-100 text-base-content` so we avoid duplicating
-  styling here which could conflict with component-scoped classes.
-*/
-
 /* Inputs, selects, textareas and buttons should use base surface tokens */
-[data-theme] input,
+[data-theme] input:not([type="checkbox"]),
 [data-theme] textarea,
 [data-theme] select,
 [data-theme] .btn {
@@ -131,9 +110,18 @@ body {
 }
 
 [data-theme="night"] .atoms-fill-1 {
-  fill: #FCD462 !important; /* original light yellow for night */
+  fill: #fcd462 !important; /* original light yellow for night */
 }
 
 [data-theme="night"] .atoms-fill-2 {
   fill: #ebf0f3 !important; /* original light fill for night */
+}
+
+/* Button border tweaks: slightly darker border in light mode, slightly lighter in dark mode */
+[data-theme="cupcake"] .btn {
+  @apply border-slate-400;
+}
+
+[data-theme="night"] .btn {
+  @apply border-slate-300;
 }

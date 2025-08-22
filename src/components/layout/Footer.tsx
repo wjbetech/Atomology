@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useUIStore } from "../../store/atomologyStore";
+import ThemeToggle from "../ui/ThemeToggle";
 
 type Props = {};
 
@@ -14,12 +15,7 @@ export default function Footer({}: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Deterministically set theme from the checkbox checked state so
-  // we always write daisyUI tokens ('cupcake' for light, 'night' for dark).
-  const onToggleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const checked = e.target.checked;
-    setTheme(checked ? "cupcake" : "night");
-  };
+  // (toggle handled by ThemeToggle component)
 
   const isLight = theme === "cupcake" || theme === "light";
   const themeLabel =
@@ -32,18 +28,12 @@ export default function Footer({}: Props) {
 
       {/* Theme toggle positioned bottom-right of footer */}
       <div className="absolute right-2 bottom-2">
-        <label className="flex items-center gap-2">
+        <div className="flex items-center gap-2">
           <span className="text-xs text-gray-500">
             {icon} {themeLabel}
           </span>
-          <input
-            type="checkbox"
-            className="toggle toggle-sm"
-            checked={isLight}
-            onChange={onToggleChange}
-            aria-label="Toggle theme"
-          />
-        </label>
+          <ThemeToggle />
+        </div>
       </div>
     </div>
   );
