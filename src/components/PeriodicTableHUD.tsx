@@ -1,5 +1,5 @@
 import React from "react";
-import elementsData from "../../data/elements.json";
+import elementsData from "../data/elements.json";
 
 interface PeriodicTableHUDProps {
   guessed: Set<string>;
@@ -46,10 +46,8 @@ export const PeriodicTableHUD: React.FC<PeriodicTableHUDProps> = ({
                   {el ? (
                     <span
                       className={
-                        `w-8 h-8 rounded border border-primary-content dark:border-primary flex items-center justify-center ` +
-                        (guessed.has(el.symbol)
-                          ? "bg-green-400"
-                          : "bg-transparent")
+                        `w-8 h-8 rounded border flex items-center justify-center element-hud-box ` +
+                        (guessed.has(el.symbol) ? "guessed bg-green-400 border-green-600" : "")
                       }
                       title={el.name}
                     >
