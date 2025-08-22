@@ -57,7 +57,7 @@ export default function HangmanDifficultySelect() {
         ))}
       </select>
       <button
-        className="btn btn-primary btn-md rounded-full w-64 mb-2"
+        className="btn btn-primary btn-outline w-full"
         onClick={handleStart}
       >
         Start

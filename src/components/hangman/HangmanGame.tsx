@@ -191,7 +191,7 @@ export default function HangmanGame() {
               Answer: <span className="font-semibold">{hangmanWord}</span>
             </div>
             <button
-              className="btn btn-primary rounded-full w-32 h-10 min-h-0 mt-3 text-sm"
+              className="btn btn-primary rounded-full w-32 h-10 min-h-0 mt-3 text-sm light:border-content"
               onClick={() => {
                 setWordGuessResult(null);
                 setInput("");

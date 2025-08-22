@@ -34,7 +34,7 @@ export default function HangmanKeyboard({
               onClick={() => {
                 if (!used && !disabled) guessLetter(l);
               }}
-              className={classes}
+              className={classes + " light:border-content"}
             >
               {L}
             </button>

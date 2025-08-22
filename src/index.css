@@ -116,12 +116,3 @@ body {
 [data-theme="night"] .atoms-fill-2 {
   fill: #ebf0f3 !important; /* original light fill for night */
 }
-
-/* Button border tweaks: slightly darker border in light mode, slightly lighter in dark mode */
-[data-theme="cupcake"] .btn {
-  @apply border-slate-400;
-}
-
-[data-theme="night"] .btn {
-  @apply border-slate-300;
-}

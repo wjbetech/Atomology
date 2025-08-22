@@ -65,7 +65,7 @@ export default function HangmanGameOverModal({
         <p className="text-gray-400 mb-4">You've run out of lives.</p>
         <div className="grid grid-cols-2 gap-3 mt-6">
           <button
-            className="btn btn-sm btn-success w-full"
+            className="btn btn-sm btn-success w-full light:border-content border-2"
             onClick={() => {
               onRestart();
             }}
@@ -73,7 +73,7 @@ export default function HangmanGameOverModal({
             Restart Hangman
           </button>
           <button
-            className="btn btn-sm btn-error w-full"
+            className="btn btn-sm btn-error w-full light:border-content"
             onClick={() => {
               onReturn();
             }}

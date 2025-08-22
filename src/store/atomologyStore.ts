@@ -243,6 +243,12 @@ export const useUIStore = create<uiSlice>((set) => ({
     set({ theme: t });
     try {
       document.documentElement.setAttribute("data-theme", t);
+      // Set Tailwind dark mode class for dark theme
+      if (t === "night") {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
     } catch (err) {}
     try {
       localStorage.setItem("atomology.theme", t);
