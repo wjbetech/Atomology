@@ -1,5 +1,5 @@
 import React from "react";
-import elementsData from "../../data/elements.json";
+import canonicalElements from "../../data/elements";
 
 interface PeriodicTableHUDProps {
   guessed: Set<string>;
@@ -7,8 +7,8 @@ interface PeriodicTableHUDProps {
 }
 
 // Get max group and period for table size
-type Element = (typeof elementsData.elements)[0];
-const elements: Element[] = elementsData.elements;
+type Element = (typeof canonicalElements)[0];
+const elements: Element[] = canonicalElements as Element[];
 const maxGroup = Math.max(...elements.map((e) => e.group || 0));
 const maxPeriod = Math.max(...elements.map((e) => e.period || 0));
 

@@ -1,5 +1,6 @@
 import { ElementType } from "../store/atomologyStore";
 import { GET } from "../data/fetch";
+import canonicalElements from "../data/elements";
 
 export const fetchUniqueElements = async (
   count: number
@@ -7,7 +8,7 @@ export const fetchUniqueElements = async (
   // Fetch all elements in a single API call
   const response = await GET();
   // For local JSON, elements are under response.elements
-  const allElements = response.elements;
+  const allElements = response.elements || canonicalElements;
 
   // // -- blocked out what I think is useless --
   // // Ensure we get at least the number of required unique elements
