@@ -54,8 +54,8 @@ export default function AnswerButton({
       disabled={effectiveDisabled}
       style={{ minWidth: 0 }}
     >
-      <span className="flex-1 flex items-center font-semibold text-base md:text-lg lg:text-xl truncate overflow-hidden">
-        <span className="mr-2 text-content text-base md:text-lg lg:text-xl font-bold flex-shrink-0">
+      <span className="flex-1 flex items-center font-semibold text-sm md:text-md truncate overflow-hidden">
+        <span className="mr-2 text-content font-bold flex-shrink-0">
           {idx + 1}.
         </span>
         <span className="truncate">{label}</span>
