@@ -218,7 +218,7 @@ export default function HangmanGame() {
       </div>
 
       <AnimatePresence>
-        {wordGuessResult && (
+        {wordGuessResult === "incorrect" && (
           <motion.div
             initial={{ opacity: 0, y: 4 }}
             animate={{ opacity: 1, y: 0 }}
@@ -226,30 +226,7 @@ export default function HangmanGame() {
             transition={{ duration: 0.28 }}
             className="flex flex-col items-center"
           >
-            {wordGuessResult === "correct" ? (
-              <div className="text-green-600 font-bold text-sm">
-                Correct! 🎉
-              </div>
-            ) : (
-              <div className="text-red-500 font-bold text-sm">Incorrect</div>
-            )}
-            <div className="text-xs text-gray-500 mt-1">
-              Answer: <span className="font-semibold">{hangmanWord}</span>
-            </div>
-            <button
-              className="btn btn-primary rounded-full w-32 h-10 min-h-0 mt-3 text-sm light:border-content"
-              onClick={() => {
-                // immediately advance to next element
-                // clear any timers
-                if (resultTimeoutRef.current)
-                  window.clearTimeout(resultTimeoutRef.current as any);
-                if (advanceTimeoutRef.current)
-                  window.clearTimeout(advanceTimeoutRef.current as any);
-                advanceToNext();
-              }}
-            >
-              Next Element
-            </button>
+            <div className="text-red-500 font-bold text-sm">Incorrect</div>
           </motion.div>
         )}
       </AnimatePresence>
