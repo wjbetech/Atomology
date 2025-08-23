@@ -27,6 +27,8 @@ export default function HangmanGame() {
   const [disabled, setDisabled] = useState(false);
   const resultTimeoutRef = React.useRef<number | null>(null);
   const advanceTimeoutRef = React.useRef<number | null>(null);
+  const DISPLAY_MS = 800;
+  const EXIT_MS = 320;
 
   // Trigger game over when incorrect guesses reach maxAttempts
   useEffect(() => {
@@ -115,9 +117,6 @@ export default function HangmanGame() {
     if (!guess) return;
     if (guess.toLowerCase() === hangmanWord.toLowerCase()) {
       setWordGuessResult("correct");
-      // show result for a short time, then fade it out, then advance to next word
-      const DISPLAY_MS = 800;
-      const EXIT_MS = 320;
       // clear any existing timers
       if (resultTimeoutRef.current)
         window.clearTimeout(resultTimeoutRef.current as any);
@@ -128,17 +127,7 @@ export default function HangmanGame() {
         setWordGuessResult(null);
         // after exit animation, advance to next
         advanceTimeoutRef.current = window.setTimeout(() => {
-          const nextIndex = (hangmanIndex ?? 0) + 1;
-          if (nextIndex < total) {
-            setHangmanIndex && setHangmanIndex(nextIndex);
-            const nextName = pool[nextIndex]?.name;
-            nextName &&
-              (useGameStore as any).getState().setHangmanWord(nextName);
-          } else {
-            // finished all words -> show finished state/modal
-            setShowGameOver(true);
-            setDisabled(true);
-          }
+          advanceToNext();
         }, EXIT_MS);
       }, DISPLAY_MS);
     } else {
@@ -147,6 +136,62 @@ export default function HangmanGame() {
     // keep the guess visible for the result display
     setInput("");
   };
+
+  // helper to advance to next element or finish the session
+  const advanceToNext = () => {
+    // add current word to guessed HUD if available
+    try {
+      const curr = pool[hangmanIndex];
+      if (curr && curr.symbol)
+        (useGameStore as any).getState().addGuessedElement(curr.symbol);
+    } catch (err) {}
+
+    const nextIndex = (hangmanIndex ?? 0) + 1;
+    if (nextIndex < total) {
+      setHangmanIndex && setHangmanIndex(nextIndex);
+      const nextName = pool[nextIndex]?.name;
+      nextName && (useGameStore as any).getState().setHangmanWord(nextName);
+      // clear local UI
+      setWordGuess("");
+      setInput("");
+      setWordGuessResult(null);
+    } else {
+      // finished all words -> show finished state/modal
+      setShowGameOver(true);
+      setDisabled(true);
+    }
+  };
+
+  // Auto-advance when all letters have been revealed via guessed letters
+  React.useEffect(() => {
+    if (!hangmanWord) return;
+    if (disabled || showGameOver) return;
+
+    // compute unique letters in the word (ignore spaces and non-letters)
+    const letters = hangmanWord
+      .toLowerCase()
+      .split("")
+      .filter((c) => /[a-z]/.test(c));
+    const unique = Array.from(new Set(letters));
+    if (unique.length === 0) return;
+
+    const allRevealed = unique.every((ch) => guessed.includes(ch));
+    if (allRevealed && wordGuessResult !== "correct") {
+      // mark correct and use the same timed flow as a typed correct guess
+      setWordGuessResult("correct");
+      if (resultTimeoutRef.current)
+        window.clearTimeout(resultTimeoutRef.current as any);
+      if (advanceTimeoutRef.current)
+        window.clearTimeout(advanceTimeoutRef.current as any);
+      resultTimeoutRef.current = window.setTimeout(() => {
+        setWordGuessResult(null);
+        advanceTimeoutRef.current = window.setTimeout(() => {
+          advanceToNext();
+        }, EXIT_MS);
+      }, DISPLAY_MS);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [guessed, hangmanWord]);
 
   return (
     <div className="flex flex-col items-center gap-4 mt-6 w-full max-w-[420px] mx-auto relative">
@@ -193,10 +238,13 @@ export default function HangmanGame() {
             <button
               className="btn btn-primary rounded-full w-32 h-10 min-h-0 mt-3 text-sm light:border-content"
               onClick={() => {
-                setWordGuessResult(null);
-                setInput("");
-                setWordGuess("");
-                // TODO: Add logic to move to the next element (advance game state)
+                // immediately advance to next element
+                // clear any timers
+                if (resultTimeoutRef.current)
+                  window.clearTimeout(resultTimeoutRef.current as any);
+                if (advanceTimeoutRef.current)
+                  window.clearTimeout(advanceTimeoutRef.current as any);
+                advanceToNext();
               }}
             >
               Next Element
