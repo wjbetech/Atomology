@@ -12,8 +12,8 @@ export default function HangmanKeyboard({
   disabled?: boolean;
 }) {
   return (
-    <div className="w-full flex justify-center mb-2 mt-4">
-      <div className="flex flex-wrap justify-center gap-x-1 gap-y-2 w-full max-w-[420px]">
+    <div className="w-full flex justify-center mb-2 mt-4 px-6 sm:px-0">
+      <div className="flex flex-wrap justify-center gap-x-1 gap-y-2 w-full max-w-[420px] px-6 sm:px-0">
         {"ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").map((L) => {
           const l = L.toLowerCase();
           const used = guessed.includes(l);

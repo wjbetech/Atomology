@@ -57,7 +57,7 @@ export default function ConfirmModal({
 
   return (
     <div
-      className="fixed inset-0 z-[3000] flex items-center justify-center bg-black/40"
+      className="fixed inset-0 z-[3000] flex items-center justify-center bg-black/40 p-4 sm:p-0"
       onClick={onCancel}
       aria-hidden={false}
     >
@@ -67,7 +67,7 @@ export default function ConfirmModal({
         aria-modal="true"
         aria-labelledby="confirm-title"
         aria-describedby="confirm-desc"
-        className="bg-[#101a2c] border border-blue-900 rounded-lg p-6 w-[90%] max-w-md shadow-lg"
+        className="bg-[#101a2c] border border-blue-900 rounded-lg p-4 sm:p-6 w-full max-w-md shadow-lg max-h-[90vh] overflow-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <h2 id="confirm-title" className="font-bold text-lg mb-2">
@@ -76,7 +76,7 @@ export default function ConfirmModal({
         <p id="confirm-desc" className="mb-4 text-gray-500">
           {description}
         </p>
-        <div className="flex gap-3 justify-between w-[200px] mt-8">
+        <div className="flex flex-col sm:flex-row gap-3 justify-between mt-6">
           <button className="btn btn-sm btn-error w-full" onClick={onCancel}>
             Cancel
           </button>
