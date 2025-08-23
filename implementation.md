@@ -358,6 +358,8 @@ By splitting the components this way, you'll maintain cleaner code and separatio
   - The “cupcake” DaisyUI theme is the reference for light mode, and “night” is the reference for dark mode.
   - All customizations must match or exceed the color contrast and accessibility of these reference themes.
 
+  - Check colors across the app for sufficient contrast using recommended contrast guidelines (WCAG AA/AAA as appropriate) and document any fixes required.
+
 - **DaisyUI setup and config:**
 
   - Tailwind and DaisyUI must be configured according to the [official DaisyUI documentation](https://daisyui.com/docs/install/).
