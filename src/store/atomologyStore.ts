@@ -61,6 +61,8 @@ export interface GameState {
 export interface uiSlice {
   theme: string;
   setTheme: (theme: string) => void;
+  showHUD: boolean;
+  setShowHUD: (show: boolean) => void;
 }
 
 export const useGameStore = create<GameState>((set, get) => {
@@ -252,6 +254,25 @@ export const useUIStore = create<uiSlice>((set) => ({
     } catch (err) {}
     try {
       localStorage.setItem("atomology.theme", t);
+    } catch (err) {}
+  },
+  // HUD visibility persisted in localStorage
+  showHUD: (() => {
+    try {
+      const stored =
+        typeof window !== "undefined" &&
+        typeof window.localStorage !== "undefined"
+          ? localStorage.getItem("atomology.showHUD")
+          : null;
+      return stored ? stored === "1" : true;
+    } catch (err) {
+      return true;
+    }
+  })(),
+  setShowHUD: (show: boolean) => {
+    set({ showHUD: show });
+    try {
+      localStorage.setItem("atomology.showHUD", show ? "1" : "0");
     } catch (err) {}
   },
 }));

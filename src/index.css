@@ -21,6 +21,7 @@ body,
   width: 100%;
   height: 100%;
   overflow: hidden; /* root-level scrolling disabled; app will scroll internally */
+  text-align: center;
 }
 
 /* Ensure persistent bottom controls don't push content off-screen */
@@ -63,40 +64,6 @@ body {
 /* smooth scale transition when resizing */
 .atomology-scale-wrap {
   transition: transform 180ms ease;
-}
-
-/* Inputs, selects, textareas and buttons should use base surface tokens */
-[data-theme] input:not([type="checkbox"]),
-[data-theme] textarea,
-[data-theme] select {
-  @apply bg-base-200 text-base-content border border-base-300;
-}
-
-[data-theme] input::placeholder,
-[data-theme] textarea::placeholder {
-  @apply text-base-content/60;
-}
-
-/* In the light 'cupcake' theme, make plain buttons use a slightly darker base on hover
-   so hovering doesn't jump to a strong primary color. Exclude primary/outline/error
-   buttons so their semantic colors remain intact. */
-[data-theme="cupcake"] .btn {
-  @apply transition-colors;
-}
-[data-theme="cupcake"]
-  .btn:not(.btn-primary):not(.btn-outline):not(.btn-error):hover,
-[data-theme="cupcake"]
-  .btn:not(.btn-primary):not(.btn-outline):not(.btn-error):focus {
-  @apply bg-base-300;
-}
-
-/* Make multiple-choice answer buttons use a light gray hover in cupcake theme */
-[data-theme="cupcake"] .answer-btn:hover,
-[data-theme="cupcake"] .answer-btn:focus {
-  /* slightly darker subtle gray background and dark text to override DaisyUI primary hover */
-  background-color: #e5e7eb !important; /* Tailwind gray-200 */
-  color: #0f172a !important; /* Tailwind gray-900 for readable text */
-  transition: background-color 160ms ease, color 120ms ease;
 }
 
 /* Dialogs should use the base surface and content tokens as well */

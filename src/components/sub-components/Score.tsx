@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 // ...existing code...
 import ConfirmModal from "../ConfirmModal";
 import { useNavigate } from "react-router-dom";
+import ReturnToMainButton from "./ReturnToMainButton";
 
 export default function Score() {
   const {
@@ -90,12 +91,6 @@ export default function Score() {
                 </motion.span>
               </div>
             </div>
-            <button
-              onClick={() => setShowConfirm(true)}
-              className="btn btn-outline !border-2 w-full sm:w-auto sm:min-w-[175px] rounded-full self-center"
-            >
-              Return to Main
-            </button>
           </div>
           {showConfirm && (
             <ConfirmModal

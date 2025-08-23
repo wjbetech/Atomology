@@ -343,3 +343,81 @@ By splitting the components this way, you'll maintain cleaner code and separatio
 8. Add the HUD and the HUD toggle to this game mode too
 9. Consider fixing the routing, and ensure that players can return to the same game spot if they accidentally refresh
 10. Make the Return to Main button the same width across all pages (refactor to its own component)
+
+## Theme System Refactor
+
+- **Massive refactor of the dark/light theme system:**
+
+  - All components must support theme-specific styling using DaisyUI’s theme tokens and Tailwind’s `dark:`/`light:`/`data-theme` selectors.
+  - Avoid Tailwind utility class clashes by using DaisyUI theme tokens (e.g., `bg-base-200`, `text-base-content`) and DaisyUI’s recommended approach for theme switching.
+  - Remove or refactor any global or component-level CSS that overrides DaisyUI’s theme tokens in a way that causes specificity or cascade issues.
+
+- **Color contrast compliance:**
+
+  - All custom and default themes must be checked for WCAG color contrast compliance.
+  - The “cupcake” DaisyUI theme is the reference for light mode, and “night” is the reference for dark mode.
+  - All customizations must match or exceed the color contrast and accessibility of these reference themes.
+
+- **DaisyUI setup and config:**
+
+  - Tailwind and DaisyUI must be configured according to the [official DaisyUI documentation](https://daisyui.com/docs/install/).
+  - `tailwind.config.js` should include:
+    - `plugins: [require("daisyui")]`
+    - `daisyui: { themes: ["cupcake", "night", ...] }`
+    - `darkMode: "class"` (or as recommended by DaisyUI)
+  - Remove any deprecated or conflicting Tailwind/DaisyUI config or plugin usage.
+  - Ensure all theme switching is handled via DaisyUI’s `data-theme` attribute or class, not by manual Tailwind class toggling.
+  - All custom CSS should use DaisyUI theme tokens and avoid hardcoded colors.
+
+- **Testing and verification:**
+  - Test all components in both light and dark themes.
+  - Verify that all interactive elements (buttons, selects, etc.) have proper color contrast and hover/focus states in both themes.
+  - Document any theme-specific overrides or exceptions in this file.
+
+---
+
+## Completed changes — 2025-08-23
+
+Below are the concrete edits made during the recent refactor and fixes (manual edits by maintainer + patches applied by assistant). This is a concise changelog so reviewers can quickly see what changed and why.
+
+- `src/components/pages/MultipleChoice.tsx` (manual & assistant)
+
+  - Ensured the page file that App renders initializes `gameStarted` on mount.
+  - Restored `Element` + `Answer` rendering and added a persistent `Score` overlay placement.
+  - (Assistant) Added a small `useEffect` to set `gameStarted` when entering the page.
+
+- `src/components/MultipleChoice.tsx` (manual)
+
+  - Kept an alternate `MultipleChoice` implementation (note: consider consolidating duplicates).
+
+- `src/components/sub-components/ReturnToMainButton.tsx` (manual)
+
+  - Button implemented as a portal-fixed element with a confirmation modal; preserved navigation and state-reset logic.
+
+- `src/components/pages/OpenAnswer.tsx` (manual)
+
+  - Page-level edits to match the refactor (imports/placement of sub-components).
+
+- `src/components/layout/Footer.tsx` (manual)
+
+  - Footer refactor to a 3-column layout: HUD toggle (left), attribution (center), `ThemeToggle` (right).
+
+- `src/components/sub-components/ThemeToggle.jsx` (manual & assistant)
+  - (Manual) Restored a toggle control wired to `useUIStore`.
+  - (Assistant) Restored icon + text label, fixed JSX syntax, and adjusted styling:
+    - Sun icon shown for light themes (yellow).
+    - Moon icon rendered white in dark themes.
+    - Label color uses `text-gray-400` in dark theme.
+
+Verification notes
+
+- Quick static checks were run against the modified files; no syntax/type errors were reported for the edited files.
+- Recommended next step: run the dev server and the test suite locally to confirm runtime behavior and visual correctness:
+
+  - Run the dev server and manually verify the Multiple Choice page shows the `Score` and the Return to Main button and that `ThemeToggle` displays icon + label.
+  - Run unit tests: `npm test` and a quick lint: `npm run lint`.
+
+Follow-ups
+
+- Consolidate duplicate `MultipleChoice` components into a single file to avoid future drift.
+- Consider adding a tiny E2E smoke test that loads the Multiple Choice page and asserts the presence of Score and Return buttons.

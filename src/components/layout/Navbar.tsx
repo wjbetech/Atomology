@@ -85,8 +85,8 @@ export default function Navbar({}: Props) {
           paddingRight: "env(safe-area-inset-right)",
         }}
       >
-        <div className="px-4">
-          <div className="bg-transparent px-3 py-3 rounded-full text-lg md:text-xl font-semibold text-center">
+        <div className="flex items-center pl-3">
+          <div className="bg-transparent rounded-full text-lg md:text-xl font-semibold text-center">
             <div
               className={
                 "text-base md:text-lg lg:text-xl uppercase tracking-wider hangman-level " +
@@ -100,8 +100,10 @@ export default function Navbar({}: Props) {
             </div>
           </div>
         </div>
-        <div className="absolute left-1/2 transform -translate-x-1/2 font-semibold text-lg text-center hangman-title">
-          Hangman Mode
+        <div className="absolute left-1/2 transform -translate-x-1/2 text-center">
+          <div className="font-semibold text-lg text-center hangman-title">
+            Hangman Mode
+          </div>
         </div>
         <div className="px-4">
           <div className="text-right text-lg md:text-xl font-semibold">
@@ -133,16 +135,28 @@ export default function Navbar({}: Props) {
 
   // default navbar with links
   return (
-    <nav
-      className="p-6 flex fixed inset-x-0 w-full items-start justify-center gap-4 bg-transparent"
-      style={{
-        paddingLeft: "env(safe-area-inset-left)",
-        paddingRight: "env(safe-area-inset-right)",
-      }}
-    >
-      {location.pathname !== "/" && <Link to="/">Main</Link>}
-      {location.pathname !== "/about" && <Link to="/about">About</Link>}
-      {location.pathname !== "/faq" && <Link to="/faq">FAQ</Link>}
-    </nav>
+    <>
+      <nav
+        className="p-6 flex fixed inset-x-0 top-0 w-full items-start justify-between gap-4 bg-transparent z-[2000]"
+        style={{
+          paddingLeft: "env(safe-area-inset-left)",
+          paddingRight: "env(safe-area-inset-right)",
+          zIndex: 2000,
+        }}
+      >
+        <div className="px-4" />
+
+        <div className="absolute left-1/2 transform -translate-x-1/2">
+          {location.pathname === "/" && (
+            <div className="flex gap-4 text-sm">
+              <Link to="/about">About</Link>
+              <Link to="/faq">FAQ</Link>
+            </div>
+          )}
+        </div>
+
+        <div className="px-4" />
+      </nav>
+    </>
   );
 }

@@ -18,14 +18,19 @@ export default function HangmanKeyboard({
           const l = L.toLowerCase();
           const used = guessed.includes(l);
           const inWord = hangmanWord.toLowerCase().includes(l);
+
           const base =
             "inline-flex items-center justify-center w-8 h-9 text-sm font-semibold rounded-sm transition-colors";
+
           const classes = used
             ? inWord
               ? base + " bg-green-700 text-white border-0 disabled:opacity-100"
               : base + " bg-gray-400/50 text-gray-700 border-0 opacity-60"
             : base +
-              " bg-gray-300 border-gray-700 text-black dark:bg-gray-400 dark:hover:bg-gray-300 hover:bg-gray-400 cursor-pointer disabled:opacity-60";
+              // use theme tokens for normal/hover states so dark/light behave consistently
+              " bg-base-200 text-base-content dark:bg-slate-700 dark:text-white" +
+              " hover:bg-base-300 dark:hover:bg-slate-600 cursor-pointer disabled:opacity-60";
+
           return (
             <button
               key={L}

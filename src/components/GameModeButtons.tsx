@@ -15,10 +15,11 @@ export default function GameModeButtons() {
           setPlayerAnswer("");
           setGameStarted(true);
         }}
-        className="btn btn-outline btn-sm lg:btn-md !border-2 !border-secondary font-[400] rounded-full w-full h-10 text-sm"
+        className="btn btn-primary btn-md lg:btn-lg rounded-full"
       >
         Multiple Choice
       </button>
+
       <button
         id="open"
         value="open"
@@ -27,17 +28,16 @@ export default function GameModeButtons() {
           setPlayerAnswer("");
           setGameStarted(true);
         }}
-        className="btn btn-outline btn-sm lg:btn-md !border-2 !border-secondary font-[400] rounded-full w-full h-10 text-sm"
+        className="btn btn-secondary btn-md lg:btn-lg rounded-full"
       >
         Open Answer
       </button>
+
       <button
         id="hangman"
         value="hangman"
         onClick={() => {
-          // reset any previous hangman state so user lands on difficulty select
           resetHangman && resetHangman();
-          // attempt to clear previous difficulty safely
           try {
             (useGameStore as any).getState?.().setHangmanDifficulty(null);
           } catch {}
@@ -45,7 +45,7 @@ export default function GameModeButtons() {
           setGameStarted(true);
           setPlayerAnswer("");
         }}
-        className="btn btn-outline btn-sm lg:btn-md !border-2 !border-secondary font-[400] rounded-full w-full h-10 text-sm"
+        className="btn btn-primary btn-md lg:btn-lg rounded-full"
       >
         Hangman Mode
       </button>
