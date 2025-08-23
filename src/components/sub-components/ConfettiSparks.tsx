@@ -1,8 +1,16 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { createPortal } from "react-dom";
 
 // Simple green sparks/confetti burst for celebration
-export default function ConfettiSparks({ trigger }: { trigger: boolean }) {
+export default function ConfettiSparks({
+  trigger,
+  anchor,
+}: {
+  trigger: boolean;
+  // anchor in viewport coordinates to position fixed portal
+  anchor?: { x: number; y: number } | null;
+}) {
   if (!trigger) return null;
   // 18 sparks, random directions, random color/size
   const colors = [
@@ -16,8 +24,21 @@ export default function ConfettiSparks({ trigger }: { trigger: boolean }) {
   const sparks = Array.from({ length: 18 });
   // Randomly choose direction: 1 (clockwise) or -1 (counterclockwise)
   const direction = Math.random() < 0.5 ? 1 : -1;
-  return (
-    <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20 overflow-hidden">
+
+  const confetti = (
+    <div
+      className="pointer-events-none"
+      style={{
+        position: anchor ? "fixed" : "absolute",
+        left: anchor ? `${anchor.x}px` : "50%",
+        top: anchor ? `${anchor.y}px` : "50%",
+        transform: anchor ? "translate(-50%,-50%)" : "translate(-50%,-50%)",
+        zIndex: 9999,
+        width: 0,
+        height: 0,
+        overflow: "visible",
+      }}
+    >
       {sparks.map((_, i) => {
         // Multiply angle by direction for clockwise/counterclockwise
         const angle =
@@ -49,10 +70,19 @@ export default function ConfettiSparks({ trigger }: { trigger: boolean }) {
               width: `${size * 6}px`,
               height: `${size * 6}px`,
               willChange: "transform, opacity",
+              position: "absolute",
+              left: 0,
+              top: 0,
             }}
           />
         );
       })}
     </div>
   );
+
+  // If document exists and anchor provided, port to body so it's not clipped
+  if (typeof document !== "undefined") {
+    return createPortal(confetti, document.body);
+  }
+  return confetti;
 }

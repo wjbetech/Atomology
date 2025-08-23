@@ -195,11 +195,12 @@ export default function HangmanGame() {
 
   return (
     <div className="flex flex-col items-center gap-4 mt-6 w-full max-w-[420px] mx-auto relative">
-      <ConfettiSparks trigger={wordGuessResult === "correct"} />
-
       {/* Group display, input, and keyboard with equal vertical spacing */}
       <div className="w-full flex flex-col items-center gap-6">
-        <HangmanLetters display={display} />
+        <HangmanLetters
+          display={display}
+          celebrate={wordGuessResult === "correct"}
+        />
 
         <HangmanGuessInput
           wordGuess={wordGuess}
