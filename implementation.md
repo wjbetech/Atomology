@@ -398,6 +398,42 @@ Below are the concrete edits made during the recent refactor and fixes (manual e
 
   - Page-level edits to match the refactor (imports/placement of sub-components).
 
+## New high-priority tasks (requested 2025-08-23)
+
+1. Overhead SEO and icon creation
+
+- Create meta tags (title, description, open graph tags) and JSON-LD for basic site metadata.
+- Create favicon and platform icons (favicon.ico, apple-touch-icon, 192/512 PNGs) and ensure they're referenced in `index.html` and the manifest.
+- Add basic sitemap.xml and robots.txt to the `public/` folder.
+
+2. Update the README.md
+
+- Add a short project summary, development setup (Node version, npm install, npm run dev), and brief list of available scripts (lint/test/build/dev).
+- Document theme toggling, environment variables, and where to find main components (App, Navbar, HUD, Hangman, Answer components).
+- Add basic contribution notes and license information.
+
+3. Fix small style discrepancies
+
+- Lives text color: standardize via `getLivesColor` in `src/components/layout/Navbar.tsx` or switch to CSS variables/theme tokens so colors are theme-aware.
+- Navbar: ensure header padding and link visibility match design (About/FAQ hidden in game modes; hangman header shows LEVEL/TITLE/LIVES centered/aligned).
+- Footer: confirm footer spacing/padding consistent across breakpoints; fix any theme token overrides.
+- FAQ & About pages: ensure consistent page padding, heading styles, and link colors; add missing semantic markup and aria attributes where relevant.
+
+If you'd like, I can start implementing these in order (suggested priority: README + SEO/icons, then README, then style fixes). Which item should I start on first?
+
+- Recent assistant & manual fixes (chronological, small summary):
+
+  - Hangman: moved confetti to letter squares, unbounded via portal, auto-advance when all letters revealed, removed "Next Element" button from result UI, updated placeholder to "the element is...", resized letter boxes for mobile, added mobile padding to letters/input/keyboard.
+  - Hangman keyboard: improved dark-theme visibility for incorrect picked letters (semi-transparent error bg).
+  - Answer component: clear `playerAnswer` in-store after correct-answer flow to avoid transient incorrect styling on next round.
+  - Navbar: show hangman header (LEVEL/TITLE/LIVES) in hangman mode; hide About/FAQ while in multi/open/hangman modes; lives color computed by `getLivesColor` (palette logic in `Navbar.tsx`).
+  - HUDWrapper: HUD hidden in hangman mode.
+  - ConfirmModal / ReturnToMainButton: responsive modal with safe padding, stacked actions on mobile, and ~45% button widths on larger screens.
+  - Hangman difficulty select: replaced native select with a styled dropdown so the options box is rounded and constrained to the select width; increased select width and added mobile padding.
+  - Layout: MultipleChoice/OpenAnswer pages adjusted so element/answers/controls sit higher on mobile; Score and Return buttons preserved as overlays.
+
+These are the changes that were applied during the recent interactive refactor/test cycle.
+
 - `src/components/layout/Footer.tsx` (manual)
 
   - Footer refactor to a 3-column layout: HUD toggle (left), attribution (center), `ThemeToggle` (right).
@@ -421,3 +457,52 @@ Follow-ups
 
 - Consolidate duplicate `MultipleChoice` components into a single file to avoid future drift.
 - Consider adding a tiny E2E smoke test that loads the Multiple Choice page and asserts the presence of Score and Return buttons.
+
+## Additional requested tasks (2025-08-23)
+
+The following items were requested to be added to the implementation backlog. Each item includes a short plan and acceptance criteria so we can pick them up and track progress.
+
+1. Ensure that buttons look good on an entire range of mobile devices
+
+   - What to do:
+     - Audit all button components (`btn` usages, `AnswerButton`, `ReturnToMainButton`, modal buttons, keyboard buttons) for touch target size, padding, and spacing across breakpoints.
+     - Standardize a small set of responsive utility classes (e.g., `px-6 py-2 sm:px-4 sm:py-1`, `w-full sm:w-auto`) and ensure text doesn't truncate.
+     - Ensure accessible hit targets (minimum 44x44px) and focus outlines/icons are visible in all themes.
+     - Add a small visual QA checklist and test screenshots for: iPhone SE, iPhone 12/13/14, Pixel 4/5/6, and a common Android mid-range device.
+   - Acceptance criteria:
+     - Buttons meet the 44x44 touch target rule on mobile.
+     - No visual overlap with safe-area insets or fixed footer controls at common mobile widths.
+     - Developer preview screenshots for at least 4 device sizes are saved under `docs/qa/screenshots/buttons/`.
+
+2. Add a congratulations + confetti dialogue box when a user has completed a given game mode
+
+   - What to do:
+     - Reuse `ConfettiSparks` (portal-based) to show confetti anchored to the modal center.
+     - Create a small `CompletionModal` component that displays summary stats (mode, score, correct answers) and action buttons (Replay, Return to Main, Share).
+     - Trigger the modal from the existing end-of-mode logic (e.g., where `showGameOver` or session completion is detected) and ensure game state is paused while modal is visible.
+   - Acceptance criteria:
+     - Modal appears on completion for all game modes and is keyboard accessible (focus trap, Escape to close).
+     - Confetti renders above UI (not clipped) and auto-stops after a short duration.
+     - Modal includes actions to replay or return to main and correctly fires those handlers.
+
+3. Fix the 119 counter for all elements (indexing issue)
+
+   - What to do:
+     - Audit `data/elements.json` length and ensure it contains exactly 118 element records.
+     - Search code for any place that computes `total = elements.length + 1` or uses atomic number as an array index; fix off-by-one logic so `total === 118` when appropriate.
+     - Add a unit test that asserts `getElements().length === 118` and that HUD/progress components derive totals from the elements array rather than hard-coded constants.
+   - Acceptance criteria:
+     - The app displays the correct total (118) in all places (LEVEL counters, HUD, difficulty selectors).
+     - Tests added to catch accidental off-by-one regressions.
+
+4. Fix the JSON data which sometimes doesn't tick off a completed element in multiple choice/open answer mode
+   - What to do:
+     - Reproduce the failure path and identify whether it's data normalization (symbol/name mismatch), a store update race (state cleared before HUD update), or `addGuessedElement` being called with the wrong symbol.
+     - Normalize all element symbol/name lookups to a canonical form (uppercase symbol, trimmed name) before adding to guessed set.
+     - Ensure calls to `addGuessedElement` are executed within the same tick as score increment (or use a small microtask) and add defensive checks in the HUD component to reconcile guessed elements from persistent session storage.
+     - Add unit/integration tests for the flow: correct answer → store updates → HUD shows element as guessed.
+   - Acceptance criteria:
+     - Elements are consistently marked guessed in HUD for Multi and Open modes immediately after correct answer.
+     - Edge cases tested (duplicated answers, symbol case differences, timing/race conditions) are covered by tests.
+
+Which of these would you like me to start on first? I suggest addressing (3) the 118 counter and (4) the JSON/HUD sync as high priority bugs.
