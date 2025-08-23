@@ -51,16 +51,16 @@ export default function Navbar({}: Props) {
     if (max === 10) {
       const palette = [
         "#ff1744", // 0 - red
-        "#ff3d00", // 1
-        "#ff7043", // 2
-        "#ff8a33", // 3
-        "#ffb347", // 4 - orange
-        "#ffcc33", // 5 - amber
-        "#ffdd55", // 6 - yellowish
-        "#ccff33", // 7 - lime
-        "#9cff3a", // 8 - greenish
-        "#66ff66", // 9 - light green
-        "#00e676", // 10 - vivid green
+        "#ff4000", // 1
+        "#ff6f00", // 2
+        "#ff9d00", // 3
+        "#ffbf00", // 4 - orange
+        "#dbc60b", // 5 - amber
+        "#d4db0b", // 6 - yellowish
+        "#b7ff00", // 7 - lime
+        "#91ff00", // 8 - greenish
+        "#51ff00", // 9 - light green
+        "#00ff0d", // 10 - vivid green
       ];
       return palette[rem] ?? palette[0];
     }
