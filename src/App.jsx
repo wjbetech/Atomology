@@ -1,12 +1,10 @@
-import "./App.css";
-
 // components
 import Layout from "./components/layout/Layout";
 import GameMode from "./components/GameMode";
-import Element from "./components/sub-components/Element";
 import Score from "./components/sub-components/Score";
 import HUDWrapper from "./components/sub-components/HUDWrapper";
-import Answer from "./components/Answer";
+import MultipleChoice from "./components/pages/MultipleChoice";
+import OpenAnswer from "./components/pages/OpenAnswer";
 import About from "./components/pages/About";
 import Faq from "./components/pages/Faq";
 import HangmanDifficultySelect from "./components/hangman/HangmanDifficultySelect";
@@ -37,17 +35,23 @@ function MainGameContent() {
     return <HangmanGame />;
   }
 
+  // Show Multiple Choice mode
+  if (gameMode === "multi" && gameStarted) {
+    return <MultipleChoice />;
+  }
+
+  // Show Open Answer mode
+  if (gameMode === "open" && gameStarted) {
+    return <OpenAnswer />;
+  }
+
+  // Default: show game mode selection and HUD
   return (
     <>
-      <HUDWrapper />
+      {/* HUDWrapper is now rendered at the top level, so remove this duplicate */}
       <div className="atomology-scale-wrap ">
         <div className="flex flex-col gap-y-10 justify-center items-center">
           <GameMode />
-          <div className="flex flex-col gap-y-10 mt-20 lg:mt-0">
-            <Element />
-            <Answer />
-          </div>
-          {/* spacing: keep score in normal flow on small screens to avoid overlap; absolute on large screens */}
           <div className="static lg:absolute lg:bottom-20">
             <Score />
           </div>
@@ -62,6 +66,7 @@ function App() {
     <Router>
       {/* Single source of truth for app background and base text color */}
       <div className="min-h-screen min-w-screen bg-content text-base-content">
+        <HUDWrapper />
         <Layout>
           <Routes>
             <Route path="/about" element={<About />} />

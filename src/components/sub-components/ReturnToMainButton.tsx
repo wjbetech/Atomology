@@ -45,7 +45,7 @@ export default function ReturnToMainButton({
   };
 
   const defaultButtonClass =
-    "btn btn-outline rounded-full !border-2 h-10 min-h-0 text-sm whitespace-nowrap px-6 min-w-[160px]";
+    "btn btn-accent rounded-full h-10 min-h-0 text-sm whitespace-nowrap px-6 min-w-[160px]";
 
   const buttonElement = (
     <button
@@ -61,7 +61,7 @@ export default function ReturnToMainButton({
       <>
         {typeof document !== "undefined"
           ? createPortal(
-              <div className="fixed left-1/2 transform -translate-x-1/2 bottom-8 md:bottom-14 z-50">
+              <div className="fixed left-1/2 transform -translate-x-1/2 bottom-[80px] md:bottom-[120px] z-[2200]">
                 {buttonElement}
               </div>,
               document.body

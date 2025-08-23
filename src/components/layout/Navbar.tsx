@@ -133,16 +133,21 @@ export default function Navbar({}: Props) {
 
   // default navbar with links
   return (
-    <nav
-      className="p-6 flex fixed inset-x-0 w-full items-start justify-center gap-4 bg-transparent"
-      style={{
-        paddingLeft: "env(safe-area-inset-left)",
-        paddingRight: "env(safe-area-inset-right)",
-      }}
-    >
-      {location.pathname !== "/" && <Link to="/">Main</Link>}
-      {location.pathname !== "/about" && <Link to="/about">About</Link>}
-      {location.pathname !== "/faq" && <Link to="/faq">FAQ</Link>}
-    </nav>
+    <>
+      <nav
+        className="p-6 flex fixed inset-x-0 w-full items-start justify-between gap-4 bg-transparent z-[2000]"
+        style={{
+          paddingLeft: "env(safe-area-inset-left)",
+          paddingRight: "env(safe-area-inset-right)",
+          zIndex: 2000,
+        }}
+      >
+        <div className="flex gap-4">
+          {location.pathname !== "/" && <Link to="/">Main</Link>}
+          {location.pathname !== "/about" && <Link to="/about">About</Link>}
+          {location.pathname !== "/faq" && <Link to="/faq">FAQ</Link>}
+        </div>
+      </nav>
+    </>
   );
 }
