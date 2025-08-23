@@ -12,14 +12,18 @@ export default function MultipleChoice() {
     if (!gameStarted) setGameStarted(true);
   }, [gameStarted, setGameStarted]);
   return (
-    <div className="flex flex-col min-h-screen flex-1 w-full items-center justify-between">
-      <div className="flex flex-col items-center justify-center flex-grow">
+    <div className="flex flex-col min-h-screen flex-1 w-full items-center justify-start sm:justify-between">
+      <div className="flex flex-col items-center justify-start sm:justify-center flex-grow pt-24 sm:pt-0">
         <Element />
-        <div className="mt-8 w-full max-w-md">
+        <div className="mt-6 w-full max-w-md">
           <Answer />
         </div>
-        <Score />
-        <ReturnToMainButton />
+        <div className="mt-0 md:mt-4">
+          <Score />
+        </div>
+        <div className="">
+          <ReturnToMainButton />
+        </div>
       </div>
     </div>
   );

@@ -39,13 +39,13 @@ export default function Footer({}: Props) {
                 checked={showHUD}
                 onChange={(e) => setShowHUD(e.target.checked)}
               />
-              <span>Toggle Table HUD</span>
+              <span>Toggle HUD</span>
             </label>
           )}
         </div>
 
         {/* Center: @wjbetech */}
-        <div className="flex items-center justify-center">
+        <div className="flex items-center justify-center text-xs">
           <span className="font-medium">@wjbetech</span>
         </div>
 

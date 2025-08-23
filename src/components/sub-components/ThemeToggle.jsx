@@ -47,7 +47,7 @@ export default function ThemeToggle() {
   );
 
   return (
-    <div className="flex items-center gap-2 text-sm">
+    <div className="flex items-center gap-2 text-xs md:text-sm">
       <span
         className={`flex items-center gap-2 text-xs md:text-sm ${
           isLight ? "text-yellow-500" : "text-gray-400"

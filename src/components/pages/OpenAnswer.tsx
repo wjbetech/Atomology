@@ -12,8 +12,8 @@ export default function OpenAnswer() {
     if (!gameStarted) setGameStarted(true);
   }, [gameStarted, setGameStarted]);
   return (
-    <div className="flex flex-col min-h-screen flex-1 w-full items-center justify-between">
-      <div className="flex flex-col items-center justify-center flex-grow">
+    <div className="flex flex-col min-h-screen flex-1 w-full items-center justify-start sm:justify-between">
+      <div className="flex flex-col items-center justify-start sm:justify-center flex-grow pt-32 sm:pb-0 sm:mb-[15rem]">
         <Element />
         <div className="mt-6 w-full max-w-md px-4">
           <Answer />
