@@ -343,3 +343,35 @@ By splitting the components this way, you'll maintain cleaner code and separatio
 8. Add the HUD and the HUD toggle to this game mode too
 9. Consider fixing the routing, and ensure that players can return to the same game spot if they accidentally refresh
 10. Make the Return to Main button the same width across all pages (refactor to its own component)
+
+## Theme System Refactor
+
+- **Massive refactor of the dark/light theme system:**
+
+  - All components must support theme-specific styling using DaisyUI’s theme tokens and Tailwind’s `dark:`/`light:`/`data-theme` selectors.
+  - Avoid Tailwind utility class clashes by using DaisyUI theme tokens (e.g., `bg-base-200`, `text-base-content`) and DaisyUI’s recommended approach for theme switching.
+  - Remove or refactor any global or component-level CSS that overrides DaisyUI’s theme tokens in a way that causes specificity or cascade issues.
+
+- **Color contrast compliance:**
+
+  - All custom and default themes must be checked for WCAG color contrast compliance.
+  - The “cupcake” DaisyUI theme is the reference for light mode, and “night” is the reference for dark mode.
+  - All customizations must match or exceed the color contrast and accessibility of these reference themes.
+
+- **DaisyUI setup and config:**
+
+  - Tailwind and DaisyUI must be configured according to the [official DaisyUI documentation](https://daisyui.com/docs/install/).
+  - `tailwind.config.js` should include:
+    - `plugins: [require("daisyui")]`
+    - `daisyui: { themes: ["cupcake", "night", ...] }`
+    - `darkMode: "class"` (or as recommended by DaisyUI)
+  - Remove any deprecated or conflicting Tailwind/DaisyUI config or plugin usage.
+  - Ensure all theme switching is handled via DaisyUI’s `data-theme` attribute or class, not by manual Tailwind class toggling.
+  - All custom CSS should use DaisyUI theme tokens and avoid hardcoded colors.
+
+- **Testing and verification:**
+  - Test all components in both light and dark themes.
+  - Verify that all interactive elements (buttons, selects, etc.) have proper color contrast and hover/focus states in both themes.
+  - Document any theme-specific overrides or exceptions in this file.
+
+---
