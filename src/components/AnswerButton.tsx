@@ -40,9 +40,6 @@ export default function AnswerButton({
   } else if (isSelected && isCorrect) {
     btnClass +=
       " !border-2 bg-green-200 dark:bg-green-900 border-green-500 dark:border-green-700 animate-pulse";
-  } else {
-    // Use a neutral gray border for unchosen answers in both light and dark themes
-    btnClass += " !border-2 !border-gray-400 dark:!border-gray-400";
   }
 
   return (
