@@ -80,6 +80,8 @@ export default function Answer() {
       setTimeout(() => {
         setDisabledAnswers(new Set());
         setAnsweredCorrect(false);
+        // clear player answer in store so next round's UI doesn't mark it incorrect
+        setPlayerAnswer("");
         // trigger a fresh fetch for the next round
         setFetchTrigger();
       }, 2000);
@@ -112,6 +114,8 @@ export default function Answer() {
       setTimeout(() => {
         setDisabledAnswers(new Set());
         setAnsweredCorrect(false);
+        // clear player answer in store so next round's UI doesn't mark it incorrect
+        setPlayerAnswer("");
         // trigger a fresh fetch for the next round
         setFetchTrigger();
       }, 2000);
