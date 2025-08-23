@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useUIStore, useGameStore } from "../../store/atomologyStore";
-import ThemeToggle from "../ui/ThemeToggle";
+import ThemeToggle from "../sub-components/ThemeToggle";
 
 type Props = {};
 
