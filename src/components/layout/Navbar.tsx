@@ -85,8 +85,8 @@ export default function Navbar({}: Props) {
           paddingRight: "env(safe-area-inset-right)",
         }}
       >
-        <div className="px-4">
-          <div className="bg-transparent px-3 py-3 rounded-full text-lg md:text-xl font-semibold text-center">
+        <div className="flex items-center pl-3">
+          <div className="bg-transparent rounded-full text-lg md:text-xl font-semibold text-center">
             <div
               className={
                 "text-base md:text-lg lg:text-xl uppercase tracking-wider hangman-level " +
@@ -103,11 +103,6 @@ export default function Navbar({}: Props) {
         <div className="absolute left-1/2 transform -translate-x-1/2 text-center">
           <div className="font-semibold text-lg text-center hangman-title">
             Hangman Mode
-          </div>
-          <div className="mt-1 flex gap-4 text-sm justify-center">
-            {location.pathname !== "/" && <Link to="/">Main</Link>}
-            {location.pathname !== "/about" && <Link to="/about">About</Link>}
-            {location.pathname !== "/faq" && <Link to="/faq">FAQ</Link>}
           </div>
         </div>
         <div className="px-4">
@@ -152,11 +147,12 @@ export default function Navbar({}: Props) {
         <div className="px-4" />
 
         <div className="absolute left-1/2 transform -translate-x-1/2">
-          <div className="flex gap-4 text-sm">
-            {location.pathname !== "/" && <Link to="/">Main</Link>}
-            {location.pathname !== "/about" && <Link to="/about">About</Link>}
-            {location.pathname !== "/faq" && <Link to="/faq">FAQ</Link>}
-          </div>
+          {location.pathname === "/" && (
+            <div className="flex gap-4 text-sm">
+              <Link to="/about">About</Link>
+              <Link to="/faq">FAQ</Link>
+            </div>
+          )}
         </div>
 
         <div className="px-4" />

@@ -6,9 +6,10 @@ const HUDWrapper = (props) => {
   const showHUD = useUIStore((s) => s.showHUD);
   const guessedElements = useGameStore((state) => state.guessedElements);
   const gameStarted = useGameStore((state) => state.gameStarted);
+  const gameMode = useGameStore((state) => state.gameMode);
   return (
     <>
-      {gameStarted && showHUD && (
+      {gameStarted && showHUD && gameMode !== "hangman" && (
         <div
           style={{
             position: "fixed",
