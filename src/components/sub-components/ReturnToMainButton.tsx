@@ -45,7 +45,7 @@ export default function ReturnToMainButton({
   };
 
   const defaultButtonClass =
-    "btn btn-accent rounded-full h-10 min-h-0 text-sm whitespace-nowrap px-6 min-w-[160px]";
+    "btn btn-accent dark:btn-secondary rounded-full h-10 min-h-0 text-sm whitespace-nowrap px-6 min-w-[160px]";
 
   const buttonElement = (
     <button
