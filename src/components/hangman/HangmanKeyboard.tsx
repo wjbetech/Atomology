@@ -25,7 +25,10 @@ export default function HangmanKeyboard({
           const classes = used
             ? inWord
               ? base + " bg-green-700 text-white border-0 disabled:opacity-100"
-              : base + " bg-gray-400/50 text-gray-700 border-0 opacity-60"
+              : // keep the existing light-theme look, but in dark mode use a semi-transparent
+                // error background so incorrect picks read as 'picked' more clearly.
+                base +
+                " bg-gray-400/50 text-gray-700 border-0 opacity-60 dark:bg-error/60 dark:text-white"
             : base +
               // use theme tokens for normal/hover states so dark/light behave consistently
               " bg-base-200 text-base-content dark:bg-slate-700 dark:text-white" +
