@@ -12,13 +12,13 @@ export default function HangmanGuessInput({
   disabled?: boolean;
 }) {
   return (
-    <div className="w-full flex justify-center mt-2">
+    <div className="w-full flex justify-center mt-2 px-6 sm:px-0">
       <form
         onSubmit={(e) => {
           if (disabled) return e.preventDefault();
           return handleWordGuess(e);
         }}
-        className="flex flex-col sm:flex-row items-center gap-3 w-full max-w-xl"
+        className="flex flex-col sm:flex-row items-center gap-3 w-full max-w-xl px-6 sm:px-0"
       >
         <input
           id="element-guess"

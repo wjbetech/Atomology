@@ -41,23 +41,54 @@ export default function HangmanDifficultySelect() {
   };
 
   return (
-    <div className="flex flex-col items-center gap-4">
+    <div className="flex flex-col items-center gap-4 w-3/4 max-w-[16rem]">
       <h2 className="text-xl font-bold mb-2 hangman-select-title">
         Select Difficulty
       </h2>
-      <select
-        className="select select-bordered rounded-full w-64 mb-2"
-        value={selected}
-        onChange={(e) => setSelected(e.target.value as DifficultyLevel)}
-      >
-        {Object.entries(DIFFICULTY_LABELS).map(([key, label]) => (
-          <option key={key} value={key}>
-            {label}
-          </option>
-        ))}
-      </select>
+      <div className="w-full max-w-[20rem] px-6 sm:px-0">
+        <div className="dropdown w-full">
+          <button
+            tabIndex={0}
+            className="btn justify-between btn-content w-full rounded-full mb-2"
+            aria-haspopup="listbox"
+          >
+            {DIFFICULTY_LABELS[selected]}
+            <svg
+              className="ml-2 h-4 w-4"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+          </button>
+          <ul
+            tabIndex={0}
+            role="listbox"
+            className="dropdown-content menu p-2 shadow bg-base-100 rounded-lg w-full mt-2"
+            aria-label="Select difficulty"
+          >
+            {Object.entries(DIFFICULTY_LABELS).map(([key, label]) => (
+              <li key={key} role="option">
+                <button
+                  className="w-full text-left rounded-md px-3 py-2 hover:bg-base-200"
+                  onClick={() => setSelected(key as DifficultyLevel)}
+                >
+                  {label}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
       <button
-        className="btn btn-sm btn-accent w-full text-content"
+        className="btn btn-sm btn-warning rounded-full w-full text-content"
         onClick={handleStart}
       >
         Start

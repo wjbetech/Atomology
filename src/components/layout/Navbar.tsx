@@ -147,12 +147,13 @@ export default function Navbar({}: Props) {
         <div className="px-4" />
 
         <div className="absolute left-1/2 transform -translate-x-1/2">
-          {location.pathname === "/" && (
-            <div className="flex gap-4 text-sm">
-              <Link to="/about">About</Link>
-              <Link to="/faq">FAQ</Link>
-            </div>
-          )}
+          {location.pathname === "/" &&
+            !["multi", "open"].includes(gameMode) && (
+              <div className="flex gap-4 text-sm">
+                <Link to="/about">About</Link>
+                <Link to="/faq">FAQ</Link>
+              </div>
+            )}
         </div>
 
         <div className="px-4" />
