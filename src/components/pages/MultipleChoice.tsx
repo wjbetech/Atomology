@@ -13,13 +13,13 @@ export default function MultipleChoice() {
   }, [gameStarted, setGameStarted]);
   return (
     <div className="flex flex-col min-h-screen flex-1 w-full items-center justify-start sm:justify-between">
-      <div className="flex flex-col items-center justify-start sm:justify-center flex-grow pt-24 sm:pt-0">
+      <div className="flex flex-col items-center justify-start sm:justify-center flex-grow pt-[8rem] sm:pt-0">
         <Element />
-        <div className="mt-6 w-full max-w-full lg:max-w-4xl xl:max-w-6xl px-4">
-          <Answer />
-        </div>
-        <div className="mt-0 md:mt-4">
-          <Score />
+        <div className=" w-full max-w-full lg:max-w-4xl xl:max-w-6xl px-4">
+          <div className="pt-8 md:pt-0">
+            <Answer />
+            <Score />
+          </div>
         </div>
         <div className="">
           <ReturnToMainButton />

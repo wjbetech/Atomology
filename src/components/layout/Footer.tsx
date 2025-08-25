@@ -22,12 +22,12 @@ export default function Footer({}: Props) {
 
   return (
     <footer
-      className="fixed left-0 right-0 bottom-0 z-[2000] bg-transparent"
+      className="fixed  bottom-0 z-[2000] bg-transparent w-full justify-between"
       aria-label="site footer"
     >
-      <div className="max-w-screen-xl mx-auto py-3 px-4 grid grid-cols-3 items-center">
+      <div className="max-w-screen mx-auto py-3 px-4 grid grid-cols-3">
         {/* Left: HUD toggle in multi/open */}
-        <div className="flex items-center flex-col sm:flex-row sm:gap-3">
+        <div className="flex flex-col sm:flex-row sm:gap-3 gap-y-2 md:gap-y-0">
           {(gameMode === "multi" || gameMode === "open") && (
             <>
               {/* Sound toggle sits above HUD toggle */}

@@ -275,6 +275,38 @@ By splitting the components this way, you'll maintain cleaner code and separatio
 - Add loading skeletons, error boundaries, and robust input validation.
 - Fix any UI/UX bugs, edge cases, or performance bottlenecks.
 
+## Responsiveness & Layout (all resolutions)
+
+Goal: Ensure the app layout and components behave and look correct across common device widths (mobile, tablet, laptop, desktop, and ultra-wide) and orientations, removing layout pain points and preventing transient visual glitches (scrollbar flicker, overflow shifts, clipped portals, etc.).
+
+High-level tasks:
+
+- Audit: capture screenshots and device sizes to reproduce layout issues (320px, 375px, 412px, 768px, 1024px, 1366px, 1440px, 1920px+).
+- Replace fragile `100vh`/`100vw` usage with `100dvh` or JS-driven `--vh` where necessary. Prefer `w-full` over `w-screen` and explicit header/footer reserved heights.
+- Ensure fixed headers/footers reserve space (use `calc(100dvh - <header> - <footer>)`) and avoid content jumps when theme or fonts load.
+- Prevent horizontal overflow: audit `w-screen`/absolute positioned elements and add `overflow-x: hidden` at root where appropriate.
+- Portals & modals: verify `createPortal` targets and ensure no clipping on small viewports; make modal content scrollable when necessary.
+- Small-size tuning: optically adjust HUD, buttons, and label sizes for 16/32px favicons and low-density displays.
+- Accessibility/responsiveness: ensure touch targets >= 44px, keyboard focus states visible, and no overlap of interactive elements on small screens.
+
+Acceptance criteria:
+
+- No transient vertical/horizontal scrollbar flicker in common viewports during initial load or navigation.
+- Fixed header/footer never overlap or push critical controls in normal usage; main content fits within `calc(100dvh - header - footer)`.
+- No horizontal scroll at standard breakpoints; `overflow-x` remains hidden or controlled.
+- Modals and portal elements are fully visible and scrollable when viewport is too small to show them entirely.
+- Visual regression tests (spot screenshots at key breakpoints) pass where configured.
+
+Quick fixes to try (prioritized):
+
+1. Replace global/static `height:100vh` uses with `height:calc(var(--vh, 1vh) * 100)` and set `--vh` on resize (already seeded in `index.html`).
+2. Swap `w-screen` → `w-full` and ensure fixed elements use `inset-x-0` where needed.
+3. Add `overflow-x: hidden` to `html, body` and set main content to `overflow-y: auto`.
+4. Reserve explicit space for header/footer and compute main min-height using CSS `calc()`.
+5. Add a small visual/acceptance test matrix in the README and include a CI job that captures screenshot diffs at a few breakpoints.
+
+Who should own this: front-end/UI developer + QA. This work can be split into an audit ticket, a quick fixes PR (low risk), and a follow-up visual regression job.
+
 ### UI Bug: transient scrollbar flicker on navigation/reload
 
 - Symptom: when returning to or reloading the main page the page briefly displays vertical and/or horizontal scrollbars (flicker) until the layout stabilizes.

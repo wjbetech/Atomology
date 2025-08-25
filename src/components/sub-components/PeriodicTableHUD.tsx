@@ -56,11 +56,11 @@ export const PeriodicTableHUD: React.FC<PeriodicTableHUDProps> = ({
           {table.map((row, y) => (
             <tr key={y}>
               {row.map((el, x) => (
-                <td key={x} className="w-8 h-8 text-center align-middle">
+                <td key={x} className="text-center align-middle">
                   {el ? (
                     <span
                       className={
-                        `w-8 h-8 rounded border border-primary-content dark:border-primary flex items-center justify-center ` +
+                        `w-6 h-6 md:w-8 md:h-8  rounded border border-primary-content dark:border-primary flex items-center justify-center ` +
                         (guessed.has(el.symbol)
                           ? "bg-green-400"
                           : "bg-transparent")
@@ -70,7 +70,7 @@ export const PeriodicTableHUD: React.FC<PeriodicTableHUDProps> = ({
                       {/* Empty box, white outline only or filled if guessed */}
                     </span>
                   ) : (
-                    <span className="inline-block w-8 h-8" />
+                    <span className="inline-block w-6 h-6 md:h-8 md:w-6" />
                   )}
                 </td>
               ))}
