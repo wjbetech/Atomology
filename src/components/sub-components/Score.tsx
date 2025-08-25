@@ -72,7 +72,7 @@ export default function Score() {
     return (
       <>
         {/* Arrow animation removed as requested */}
-  <div className="font-semibold flex flex-col items-center gap-2 relative place-content-center place-items-center transform -translate-y-8 sm:-translate-y-10 md:-translate-y-1 lg:-translate-y-2 z-[2300]">
+        <div className="font-semibold flex flex-col items-center gap-2 relative place-content-center place-items-center transform -translate-y-8 sm:-translate-y-10 md:-translate-y-1 lg:-translate-y-2 z-[2300]">
           <div className="flex flex-col items-center justify-center w-full place-content-center place-items-center">
             <div className="relative inline-block">
               <div className="flex justify-center m-auto place-content-center place-items-center">
