@@ -28,7 +28,7 @@ export default function GameModeButtons() {
           setPlayerAnswer("");
           setGameStarted(true);
         }}
-        className="btn btn-accent dark:btn-secondary btn-md lg:btn-lg rounded-full"
+        className="btn btn-primary btn-md lg:btn-lg rounded-full"
       >
         Open Answer
       </button>
