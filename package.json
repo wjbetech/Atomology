@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "generate-favicons": "node ./scripts/generateFavicons.mjs",
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
@@ -43,6 +44,7 @@
     "jest": "^30.0.5",
     "jest-environment-jsdom": "^30.0.5",
     "postcss": "^8.4.45",
+    "sharp": "^0.32.6",
     "tailwindcss": "^3.4.10",
     "ts-jest": "^29.4.1",
     "vite": "^5.4.1"

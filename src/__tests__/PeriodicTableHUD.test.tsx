@@ -4,7 +4,7 @@ import "@testing-library/jest-dom";
 import { PeriodicTableHUD } from "../components/sub-components/PeriodicTableHUD";
 import HUDWrapper from "../components/sub-components/HUDWrapper";
 import { useGameStore } from "../store/atomologyStore";
-import { act } from "react-dom/test-utils";
+import { act } from "react";
 
 describe("PeriodicTableHUD", () => {
   it("fills the element box when symbol is in guessed set", () => {

@@ -1,13 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Atomology favicon: light theme (dark glyph) -->
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 491.52 491.52">
-  <rect width="100%" height="100%" fill="transparent" />
-  <text x="50%" y="78%" text-anchor="middle" dominant-baseline="alphabetic"
-        font-family="Georgia, 'Times New Roman', Times, serif"
-        font-weight="700"
-        fill="#0b1220"
-        font-size="520">
-    <tspan>A</tspan>
-    <tspan dx="28" font-size="300">.</tspan>
-  </text>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Atomology favicon (light): cream square with a large dark serif 'A' -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="Atomology favicon light">
+  <rect width="100%" height="100%" fill="#FBF5E6" rx="48"/>
+  <text x="50%" y="62%" text-anchor="middle" dominant-baseline="middle" font-family="Georgia, 'Times New Roman', Times, serif" font-weight="700" fill="#0b1220" stroke="#ffffff" stroke-width="6" paint-order="stroke" font-size="400">A</text>
 </svg>

@@ -1,16 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Atomology favicon: serif "A." centered, transparent background -->
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 491.52 491.52">
-  <!-- Transparent background so only the glyph renders -->
-  <rect width="100%" height="100%" fill="transparent" />
-
-  <!-- Very large serif 'A' with a period to the right, aligned low in the viewBox -->
-  <text x="50%" y="78%" text-anchor="middle" dominant-baseline="alphabetic"
-        font-family="Georgia, 'Times New Roman', Times, serif"
-        font-weight="700"
-        fill="#0b1220"
-        font-size="520">
-    <tspan>A</tspan>
-    <tspan dx="28" font-size="300">.</tspan>
-  </text>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Atomology favicon: cream square with a large centered serif 'A' -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="Atomology favicon">
+  <!-- Cream square background -->
+  <rect width="100%" height="100%" fill="#FBF5E6" rx="48"/>
+  <!-- Larger serif A, moved lower for better optical centering; add faint background-matching stroke for crisper edges at small sizes -->
+  <text x="50%" y="60%" text-anchor="middle" dominant-baseline="middle" font-family="Georgia, 'Times New Roman', Times, serif" font-weight="700" fill="#0b1220" stroke="#FBF5E6" stroke-width="10" paint-order="stroke" font-size="380">A</text>
 </svg>
