@@ -1,8 +1,6 @@
 # Data Quality & Periodic Table Mapping
 
-- Verify that `elements.json` contains all 118 elements.
-- Ensure every element has both `period` and `group` properties for correct mapping in the HUD/grid.
-- Add missing `period`/`group` values to any elements that lack them, so every element is represented by a box in the periodic table HUD.
+- DONE: Canonical elements verified and normalized — `elements.json` contains the canonical 118 elements, and entries include `period` and `group` properties for HUD mapping. (Tests added to guard this.)
 
 # Expanded Implementation Plan & Tasks
 
@@ -21,7 +19,7 @@
 ## 4. Hangman-Style Game Mode
 
 - Implement a new mode where users guess the element name letter by letter (like Hangman).
-- Show blanks for each letter, track incorrect guesses, and provide hints.
+- Show blanks for each letter, track incorrect guesses, and provide hints.wwwwwwwwwwwww
 - Integrate with existing state management and scoring.
 
 ## 5. Localized Personal Hiscores
@@ -229,9 +227,12 @@ By splitting the components this way, you'll maintain cleaner code and separatio
 6.  Visual QA: verify all theme-dependent elements (Navbar badges, buttons, modal borders, text contrast) across themes; add a small visual test matrix in README or CI notes.
 
 - Acceptance criteria:
+
   - Theme selection persists across reloads and is controllable from the UI.
   - `data-theme` attribute always matches the visible theme and updates when `system` preference changes.
   - Contrast and accessibility checks pass for each theme (manual/automated checklist).
+
+- DONE: `setTheme` persistence and safer startup checks implemented — startup code removes stale/invalid stored session data (e.g., hangmanPool), and theme selection is wired to the store. JSON-LD is injected at runtime from `src/main.jsx` to avoid accidental rendering.
 
 ## Localization & Internationalization
 
@@ -404,9 +405,8 @@ Below are the concrete edits made during the recent refactor and fixes (manual e
 
 1. Overhead SEO and icon creation
 
-- Create meta tags (title, description, open graph tags) and JSON-LD for basic site metadata.
-- Create favicon and platform icons (favicon.ico, apple-touch-icon, 192/512 PNGs) and ensure they're referenced in `index.html` and the manifest.
-- Add basic sitemap.xml and robots.txt to the `public/` folder.
+- PARTIAL / DONE: Meta tags (title, description, Open Graph, Twitter) and JSON-LD are in place — JSON-LD is injected at runtime from `src/main.jsx` to avoid accidental rendering as page text. Theme-aware SVG favicons (`/favicon-light.svg`, `/favicon-dark.svg`, `/favicon.svg`) and media-aware link tags plus a JS fallback were added.
+- TODO: Generate PNG fallbacks (16x16, 32x32, 192x192, 512x512), add them to `public/`, update `manifest.json` icon entries, and add `sitemap.xml`/`robots.txt` to `public/` if desired.
 
 2. Update the README.md
 
@@ -489,13 +489,7 @@ The following items were requested to be added to the implementation backlog. Ea
 
 3. Fix the 119 counter for all elements (indexing issue)
 
-   - What to do:
-     - Audit `data/elements.json` length and ensure it contains exactly 118 element records.
-     - Search code for any place that computes `total = elements.length + 1` or uses atomic number as an array index; fix off-by-one logic so `total === 118` when appropriate.
-     - Add a unit test that asserts `getElements().length === 118` and that HUD/progress components derive totals from the elements array rather than hard-coded constants.
-   - Acceptance criteria:
-     - The app displays the correct total (118) in all places (LEVEL counters, HUD, difficulty selectors).
-     - Tests added to catch accidental off-by-one regressions.
+- DONE: Off-by-one/119 counter fixed. `data/elements.json` contains 118 entries and a unit test asserts the canonical length; HUD/progress derive totals from the elements array.
 
 4. Fix the JSON data which sometimes doesn't tick off a completed element in multiple choice/open answer mode
    - What to do:

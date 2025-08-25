@@ -13,6 +13,19 @@
       type="image/svg+xml"
       href="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gQXRvbW9sb2d5IGZhdmljb246IHNlcmlmICJBLiIgY2VudGVyZWQsIHRyYW5zcGFyZW50IGJhY2tncm91bmQgLS0+DQo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMCAwIDQ5MS41MiA0OTEuNTIiPg0KICA8IS0tIFRyYW5zcGFyZW50IGJhY2tncm91bmQgc28gb25seSB0aGUgZ2x5cGggcmVuZGVycyAtLT4NCiAgPHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idHJhbnNwYXJlbnQiIC8+DQoNCiAgPCEtLSBMYXJnZSBzZXJpZiAnQScgd2l0aCBhIHBlcmlvZCB0byB0aGUgcmlnaHQuIERhcmsgbmF2eSBmaWxsLiAtLT4NCiAgPHRleHQgeD0iNTAlIiB5PSI1MiUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJtaWRkbGUiDQogICAgICAgIGZvbnQtZmFtaWx5PSJHZW9yZ2lhLCAnVGltZXMgTmV3IFJvbWFuJywgVGltZXMsIHNlcmlmIg0KICAgICAgICBmb250LXdlaWdodD0iNzAwIg0KICAgICAgICBmaWxsPSIjMGIxMjIwIg0KICAgICAgICBmb250LXNpemU9IjI2MCI+DQogICAgPHRzcGFuPkE8L3RzcGFuPg0KICAgIDx0c3BhbiBkeD0iNiIgZm9udC1zaXplPSIxMjAiPi48L3RzcGFuPg0KICA8L3RleHQ+DQo8L3N2Zz4NCg=="
     />
+    <!-- Theme-aware favicons: let modern browsers pick by media query -->
+    <link
+      rel="icon"
+      href="/favicon-light.svg"
+      media="(prefers-color-scheme: light)"
+    />
+    <link
+      rel="icon"
+      href="/favicon-dark.svg"
+      media="(prefers-color-scheme: dark)"
+    />
+    <!-- Fallback canonical favicon -->
+    <link rel="icon" href="/favicon.svg" />
     <link rel="manifest" href="/manifest.json?v=1" />
     <link rel="apple-touch-icon" href="/favicon.svg" />
     <meta name="theme-color" content="#0b1220" />
@@ -86,15 +99,8 @@
       // Create a spinning favicon by embedding an animated SVG in a data URL.
       // favicon is embedded as a data URL in the static link to avoid caching issues
     </script>
-    <!-- JSON-LD structured data for SEO; update @id/@url to production URL -->
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "WebSite",
-        "name": "Atomology",
-        "url": "/"
-      }
-    </script>
+    <!-- JSON-LD structured data is injected at runtime from `src/main.jsx` to
+     avoid it accidentally rendering as visible text in some build/configs. -->
   </head>
   <body>
     <div id="root"></div>

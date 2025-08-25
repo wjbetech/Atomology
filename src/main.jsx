@@ -70,6 +70,38 @@ safeStorageCheck({
     parsed && Array.isArray(parsed.elements) && parsed.elements.length > 118,
 });
 
+// Inject JSON-LD structured data at runtime to avoid accidental rendering
+// of the block in some HTML pipelines. Keep this minimal and synchronous so
+// crawlers see it quickly.
+try {
+  const ld = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Atomology",
+    url: "/",
+  };
+
+  const s = document.createElement("script");
+  s.type = "application/ld+json";
+  s.text = JSON.stringify(ld);
+  document.head.appendChild(s);
+} catch (e) {
+  // non-fatal — don't block app startup if head manipulation fails
+  // (some strict CSP or environments may throw).
+  // Only log in obvious dev contexts (localhost) to avoid noisy output in
+  // production-like environments where `process` may be undefined.
+  try {
+    const isLocal =
+      typeof location !== "undefined" &&
+      /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
+    if (isLocal && typeof console !== "undefined") {
+      console.warn("Failed to inject JSON-LD structured data", e);
+    }
+  } catch {
+    // swallow — logging shouldn't throw
+  }
+}
+
 createRoot(rootEl).render(
   <StrictMode>
     <App />
