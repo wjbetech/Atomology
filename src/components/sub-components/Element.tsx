@@ -126,10 +126,10 @@ export default function Element() {
     if (error) return <p className="mt-24">Error: {error}</p>;
 
     return (
-      <div className="relative place-self-center">
+      <div className="relative place-self-center md:-translate-y-6 lg:-translate-y-8">
         {/* Confetti/sparks celebration effect overlays the entire element box */}
         <ConfettiSparks trigger={celebrate} />
-        <div className="relative p-4 md:p-6 lg:p-8 rounded-lg bg-opacity-50 bg-gradient-to-rshadow-lg backdrop-blur-md transition-all duration-500 xs:w-[40px] xs:h-[40px] lg:w-[100px] lg:h-[100px] *:overflow-hidden">
+        <div className="relative p-4 md:p-6 lg:p-8 rounded-lg bg-opacity-50 bg-gradient-to-rshadow-lg backdrop-blur-md transition-all duration-500 lg:h-[125px] *:overflow-hidden">
           {/* static blurred background */}
           <div className="absolute -inset-1 rounded-lg bg-gradient-to-r from-black to-transparent blur opacity-20"></div>
 
