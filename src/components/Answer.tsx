@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import AnswerButton from "./AnswerButton";
 import { motion, AnimatePresence } from "framer-motion";
 import { useGameStore } from "../store/atomologyStore";
+import ConfettiSparks from "./sub-components/ConfettiSparks";
 
 // sanitiser hook
 import { sanitiseAnswer } from "../utils/answerSanitiser";
@@ -37,6 +38,8 @@ export default function Answer() {
   // When true the round is locked because the correct answer was picked;
   // used to disable all buttons and show the deep-green celebration style.
   const [answeredCorrect, setAnsweredCorrect] = useState(false);
+  // brief celebration trigger for confetti
+  const [celebrate, setCelebrate] = useState(false);
 
   useEffect(() => {
     if (!gameStarted) {
@@ -66,6 +69,103 @@ export default function Answer() {
     }, duration) as unknown as number;
   };
 
+  // small helper tones using WebAudio API to avoid extra assets
+  const playTone = (
+    freq: number,
+    duration = 0.12,
+    type: OscillatorType = "sine"
+  ) => {
+    try {
+      const ctx = new (window.AudioContext ||
+        (window as any).webkitAudioContext)();
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.type = type;
+      o.frequency.value = freq;
+      o.connect(g);
+      g.connect(ctx.destination);
+      g.gain.setValueAtTime(0.001, ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.2, ctx.currentTime + 0.01);
+      o.start();
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+      setTimeout(() => {
+        o.stop();
+        ctx.close();
+      }, duration * 1000 + 50);
+    } catch (e) {
+      // ignore audio errors (e.g., autoplay policies) silently
+    }
+  };
+
+  // richer short celebration: three-note arpeggio + bright sparkle overlay
+  const playCelebration = () => {
+    try {
+      const Ctx = window.AudioContext || (window as any).webkitAudioContext;
+      const ctx = new Ctx();
+      const now = ctx.currentTime;
+      const master = ctx.createGain();
+      master.gain.value = 0.001;
+      master.connect(ctx.destination);
+
+      // quick fade-in
+      master.gain.exponentialRampToValueAtTime(0.6, now + 0.02);
+
+      const notes = [523.25, 659.25, 783.99]; // C5, E5, G5 arpeggio
+      const noteDur = 0.14;
+
+      notes.forEach((freq, i) => {
+        const t = now + i * (noteDur * 0.9);
+        const o = ctx.createOscillator();
+        const g = ctx.createGain();
+        // slightly detuned saw + triangle mix for warmth
+        o.type = "sawtooth" as OscillatorType;
+        o.frequency.value = freq;
+        const o2 = ctx.createOscillator();
+        o2.type = "triangle" as OscillatorType;
+        o2.frequency.value = freq * 0.999;
+
+        g.gain.setValueAtTime(0.0001, t);
+        g.gain.exponentialRampToValueAtTime(0.35, t + 0.01);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + noteDur);
+
+        o.connect(g);
+        o2.connect(g);
+        g.connect(master);
+
+        o.start(t);
+        o2.start(t);
+        o.stop(t + noteDur + 0.02);
+        o2.stop(t + noteDur + 0.02);
+      });
+
+      // sparkle overlay
+      const sparkle = ctx.createOscillator();
+      const sg = ctx.createGain();
+      sparkle.type = "sine" as OscillatorType;
+      sparkle.frequency.value = 1400;
+      sg.gain.setValueAtTime(0.0001, now);
+      sg.gain.exponentialRampToValueAtTime(0.18, now + 0.02);
+      sg.gain.exponentialRampToValueAtTime(
+        0.0001,
+        now + notes.length * noteDur
+      );
+      sparkle.connect(sg);
+      sg.connect(master);
+      sparkle.start(now);
+      sparkle.stop(now + notes.length * noteDur + 0.02);
+
+      // schedule context close
+      setTimeout(() => {
+        try {
+          master.disconnect();
+          ctx.close();
+        } catch (e) {}
+      }, (notes.length * noteDur + 0.2) * 1000);
+    } catch (e) {
+      // ignore audio errors silently
+    }
+  };
+
   // Handle multi-choice button click
   const handleMultiSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
     const selectedAnswer = e.currentTarget.value;
@@ -82,6 +182,9 @@ export default function Answer() {
       setAnsweredCorrect(true);
       // show correct message (this cancels any 'incorrect' message instantly)
       showMessage("correct", 2000);
+      // celebration visual + tone
+      setCelebrate(true);
+      playCelebration();
       // clear disabled answers and unlock after celebration (2s)
       setTimeout(() => {
         setDisabledAnswers(new Set());
@@ -90,11 +193,14 @@ export default function Answer() {
         setPlayerAnswer("");
         // trigger a fresh fetch for the next round
         setFetchTrigger();
+        // stop celebration after the round advances
+        setCelebrate(false);
       }, 2000);
     } else {
       // add this wrong answer to the disabled set for the round
       setDisabledAnswers((prev) => new Set(prev).add(selectedAnswer));
       showMessage("incorrect", 4000);
+      playTone(220, 0.18, "triangle");
     }
   };
 
@@ -117,6 +223,8 @@ export default function Answer() {
       // lock round and show deep-green celebration; clear disabled after celebration
       setAnsweredCorrect(true);
       showMessage("correct", 2000);
+      setCelebrate(true);
+      playCelebration();
       setTimeout(() => {
         setDisabledAnswers(new Set());
         setAnsweredCorrect(false);
@@ -124,9 +232,11 @@ export default function Answer() {
         setPlayerAnswer("");
         // trigger a fresh fetch for the next round
         setFetchTrigger();
+        setCelebrate(false);
       }, 2000);
     } else {
       showMessage("incorrect", 4000);
+      playTone(220, 0.18, "triangle");
     }
   };
 
@@ -171,7 +281,7 @@ export default function Answer() {
             })}
           </div>
           {/* Feedback popup hoisted below the grid */}
-          <div className="flex justify-center items-center w-full py-10 h-[40px]">
+          <div className="relative flex justify-center items-center w-full py-10 h-[40px]">
             {/* screen-reader live region; kept visually hidden but updates when message changes */}
             <span className="sr-only text-xl" role="status" aria-live="polite">
               {message === "incorrect"
@@ -187,8 +297,8 @@ export default function Answer() {
                   initial={{ opacity: 0, y: -6 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -6 }}
-                  transition={{ duration: 0.3 }}
-                  className="label-text-alt text-red-500 font-semibold text-lg text-center whitespace-nowrap"
+                  transition={{ duration: 0.28 }}
+                  className="label-text-alt text-red-500 font-semibold text-lg absolute inset-x-0 top-3 text-center whitespace-nowrap"
                   style={{ willChange: "transform, opacity" }}
                 >
                   Incorrect, try again!
@@ -201,8 +311,8 @@ export default function Answer() {
                   initial={{ opacity: 0, y: -6 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -6 }}
-                  transition={{ duration: 0.3 }}
-                  className="label-text-alt text-green-600 font-semibold text-lg text-center whitespace-nowrap"
+                  transition={{ duration: 0.28 }}
+                  className="label-text-alt text-green-600 font-semibold text-lg absolute inset-x-0 top-3 text-center whitespace-nowrap"
                   style={{ willChange: "transform, opacity" }}
                 >
                   Correct!
@@ -210,6 +320,7 @@ export default function Answer() {
               ) : null}
             </AnimatePresence>
           </div>
+          <ConfettiSparks trigger={celebrate} anchor={null} />
         </>
       );
     }
@@ -260,6 +371,7 @@ export default function Answer() {
               ) : null}
             </AnimatePresence>
           </div>
+          <ConfettiSparks trigger={celebrate} anchor={null} />
         </form>
       );
     }
