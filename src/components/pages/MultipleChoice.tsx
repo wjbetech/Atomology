@@ -15,7 +15,7 @@ export default function MultipleChoice() {
     <div className="flex flex-col min-h-screen flex-1 w-full items-center justify-start sm:justify-between">
       <div className="flex flex-col items-center justify-start sm:justify-center flex-grow pt-24 sm:pt-0">
         <Element />
-        <div className="mt-6 w-full max-w-md">
+        <div className="mt-6 w-full max-w-xl">
           <Answer />
         </div>
         <div className="mt-0 md:mt-4">
