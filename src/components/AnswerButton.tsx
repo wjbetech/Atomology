@@ -25,13 +25,12 @@ export default function AnswerButton({
   const effectiveDisabled = !!disabled || !!isPickedWrong;
 
   let btnClass =
-    "btn btn-primary rounded-full overflow-hidden shadow-sm transition-all duration-300 w-full min-h-12 h-auto flex items-center justify-center gap-2 px-3 sm:px-5 md:px-8 text-base md:text-lg lg:text-xl whitespace-nowrap overflow-hidden";
+    "btn btn-primary rounded-full shadow-sm transition-all duration-300 w-full py-3 sm:py-4 md:py-5 px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 flex items-center justify-center gap-3 text-base md:text-lg lg:text-xl h-auto min-h-[56px] sm:min-h-[64px] md:max-h-[50px] max-h-[120px] sm:max-h-[90px] md:max-h-[80px] overflow-hidden";
 
   if (isPickedWrong) {
     // Incorrect answer: force error border + half opacity and make it disabled
     btnClass =
-      "btn btn-outline btn-content rounded-full overflow-hidden shadow-sm transition-all duration-300 w-full min-h-12 h-auto flex items-center justify-center gap-2 px-3 sm:px-5 md:px-8 text-base md:text-lg lg:text-xl whitespace-nowrap" +
-      " !border-2 !border-error opacity-50 btn-disabled";
+      "btn btn-outline btn-content rounded-full shadow-sm transition-all duration-300 w-full py-3 sm:py-4 md:py-5 px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 flex items-center justify-center gap-3 text-base md:text-lg lg:text-xl h-auto min-h-[56px] sm:min-h-[64px] md:min-h-[72px] max-h-[120px] sm:max-h-[110px] md:max-h-[96px] overflow-hidden !border-2 !border-error opacity-50 btn-disabled";
   } else if (disabled) {
     // For generic disabled, use DaisyUI's btn-disabled to get the standard disabled look/behavior.
     btnClass += " btn-disabled";
@@ -49,13 +48,12 @@ export default function AnswerButton({
       value={label}
       id={`answer=${idx}`}
       disabled={effectiveDisabled}
-      style={{ minWidth: 0 }}
     >
-      <span className="flex-1 flex items-center font-semibold text-sm md:text-md truncate overflow-hidden">
-        <span className="mr-2 text-content font-bold flex-shrink-0">
+      <span className="flex-1 flex items-center font-semibold text-base md:text-lg lg:text-xl leading-tight">
+        <span className="mr-3 text-content font-bold flex-shrink-0 text-sm md:text-base">
           {idx + 1}.
         </span>
-        <span className="truncate">{label}</span>
+        <span className="break-words flex align-middle">{label}</span>
       </span>
     </button>
   );
