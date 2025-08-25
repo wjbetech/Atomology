@@ -25,6 +25,9 @@ export default function Answer() {
   const [message, setMessage] = useState<"none" | "incorrect" | "correct">(
     "none"
   );
+  // nonce increments each time a new message is shown so keyed motion elements
+  // always mount/unmount even if the same message text appears repeatedly.
+  const [messageNonce, setMessageNonce] = useState(0);
   // timer ref used to cancel and prevent overlapping messages
   const messageTimer = React.useRef<number | null>(null);
   // Track wrong answers that have been disabled for the current round
@@ -52,6 +55,9 @@ export default function Answer() {
       clearTimeout(messageTimer.current);
       messageTimer.current = null;
     }
+    // bump nonce before setting message so animated components receive a
+    // unique key every time and will re-run their entrance animation.
+    setMessageNonce((n) => n + 1);
     setMessage(type);
     // schedule clear
     messageTimer.current = window.setTimeout(() => {
@@ -177,7 +183,7 @@ export default function Answer() {
             <AnimatePresence>
               {message === "incorrect" && !loading ? (
                 <motion.span
-                  key="incorrect"
+                  key={`incorrect-${messageNonce}`}
                   initial={{ opacity: 0, y: -6 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -6 }}
@@ -191,7 +197,7 @@ export default function Answer() {
 
               {!loading && message === "correct" ? (
                 <motion.span
-                  key="correct"
+                  key={`correct-${messageNonce}`}
                   initial={{ opacity: 0, y: -6 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -6 }}
@@ -229,7 +235,7 @@ export default function Answer() {
             <AnimatePresence>
               {!loading && message === "incorrect" ? (
                 <motion.span
-                  key="open-incorrect"
+                  key={`open-incorrect-${messageNonce}`}
                   initial={{ opacity: 0, y: -6 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -6 }}
@@ -242,7 +248,7 @@ export default function Answer() {
 
               {!loading && message === "correct" ? (
                 <motion.span
-                  key="open-correct"
+                  key={`open-correct-${messageNonce}`}
                   initial={{ opacity: 0, y: -6 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -6 }}
