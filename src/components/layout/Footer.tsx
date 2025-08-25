@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useUIStore, useGameStore } from "../../store/atomologyStore";
 import ThemeToggle from "../sub-components/ThemeToggle";
+import SoundToggle from "../sub-components/SoundToggle";
 
 type Props = {};
 
@@ -26,21 +27,29 @@ export default function Footer({}: Props) {
     >
       <div className="max-w-screen-xl mx-auto py-3 px-4 grid grid-cols-3 items-center">
         {/* Left: HUD toggle in multi/open */}
-        <div className="flex items-center">
+        <div className="flex items-center flex-col sm:flex-row sm:gap-3">
           {(gameMode === "multi" || gameMode === "open") && (
-            <label
-              htmlFor="footer-hud-toggle"
-              className="flex items-center gap-2 text-xs cursor-pointer"
-            >
-              <input
-                id="footer-hud-toggle"
-                type="checkbox"
-                className="toggle toggle-primary toggle-sm"
-                checked={showHUD}
-                onChange={(e) => setShowHUD(e.target.checked)}
-              />
-              <span>Toggle HUD</span>
-            </label>
+            <>
+              {/* Sound toggle sits above HUD toggle */}
+              <div>
+                <SoundToggle />
+              </div>
+              <div>
+                <label
+                  htmlFor="footer-hud-toggle"
+                  className="flex items-center gap-2 text-xs cursor-pointer"
+                >
+                  <input
+                    id="footer-hud-toggle"
+                    type="checkbox"
+                    className="toggle toggle-primary toggle-sm"
+                    checked={showHUD}
+                    onChange={(e) => setShowHUD(e.target.checked)}
+                  />
+                  <span>Toggle HUD</span>
+                </label>
+              </div>
+            </>
           )}
         </div>
 

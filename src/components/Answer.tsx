@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import AnswerButton from "./AnswerButton";
 import { motion, AnimatePresence } from "framer-motion";
-import { useGameStore } from "../store/atomologyStore";
+import { useGameStore, useUIStore } from "../store/atomologyStore";
 import ConfettiSparks from "./sub-components/ConfettiSparks";
 
 // sanitiser hook
@@ -21,6 +21,7 @@ export default function Answer() {
     setFetchTrigger,
     addGuessedElement,
   } = useGameStore();
+  const soundEnabled = useUIStore((s) => s.soundEnabled);
   const [input, setInput] = useState("");
   // unified message state: 'none' | 'incorrect' | 'correct'
   const [message, setMessage] = useState<"none" | "incorrect" | "correct">(
@@ -184,7 +185,7 @@ export default function Answer() {
       showMessage("correct", 2000);
       // celebration visual + tone
       setCelebrate(true);
-      playCelebration();
+      if (soundEnabled) playCelebration();
       // clear disabled answers and unlock after celebration (2s)
       setTimeout(() => {
         setDisabledAnswers(new Set());
@@ -200,7 +201,7 @@ export default function Answer() {
       // add this wrong answer to the disabled set for the round
       setDisabledAnswers((prev) => new Set(prev).add(selectedAnswer));
       showMessage("incorrect", 4000);
-      playTone(220, 0.18, "triangle");
+      if (soundEnabled) playTone(220, 0.18, "triangle");
     }
   };
 
@@ -224,7 +225,7 @@ export default function Answer() {
       setAnsweredCorrect(true);
       showMessage("correct", 2000);
       setCelebrate(true);
-      playCelebration();
+      if (soundEnabled) playCelebration();
       setTimeout(() => {
         setDisabledAnswers(new Set());
         setAnsweredCorrect(false);
@@ -236,7 +237,7 @@ export default function Answer() {
       }, 2000);
     } else {
       showMessage("incorrect", 4000);
-      playTone(220, 0.18, "triangle");
+      if (soundEnabled) playTone(220, 0.18, "triangle");
     }
   };
 

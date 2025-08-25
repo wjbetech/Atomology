@@ -63,6 +63,8 @@ export interface uiSlice {
   setTheme: (theme: string) => void;
   showHUD: boolean;
   setShowHUD: (show: boolean) => void;
+  soundEnabled: boolean;
+  setSoundEnabled: (enabled: boolean) => void;
 }
 
 export const useGameStore = create<GameState>((set, get) => {
@@ -273,6 +275,25 @@ export const useUIStore = create<uiSlice>((set) => ({
     set({ showHUD: show });
     try {
       localStorage.setItem("atomology.showHUD", show ? "1" : "0");
+    } catch (err) {}
+  },
+  // sound enabled toggle persisted in localStorage
+  soundEnabled: (() => {
+    try {
+      const stored =
+        typeof window !== "undefined" &&
+        typeof window.localStorage !== "undefined"
+          ? localStorage.getItem("atomology.soundEnabled")
+          : null;
+      return stored ? stored === "1" : true;
+    } catch (err) {
+      return true;
+    }
+  })(),
+  setSoundEnabled: (enabled: boolean) => {
+    set({ soundEnabled: enabled });
+    try {
+      localStorage.setItem("atomology.soundEnabled", enabled ? "1" : "0");
     } catch (err) {}
   },
 }));
