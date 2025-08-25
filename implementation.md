@@ -441,11 +441,17 @@ These are the changes that were applied during the recent interactive refactor/t
   - Footer refactor to a 3-column layout: HUD toggle (left), attribution (center), `ThemeToggle` (right).
 
 - `src/components/sub-components/ThemeToggle.jsx` (manual & assistant)
+
   - (Manual) Restored a toggle control wired to `useUIStore`.
   - (Assistant) Restored icon + text label, fixed JSX syntax, and adjusted styling:
+
     - Sun icon shown for light themes (yellow).
     - Moon icon rendered white in dark themes.
     - Label color uses `text-gray-400` in dark theme.
+
+  - `src/components/sub-components/PeriodicTableHUD.tsx` (assistant)
+
+    - DONE: Fixed HUD placement bug — `PeriodicTableHUD` now prefers `xpos`/`ypos` coordinates (falling back to `group`/`period`) when building the table so lanthanides/actinides (e.g., Erbium) occupy their intended HUD squares and guessed elements fill correctly.
 
 Verification notes
 
@@ -502,3 +508,49 @@ The following items were requested to be added to the implementation backlog. Ea
      - Edge cases tested (duplicated answers, symbol case differences, timing/race conditions) are covered by tests.
 
 Which of these would you like me to start on first? I suggest addressing (3) the 118 counter and (4) the JSON/HUD sync as high priority bugs.
+
+## Suggested next tasks — prioritized (small, high-value)
+
+Below are focused, actionable items I recommend adding to this implementation backlog. Each is small enough to implement and verify quickly.
+
+1. PNG favicon fallbacks & manifest update (priority: High)
+
+- What to do: create 16x16, 32x32, 192x192, and 512x512 PNGs from the existing SVG, add them to `public/`, and update `public/manifest.json` and `index.html` to reference them.
+- Acceptance: browsers that don't support SVG favicons (older Android browsers, some crawlers) will show proper PNG icons; `manifest.json` includes PNG entries for installable PWA icons.
+
+2. HUD rendering unit tests for lanthanides (priority: High)
+
+- What to do: add a Jest/React Testing Library test that renders `PeriodicTableHUD` and asserts that specific lanthanides (e.g., La, Ce, Er) appear in expected table coordinates (by querying the `title` attribute or `aria-label`).
+- Acceptance: test covers at least 3 lanthanides and will fail if placement logic regresses.
+
+3. JSON/HUD sync integration test (priority: High)
+
+- What to do: add a test that simulates a correct answer flow (call store `addGuessedElement`) and asserts `PeriodicTableHUD` updates to show the guessed element filled.
+- Acceptance: deterministic test that guards against race conditions between scoring and HUD updates.
+
+4. Small E2E smoke test (Playwright or Cypress) for Multiple Choice (priority: Medium)
+
+- What to do: create a lightweight E2E that starts the app, navigates to Multiple Choice, answers one question correctly, and asserts Score, Return button, and HUD update.
+- Acceptance: a single stable smoke test that runs fast in CI and surface regressions in core flows.
+
+5. Accessibility quick audit & fixes (priority: Medium)
+
+- What to do: run axe-core checks on key pages (Multiple Choice, Hangman, Open Answer), fix missing role/label issues, and ensure focus order for modals.
+- Acceptance: no high-severity axe violations on core flows.
+
+6. Consolidate duplicate `MultipleChoice` files (priority: Low)
+
+- What to do: locate duplicate `MultipleChoice` implementations and consolidate into a single canonical component; add tests to cover its behavior.
+- Acceptance: one source of truth for the page and preserved functionality.
+
+7. CI: GitHub Actions workflow (priority: Medium)
+
+- What to do: add `.github/workflows/ci.yml` to run install, lint, build, and tests on PRs. Optionally include a jobs matrix for Node versions.
+- Acceptance: PRs show CI status; failing tests/blocking lint prevent merges.
+
+8. Sitemap and robots (priority: Low)
+
+- What to do: create `public/sitemap.xml` and `public/robots.txt` with basic entries and point to the canonical URL when available.
+- Acceptance: files present in `public/` and reachable at `/<file>`.
+
+If you want, I can implement any of the above now — tell me which to pick first and I'll start with a small patch, tests, and verification run.
