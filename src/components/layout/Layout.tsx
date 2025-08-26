@@ -15,7 +15,7 @@ export default function Layout({ children }: Props) {
       style={{ minHeight: "calc(var(--vh, 1vh) * 100)" }}
     >
       <Navbar />
-      <main className="flex flex-1 flex-col items-center justify-start max-w-full m-auto pt-20 lg:pt-24 overflow-y-auto w-full pb-24">
+      <main className="flex flex-1 flex-col items-center justify-start max-w-full m-auto pt-20 lg:pt-24 w-full pb-24">
         {children}
       </main>
       <Footer />
