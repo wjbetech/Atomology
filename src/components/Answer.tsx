@@ -167,6 +167,13 @@ export default function Answer() {
     }
   };
 
+  // Play the incorrect tone whenever the unified message state becomes 'incorrect'
+  useEffect(() => {
+    if (message === "incorrect" && soundEnabled) {
+      playTone(220, 0.18, "triangle");
+    }
+  }, [message, soundEnabled]);
+
   // Handle multi-choice button click
   const handleMultiSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
     const selectedAnswer = e.currentTarget.value;
@@ -201,7 +208,6 @@ export default function Answer() {
       // add this wrong answer to the disabled set for the round
       setDisabledAnswers((prev) => new Set(prev).add(selectedAnswer));
       showMessage("incorrect", 4000);
-      if (soundEnabled) playTone(220, 0.18, "triangle");
     }
   };
 
@@ -237,7 +243,6 @@ export default function Answer() {
       }, 2000);
     } else {
       showMessage("incorrect", 4000);
-      if (soundEnabled) playTone(220, 0.18, "triangle");
     }
   };
 

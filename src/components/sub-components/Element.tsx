@@ -49,7 +49,10 @@ export default function Element() {
         const el = boxRef.current;
         if (el && typeof window !== "undefined") {
           const rect = el.getBoundingClientRect();
-          setAnchor({ x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 });
+          setAnchor({
+            x: rect.left + rect.width / 2,
+            y: rect.top + rect.height / 2,
+          });
         }
       } catch (e) {
         setAnchor(null);
@@ -147,7 +150,10 @@ export default function Element() {
       <div className="relative place-self-center md:-translate-y-6 lg:-translate-y-8">
         {/* Confetti/sparks celebration effect overlays the entire element box */}
         <ConfettiSparks trigger={celebrate} anchor={anchor} />
-        <div ref={boxRef} className="relative p-4 md:p-6 lg:p-8 rounded-lg bg-opacity-50 bg-gradient-to-rshadow-lg backdrop-blur-md transition-all duration-500 lg:h-[125px] *:overflow-hidden">
+        <div
+          ref={boxRef}
+          className="relative p-4 md:p-6 lg:p-8 rounded-lg bg-opacity-50 bg-gradient-to-rshadow-lg backdrop-blur-md transition-all duration-500 lg:h-[125px] *:overflow-hidden"
+        >
           {/* static blurred background */}
           <div className="absolute -inset-1 rounded-lg bg-gradient-to-r from-black to-transparent blur opacity-20"></div>
 
