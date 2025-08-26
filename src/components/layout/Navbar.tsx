@@ -152,6 +152,7 @@ export default function Navbar({}: Props) {
               <div className="flex gap-4 text-sm">
                 <Link to="/about">About</Link>
                 <Link to="/faq">FAQ</Link>
+                <Link to="/contact">Contact</Link>
               </div>
             )}
         </div>

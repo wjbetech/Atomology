@@ -7,6 +7,7 @@ import MultipleChoice from "./components/pages/MultipleChoice";
 import OpenAnswer from "./components/pages/OpenAnswer";
 import About from "./components/pages/About";
 import Faq from "./components/pages/Faq";
+import Contact from "./components/pages/Contact";
 import HangmanDifficultySelect from "./components/hangman/HangmanDifficultySelect";
 import HangmanGame from "./components/hangman/HangmanGame";
 
@@ -71,6 +72,7 @@ function App() {
           <Routes>
             <Route path="/about" element={<About />} />
             <Route path="/faq" element={<Faq />} />
+            <Route path="/contact" element={<Contact />} />
             <Route path="/" element={<MainGameContent />} />
           </Routes>
         </Layout>

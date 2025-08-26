@@ -10,6 +10,11 @@
 - Add visual feedback (animations, color flashes, confetti, etc.) for right/wrong answers.
 - Consider haptic feedback for mobile.
 
+- DONE: Incorrect sound plays for Open Answer mode (centralised via `message` watcher in `Answer.tsx`).
+- DONE: Confetti/sparks celebration anchored to the `Element` component (moved from global/centered portal to anchored viewport coords).
+- DONE: Celebration sound added for Hangman mode when correct (plays when `wordGuessResult === 'correct'`).
+- DONE: Sound toggle exposed in the `Footer` for Hangman mode and duplicate per-page toggle removed (single source of truth in `Footer.tsx`).
+
 ## 3. More Fluid Stylings (Wordle-like)
 
 - Refine UI/UX to be more fluid and interactive, inspired by Wordle.
@@ -367,13 +372,61 @@ Who should own this: front-end/UI developer + QA. This work can be split into an
 # Hangman Mode Improvements & UI/UX Tasks
 
 1. Make the input+guess buttons a bit wider
+
+## About, FAQ & Contact pages
+
+Goal: Improve content quality, add a Contact page with a working message form and social links, and ensure About/FAQ/Contact are responsive across resolutions.
+
+Tasks:
+
+1. Fix the content of the About and FAQ pages
+
+- Audit copy for clarity, tone, and accuracy.
+- Improve headings, microcopy, and accessible semantics (use landmarks, aria labels where appropriate).
+- Add small author bio and purpose statement on About page.
+
+2. Add a Contact page with contact info + message form
+
+- Create `src/components/pages/Contact.tsx` (or `pages/contact` folder) with a clear contact block (email, optional phone/location) and a message form (name, email, message, submit).
+- Implement client-side validation (required fields, email format) and friendly success/error messages.
+- For form delivery, recommend one of these non-breaking options:
+  - Netlify Forms (static, no server required)
+  - EmailJS or Formspree (third-party form forwarding)
+  - Small serverless function (Lambda/Netlify function) that sends mail via SMTP/SendGrid
+- Provide graceful fallback (mailto: link) if no form backend is configured.
+
+3. Add social clickables on the Contact page
+
+- Add icons for GitHub, Twitter, LinkedIn, etc., with accessible labels and `rel="noopener noreferrer" target="_blank"`.
+- Make them keyboard-focusable with visible focus styles.
+
+4. Ensure About, FAQ and Contact pages are responsive at all resolutions
+
+- Mobile-first layout, test at 320, 375, 412, 768, 1024, 1366, 1440, 1920px.
+- Use responsive utility classes / CSS grid or flex to reflow content; ensure touch targets >=44px.
+- Ensure forms don’t overflow; inputs should stretch to available width and stack on small screens.
+- Verify footer/header don’t overlap content; reserve space as needed.
+
+Acceptance criteria
+
+- About, FAQ and Contact pages updated and deployed in the codebase.
+- Contact page includes a working client-side validated form and either a configured backend option or mailto fallback.
+- Social links present, accessible, and open in new tabs.
+- Responsive behavior verified across the key breakpoints; no horizontal overflow or clipped content.
+
+Implementation notes
+
+- Prefer React functional components under `src/components/pages/` to keep folder consistent with existing pages.
+- Reuse `Layout` and `Footer` components so the footer sound toggle and theme toggle remain consistent across pages.
+- If you want me to implement the Contact form and wire it to a specific delivery method (Netlify/EmailJS/serverless), tell me which provider and I will implement it and add deployment notes.
+
 2. Reduce the size of the atom name text and the margin between the letters and the lines
 3. Fix the placeholder element text to look better, italicize it too
-4. Animate correct answers with confetti
+4. Animate correct answers with confetti — DONE (confetti anchored to element and triggered on correct)
 5. Display what the correct answer was
 6. Add a button to move to the next element
 7. Display the guessed letters more visibly
-8. Add the HUD and the HUD toggle to this game mode too
+8. Add the HUD and the HUD toggle to this game mode too — DONE (HUD toggle available via the Footer in hangman mode)
 9. Consider fixing the routing, and ensure that players can return to the same game spot if they accidentally refresh
 10. Make the Return to Main button the same width across all pages (refactor to its own component)
 
