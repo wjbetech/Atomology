@@ -28,7 +28,7 @@ export default function GameModeButtons() {
           setPlayerAnswer("");
           setGameStarted(true);
         }}
-        className="btn btn-primary btn-md lg:btn-lg rounded-full"
+        className="btn btn-secondary btn-md lg:btn-lg rounded-full"
       >
         Open Answer
       </button>
@@ -45,7 +45,7 @@ export default function GameModeButtons() {
           setGameStarted(true);
           setPlayerAnswer("");
         }}
-        className="btn btn-primary btn-md lg:btn-lg rounded-full"
+        className="btn btn-warning btn-md lg:btn-lg rounded-full"
       >
         Hangman Mode
       </button>
