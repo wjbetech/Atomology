@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ConfettiSparks from "./ConfettiSparks";
 import { messages } from "../../utils/loadingMessages";
@@ -32,6 +32,9 @@ export default function Element() {
   } = useGameStore();
 
   const [celebrate, setCelebrate] = useState(false);
+  // anchor in viewport coords for ConfettiSparks
+  const [anchor, setAnchor] = useState<{ x: number; y: number } | null>(null);
+  const boxRef = useRef<HTMLDivElement | null>(null);
   const [prefetching, setPrefetching] = useState(false);
   const [nextElements, setNextElements] = useState(null);
   const [nextAnswer, setNextAnswer] = useState(null);
@@ -41,7 +44,22 @@ export default function Element() {
   useEffect(() => {
     if (playerAnswer && answer && playerAnswer === answer.name) {
       setCelebrate(true);
-      const t = window.setTimeout(() => setCelebrate(false), 1200);
+      // compute anchor (center of the element box) for anchored confetti
+      try {
+        const el = boxRef.current;
+        if (el && typeof window !== "undefined") {
+          const rect = el.getBoundingClientRect();
+          setAnchor({ x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 });
+        }
+      } catch (e) {
+        setAnchor(null);
+      }
+
+      const t = window.setTimeout(() => {
+        setCelebrate(false);
+        // clear anchor after celebration ends
+        setAnchor(null);
+      }, 1200);
       return () => window.clearTimeout(t);
     }
   }, [playerAnswer, answer]);
@@ -128,8 +146,8 @@ export default function Element() {
     return (
       <div className="relative place-self-center md:-translate-y-6 lg:-translate-y-8">
         {/* Confetti/sparks celebration effect overlays the entire element box */}
-        <ConfettiSparks trigger={celebrate} />
-        <div className="relative p-4 md:p-6 lg:p-8 rounded-lg bg-opacity-50 bg-gradient-to-rshadow-lg backdrop-blur-md transition-all duration-500 lg:h-[125px] *:overflow-hidden">
+        <ConfettiSparks trigger={celebrate} anchor={anchor} />
+        <div ref={boxRef} className="relative p-4 md:p-6 lg:p-8 rounded-lg bg-opacity-50 bg-gradient-to-rshadow-lg backdrop-blur-md transition-all duration-500 lg:h-[125px] *:overflow-hidden">
           {/* static blurred background */}
           <div className="absolute -inset-1 rounded-lg bg-gradient-to-r from-black to-transparent blur opacity-20"></div>
 

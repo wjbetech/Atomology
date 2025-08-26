@@ -321,7 +321,7 @@ export default function Answer() {
               ) : null}
             </AnimatePresence>
           </div>
-          <ConfettiSparks trigger={celebrate} anchor={null} />
+          {/* Confetti is now anchored and rendered by <Element />; keep celebrate state here for audio/timing only */}
         </>
       );
     }
@@ -372,7 +372,7 @@ export default function Answer() {
               ) : null}
             </AnimatePresence>
           </div>
-          <ConfettiSparks trigger={celebrate} anchor={null} />
+          {/* Confetti is now anchored and rendered by <Element />; keep celebrate state here for audio/timing only */}
         </form>
       );
     }
