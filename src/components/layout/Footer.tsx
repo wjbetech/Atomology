@@ -28,7 +28,9 @@ export default function Footer({}: Props) {
       <div className="max-w-screen mx-auto py-3 px-4 grid grid-cols-3">
         {/* Left: HUD toggle in multi/open */}
         <div className="flex flex-col sm:flex-row sm:gap-3 gap-y-2 md:gap-y-0">
-          {(gameMode === "multi" || gameMode === "open") && (
+          {(gameMode === "multi" ||
+            gameMode === "open" ||
+            gameMode === "hangman") && (
             <>
               {/* Sound toggle sits above HUD toggle */}
               <div>
