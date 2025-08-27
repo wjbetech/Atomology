@@ -4,12 +4,16 @@ import GameModeButtons from "../GameModeButtons";
 
 export default function Home() {
   return (
-    <div
-      className="flex-1 flex flex-col items-center justify-center transition-all duration-500 place-self-center"
-      style={{ minHeight: 320 }}
-    >
-      <GameModeTitle />
-      <GameModeButtons />
+    <div className="w-full flex-1 h-full flex items-center justify-center px-6 transition-all duration-500 pt-24">
+      <div
+        className="w-full max-w-4xl flex flex-col items-center justify-center gap-6
+      "
+      >
+        <div className="mb-4">
+          <GameModeTitle />
+        </div>
+        <GameModeButtons />
+      </div>
     </div>
   );
 }

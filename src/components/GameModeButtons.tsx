@@ -6,7 +6,7 @@ export default function GameModeButtons() {
     useGameStore();
 
   return (
-    <div className="flex flex-col gap-5 justify-center w-full max-w-md mx-auto mt-4 md:mt-6 mb-4 md:mb-6 lg:mb-10">
+    <div className="flex flex-col gap-5 justify-center w-full max-w-md mx-auto">
       <button
         id="multiple"
         value="multiple"
