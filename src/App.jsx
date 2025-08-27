@@ -1,6 +1,6 @@
 // components
 import Layout from "./components/layout/Layout";
-import GameMode from "./components/GameMode";
+import Home from "./components/layout/Home";
 import Score from "./components/sub-components/Score";
 import HUDWrapper from "./components/sub-components/HUDWrapper";
 import MultipleChoice from "./components/pages/MultipleChoice";
@@ -50,9 +50,9 @@ function MainGameContent() {
   return (
     <>
       {/* HUDWrapper is now rendered at the top level, so remove this duplicate */}
-      <div className="atomology-scale-wrap ">
-        <div className="flex flex-col gap-y-10 justify-center items-center">
-          <GameMode />
+      <div className="atomology-scale-wrap flex-1 h-full flex place-content-center">
+        <div className="flex-1 h-full w-full flex flex-col gap-y-10 justify-center items-center place-content-center place-items-center min-h-[calc(var(--vh,1vh)*100-var(--site-navbar-height)-var(--site-footer-height))]">
+          <Home />
           <div className="static lg:absolute lg:bottom-20">
             <Score />
           </div>

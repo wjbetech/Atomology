@@ -22,10 +22,11 @@ export default function Footer({}: Props) {
 
   return (
     <footer
-      className="fixed  bottom-0 z-[2000] bg-transparent w-full justify-between"
+      className="fixed bottom-0 z-[3000] bg-base-100 w-full"
       aria-label="site footer"
+      style={{ height: "var(--site-footer-height)" }}
     >
-      <div className="max-w-screen mx-auto py-3 px-4 grid grid-cols-3">
+      <div className="max-w-screen mx-auto h-full flex items-center justify-center gap-4 py-0 px-4">
         {/* Left: HUD toggle in multi/open */}
         <div className="flex flex-col sm:flex-row sm:gap-3 gap-y-2 md:gap-y-0">
           {(gameMode === "multi" ||
@@ -55,13 +56,8 @@ export default function Footer({}: Props) {
           )}
         </div>
 
-        {/* Center: @wjbetech */}
-        <div className="flex items-center justify-center text-xs">
-          <span className="font-medium">@wjbetech</span>
-        </div>
-
         {/* Right: Theme toggle */}
-        <div className="flex items-center justify-end">
+        <div className="flex items-center justify-end ml-auto">
           <ThemeToggle />
         </div>
       </div>

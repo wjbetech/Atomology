@@ -79,10 +79,12 @@ export default function Navbar({}: Props) {
   if (gameMode === "hangman" && gameStarted) {
     return (
       <nav
-        className="p-4 flex fixed inset-x-0 w-full items-start justify-between bg-transparent"
+        className="fixed inset-x-0 top-0 w-full bg-base-100 flex items-center justify-between p-4 border-b-2 border-gray-200/60 dark:border-[#ffffff0d]"
         style={{
+          height: "var(--site-navbar-height)",
           paddingLeft: "env(safe-area-inset-left)",
           paddingRight: "env(safe-area-inset-right)",
+          zIndex: 3000,
         }}
       >
         <div className="flex items-center pl-3">
@@ -100,11 +102,13 @@ export default function Navbar({}: Props) {
             </div>
           </div>
         </div>
-        <div className="absolute left-1/2 transform -translate-x-1/2 text-center">
+
+        <div className="absolute left-1/2 transform -translate-x-1/2 text-center h-full flex items-center">
           <div className="font-semibold text-lg text-center hangman-title">
             Hangman Mode
           </div>
         </div>
+
         <div className="px-4">
           <div className="text-right text-lg md:text-xl font-semibold">
             <span
@@ -137,16 +141,17 @@ export default function Navbar({}: Props) {
   return (
     <>
       <nav
-        className="p-6 flex fixed inset-x-0 top-0 w-full items-start justify-between gap-4 bg-transparent z-[2000]"
+        className="fixed inset-x-0 top-0 w-full bg-base-100 z-[3000] flex items-center justify-between gap-4 p-4 border-b-2 border-gray-200/60 dark:border-[#ffffff0d]"
         style={{
+          height: "var(--site-navbar-height)",
           paddingLeft: "env(safe-area-inset-left)",
           paddingRight: "env(safe-area-inset-right)",
-          zIndex: 2000,
+          zIndex: 3000,
         }}
       >
         <div className="px-4" />
 
-        <div className="absolute left-1/2 transform -translate-x-1/2">
+        <div className="absolute left-1/2 transform -translate-x-1/2 h-full flex items-center">
           {!["multi", "open"].includes(gameMode) && (
             <div className="flex gap-4 text-sm">
               <Link to="/about">About</Link>
