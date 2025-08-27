@@ -398,6 +398,20 @@ Tasks:
 3. Add social clickables on the Contact page
 
 - Add icons for GitHub, Twitter, LinkedIn, etc., with accessible labels and `rel="noopener noreferrer" target="_blank"`.
+
+4. Refactor all 'Back' buttons to a single reusable Back component
+
+- Replace inline/back-link markup across pages (`About`, `FAQ`, `Contact`, any modal footers) with a single `Back` component (e.g. `src/components/Back.tsx`).
+- Implementation notes:
+  - Props: `href?: string`, `onClick?: () => void`, `label?: string` (default "Back"), `ariaLabel?: string`, `variant?: 'ghost'|'primary'`.
+  - Use a small left-arrow SVG icon and daisyUI `btn btn-ghost` styling by default.
+  - Prefer `onClick` navigation when tighter control is needed (e.g., SPA navigation) and `href` for plain links; forward refs for accessibility if needed.
+  - Ensure keyboard focus, visible focus ring, and screen-reader label/role are present.
+  - Add unit tests to verify rendering, click/callback behavior, and presence of accessible attributes.
+- Acceptance criteria:
+  - All existing Back anchors/buttons are replaced with the new `Back` component.
+  - Visual and keyboard behaviour matches previous/back-link semantics.
+  - Tests added/updated and passing for any impacted components.
 - Make them keyboard-focusable with visible focus styles.
 
 4. Ensure About, FAQ and Contact pages are responsive at all resolutions

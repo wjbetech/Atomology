@@ -18,9 +18,12 @@ export default function Layout({ children }: Props) {
       <main
         className="flex flex-col items-center justify-start max-w-full m-auto w-full overflow-y-auto"
         style={{
-          height: "calc(var(--vh, 1vh) * 100)",
-          paddingTop: "var(--site-navbar-height)",
-          paddingBottom: "var(--site-footer-height)",
+          // allow the main area to flex; use minHeight to avoid forcing overflow
+          flex: "1 1 auto",
+          minHeight:
+            "calc(var(--vh, 1vh) * 100 - var(--site-navbar-height) - var(--site-footer-height))",
+          paddingLeft: "env(safe-area-inset-left)",
+          paddingRight: "env(safe-area-inset-right)",
           boxSizing: "border-box",
         }}
       >
