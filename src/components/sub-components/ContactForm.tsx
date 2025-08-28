@@ -15,8 +15,8 @@ export default function ContactForm() {
             <h2 className="font-semibold mb-2">Contact info</h2>
             <p className="mb-2 text-sm">
               Email:{" "}
-              <a href="mailto:you@example.com" className="link">
-                you@example.com
+              <a href="mailto:wjbetech@gmail.com" className="link">
+                wjbetech@gmail.com
               </a>
             </p>
             <p className="mb-4 text-sm">Follow me on:</p>
@@ -95,7 +95,7 @@ export default function ContactForm() {
               const body = encodeURIComponent(
                 `From: ${name} <${email}>\n\n${message}`
               );
-              window.location.href = `mailto:you@example.com?subject=${encodeURIComponent(
+              window.location.href = `mailto:wjbetech@gmail.com?subject=${encodeURIComponent(
                 "Contact from atomology"
               )}&body=${body}`;
             }}
