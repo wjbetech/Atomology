@@ -287,6 +287,8 @@ Goal: Ensure the app layout and components behave and look correct across common
 High-level tasks:
 
 - Audit: capture screenshots and device sizes to reproduce layout issues (320px, 375px, 412px, 768px, 1024px, 1366px, 1440px, 1920px+).
+- Audit: capture screenshots and device sizes to reproduce layout issues (320px, 375px, 412px, 768px, 1024px, 1366px, 1440px, 1920px+).
+- DONE: Main page (logo/title/buttons) centered responsively across breakpoints; spacing and optical-centering tweaks applied.
 - Replace fragile `100vh`/`100vw` usage with `100dvh` or JS-driven `--vh` where necessary. Prefer `w-full` over `w-screen` and explicit header/footer reserved heights.
 - Ensure fixed headers/footers reserve space (use `calc(100dvh - <header> - <footer>)`) and avoid content jumps when theme or fonts load.
 - Prevent horizontal overflow: audit `w-screen`/absolute positioned elements and add `overflow-x: hidden` at root where appropriate.
