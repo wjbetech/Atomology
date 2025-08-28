@@ -147,7 +147,7 @@ export default function Element() {
     if (error) return <p className="mt-24">Error: {error}</p>;
 
     return (
-      <div className="relative place-self-center md:-translate-y-6 lg:-translate-y-8">
+      <div className="place-self-center py-8">
         {/* Confetti/sparks celebration effect overlays the entire element box */}
         <ConfettiSparks trigger={celebrate} anchor={anchor} />
         <div
@@ -180,11 +180,11 @@ export default function Element() {
           <motion.div
             animate={celebrate ? { scale: [1, 1.12, 1] } : { scale: 1 }}
             transition={{ duration: 0.9 }}
-            className="relative z-10 flex flex-col items-center justify-center"
+            className="relative z-10 flex flex-col items-center justify-center "
             style={{ willChange: "transform" }}
           >
-            <span className="drop-shadow-lg">{answer?.number}</span>
-            <h1 className="font-semibold text-5xl drop-shadow-lg tracking-wider">
+            <span className="drop-shadow-lg text">{answer?.number}</span>
+            <h1 className="font-semibold text-2xl md:text-4xl lg:text-5xl drop-shadow-lg tracking-wider">
               {answer?.symbol}
             </h1>
           </motion.div>

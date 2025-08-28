@@ -3,18 +3,21 @@ import React from "react";
 // components
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import { useGameStore } from "../../store/atomologyStore";
 
 type Props = {
   children: React.ReactNode;
 };
 
 export default function Layout({ children }: Props) {
+  const gameMode = useGameStore((s) => s.gameMode);
   return (
     <div
       className="flex flex-col w-full relative overflow-x-hidden"
       style={{ minHeight: "calc(var(--vh, 1vh) * 100)" }}
     >
-      <Navbar />
+      {/* Don't render the default Navbar inside active game modes; those pages render their own in-game navbars */}
+      {!["multi", "open", "hangman"].includes(gameMode) && <Navbar />}
       <main
         className="flex flex-col items-center justify-start max-w-full m-auto w-full overflow-y-auto"
         style={{

@@ -25,7 +25,7 @@ export default function AnswerButton({
   const effectiveDisabled = !!disabled || !!isPickedWrong;
 
   let btnClass =
-    "btn btn-outline  rounded-full shadow-sm transition-all duration-300 w-full py-2 sm:py-3 md:py-2 px-6 sm:px-8 md:px-14 lg:px-16 xl:px-18 flex items-center justify-center gap-3 text-base md:text-lg lg:text-xl h-auto min-h-[48px] sm:min-h-[56px] md:min-h-[52px] max-h-[110px] sm:max-h-[90px] md:max-h-[80px] overflow-hidden";
+    "btn btn-outline  rounded-full shadow-sm transition-all duration-300 w-full py-2 sm:py-3 md:py-2 px-6 sm:px-8 md:px-14 lg:px-16 xl:px-18 flex items-center justify-center gap-3 text-base md:text-lg lg:text-xl h-auto min-h-[30px] sm:min-h-[40px] md:min-h-[52px] max-h-[110px] sm:max-h-[90px] md:max-h-[80px] overflow-hidden";
 
   if (isPickedWrong) {
     // Incorrect answer: force error border + half opacity and make it disabled

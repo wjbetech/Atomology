@@ -26,7 +26,7 @@ export default function Footer({}: Props) {
       aria-label="site footer"
       style={{ height: "var(--site-footer-height)" }}
     >
-      <div className="max-w-screen mx-auto h-full flex items-center justify-center gap-4 py-0 px-4">
+      <div className="max-w-screen mx-auto h-full flex items-center justify-center gap-4 pb-2 px-4">
         {/* Left: HUD toggle in multi/open */}
         <div className="flex flex-col sm:flex-row sm:gap-3 gap-y-2 md:gap-y-0">
           {(gameMode === "multi" ||
@@ -37,7 +37,7 @@ export default function Footer({}: Props) {
               <div>
                 <SoundToggle />
               </div>
-              <div>
+              <div className="hidden sm:block">
                 <label
                   htmlFor="footer-hud-toggle"
                   className="flex items-center gap-2 text-xs cursor-pointer"

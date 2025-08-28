@@ -11,6 +11,7 @@ const HUDWrapper = (props) => {
     <>
       {gameStarted && showHUD && gameMode !== "hangman" && (
         <div
+          className="hidden sm:block"
           style={{
             position: "fixed",
             top: "1rem",
