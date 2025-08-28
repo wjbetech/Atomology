@@ -1,11 +1,12 @@
 import React from "react";
+import BackButton from "./sub-components/BackButton";
 
 type Props = {};
 
 export default function FaqContent({}: Props) {
   return (
     <div
-      className="w-3/4 lg:w-1/2 mx-auto px-6 flex flex-col items-center text-center my-auto py-12 sm:py-16 md:py-20 py-20"
+      className="w-3/4 lg:w-1/2 mx-auto px-6 flex flex-col items-center text-center my-auto py-12 sm:py-16 md:py-20"
       style={{ WebkitOverflowScrolling: "touch" as any }}
     >
       <div className="flex flex-col gap-y-8">
@@ -39,31 +40,7 @@ export default function FaqContent({}: Props) {
               </p>
             </div>
           </div>
-          <div className="flex justify-center">
-            <button
-              type="button"
-              onClick={() => (window.location.href = "/")}
-              aria-label="Back to home"
-              className="btn btn-outline border-2 rounded-full mt-10 flex items-center   pr-6"
-            >
-              <svg
-                className="w-5 h-5"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                aria-hidden="true"
-              >
-                <path
-                  d="M15 18L9 12l6-6"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-              <span>Back</span>
-            </button>
-          </div>
+          <BackButton />
         </div>
       </div>
     </div>

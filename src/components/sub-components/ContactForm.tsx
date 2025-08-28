@@ -1,26 +1,28 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import BackButton from "./BackButton";
 
 export default function ContactForm() {
   return (
-    <div className="max-w-4xl mx-auto w-full px-4">
-      <h1 className="text-3xl font-semibold mb-3">Contact</h1>
-      <p className="mb-6 text-sm text-gray-600 dark:text-gray-300">
-        I'd love to hear from you. Use the form below to send a message.
+    <div className="max-w-4xl mx-auto w-full">
+      <h3 className="text-center text-xl font-serif font-semibold mt-8 mb-10 underline decoration-2 underline-offset-4">
+        Contact
+      </h3>
+      <p className="mb-6 text-sm text-gray-600 dark:text-gray-300 text-center md:text-left">
+        I'm always open to collaboration opportunities, constructive feedback,
+        bug reports, and suggestions for new game modes. Use the form below to
+        get in touch — or email me directly!
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <aside className="space-y-4">
+        <aside className="space-y-4 flex flex-col items-center md:items-start text-center md:text-left">
           <div>
-            <h2 className="font-semibold mb-2">Contact info</h2>
-            <p className="mb-2 text-sm">
-              Email:{" "}
+            <p className="mb-3 text-sm">
               <a href="mailto:wjbetech@gmail.com" className="link">
                 wjbetech@gmail.com
               </a>
             </p>
-            <p className="mb-4 text-sm">Follow me on:</p>
-            <div className="flex gap-3">
+            <div className="flex gap-3 justify-center md:justify-start">
               <a
                 href="https://github.com/wjbetech"
                 target="_blank"
@@ -107,7 +109,7 @@ export default function ContactForm() {
               id="name"
               name="name"
               placeholder="Your name"
-              className="input input-bordered w-full"
+              className="input input-bordered w-full rounded-full"
               required
             />
 
@@ -119,7 +121,7 @@ export default function ContactForm() {
               name="email"
               type="email"
               placeholder="Your email"
-              className="input input-bordered w-full"
+              className="input input-bordered w-full rounded-full"
               required
             />
 
@@ -130,7 +132,7 @@ export default function ContactForm() {
               id="message"
               name="message"
               placeholder="Message"
-              className="textarea textarea-bordered w-full"
+              className="textarea textarea-bordered w-full rounded-lg h-40"
               rows={6}
               required
             />
@@ -143,6 +145,7 @@ export default function ContactForm() {
                 Send
               </button>
             </div>
+            <BackButton />
           </form>
         </section>
       </div>
