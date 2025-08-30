@@ -20,7 +20,7 @@ export default function HangmanLetters({
   return (
     <div
       ref={ref}
-      className="relative flex flex-wrap justify-center mb-2 min-h-[48px] px-6 sm:px-0"
+      className="relative flex flex-wrap justify-center min-h-[48px] px-6 sm:px-0"
     >
       {/* Confetti/celebration anchored to the letters container (portal) */}
       <ConfettiSparks trigger={celebrate} anchor={anchor} />

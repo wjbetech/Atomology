@@ -80,7 +80,7 @@ export default function InGameNavbar({}: Props) {
   if (gameMode === "hangman" && gameStarted) {
     return (
       <nav
-        className="fixed inset-x-0 top-0 w-full flex items-center justify-between p-4"
+        className="fixed inset-x-0 top-0 w-full flex items-center justify-between px-4 py-2"
         style={{
           height: "var(--site-navbar-height)",
           paddingLeft: "env(safe-area-inset-left)",
@@ -92,7 +92,7 @@ export default function InGameNavbar({}: Props) {
           <div className="bg-transparent rounded-full text-lg md:text-xl font-semibold text-center">
             <div
               className={
-                "text-base md:text-lg lg:text-xl uppercase tracking-wider hangman-level " +
+                "text-base md:text-lg lg:text-xl uppercase tracking-wider hangman-level mt-1 " +
                 (isDark ? "text-gray-300" : "text-gray-800")
               }
             >
@@ -114,7 +114,7 @@ export default function InGameNavbar({}: Props) {
           <div className="text-right text-lg md:text-xl font-semibold">
             <span
               className={
-                "text-base md:text-lg lg:text-xl uppercase tracking-wider block " +
+                "text-base md:text-lg lg:text-xl uppercase tracking-wider block mt-1 " +
                 (isDark ? "text-gray-300" : "text-gray-800")
               }
             >

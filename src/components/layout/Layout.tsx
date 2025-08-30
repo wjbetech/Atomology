@@ -19,7 +19,7 @@ export default function Layout({ children }: Props) {
       {/* Don't render the default Navbar inside active game modes; those pages render their own in-game navbars */}
       {!["multi", "open", "hangman"].includes(gameMode) && <Navbar />}
       <main
-        className="flex flex-col items-center justify-start max-w-full m-auto w-full overflow-y-auto"
+        className="flex flex-col items-center justify-start max-w-full m-auto w-full overflow-y-auto min-h-0"
         style={{
           // allow the main area to flex; use minHeight to avoid forcing overflow
           flex: "1 1 auto",

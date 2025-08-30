@@ -37,17 +37,28 @@ export default function Footer({}: Props) {
               <div>
                 <SoundToggle />
               </div>
-              <div className="hidden sm:block">
+              <div>
                 <label
                   htmlFor="footer-hud-toggle"
-                  className="flex items-center gap-2 text-xs cursor-pointer"
+                  className={
+                    "flex items-center gap-2 text-xs " +
+                    (gameMode === "hangman"
+                      ? "opacity-50 cursor-not-allowed"
+                      : "cursor-pointer")
+                  }
+                  aria-disabled={gameMode === "hangman"}
                 >
                   <input
                     id="footer-hud-toggle"
                     type="checkbox"
                     className="toggle toggle-primary toggle-sm"
                     checked={showHUD}
-                    onChange={(e) => setShowHUD(e.target.checked)}
+                    onChange={(e) =>
+                      gameMode === "hangman"
+                        ? null
+                        : setShowHUD(e.target.checked)
+                    }
+                    disabled={gameMode === "hangman"}
                   />
                   <span>Toggle HUD</span>
                 </label>

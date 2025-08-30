@@ -85,7 +85,7 @@ body {
 
 /* Dialogs should use the base surface and content tokens as well */
 [data-theme] [role="dialog"] {
-  @apply bg-base-100 text-base-content border;
+  @apply bg-base-100 text-base-content;
 }
 
 /* Specific helper: hangman input */

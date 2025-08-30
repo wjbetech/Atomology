@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useGameStore, useUIStore } from "../../store/atomologyStore";
+import InGameNavbar from "../layout/InGameNavbar";
 import { motion, AnimatePresence } from "framer-motion";
 import ConfettiSparks from "../sub-components/ConfettiSparks.tsx";
 import ReturnToMainButton from "../sub-components/ReturnToMainButton.tsx";
@@ -31,6 +32,7 @@ export default function HangmanGame() {
   const EXIT_MS = 320;
 
   const soundEnabled = useUIStore((s) => s.soundEnabled);
+  const setShowHUD = useUIStore((s) => s.setShowHUD);
 
   // richer short celebration: three-note arpeggio + bright sparkle overlay
   const playCelebration = () => {
@@ -167,6 +169,11 @@ export default function HangmanGame() {
 
   if (!hangmanWord) return null;
 
+  // Ensure HUD is turned off when entering actual Hangman game
+  React.useEffect(() => {
+    setShowHUD(false);
+  }, [setShowHUD]);
+
   // Build display for blanks and correct letters, all capitalized
   const display = hangmanWord.split("").map((char, i) => {
     if (char === " ") return <span key={i} className="w-3 inline-block" />;
@@ -272,95 +279,98 @@ export default function HangmanGame() {
   }, [guessed, hangmanWord]);
 
   return (
-    <div className="flex flex-col items-center gap-4 mt-6 w-full max-w-[420px] mx-auto relative">
-      {/* Group display, input, and keyboard with equal vertical spacing */}
-      <div className="w-full flex flex-col items-center gap-6">
-        <HangmanLetters
-          display={display}
-          celebrate={wordGuessResult === "correct"}
-        />
+    <>
+      <InGameNavbar />
+      <div className="w-full flex-1 flex flex-col items-center gap-4 mt-6 max-w-[420px] mx-auto relative">
+        {/* Group display, input, and keyboard with equal vertical spacing */}
+        <div className="w-full flex flex-1 flex-col items-center justify-center gap-3">
+          <HangmanLetters
+            display={display}
+            celebrate={wordGuessResult === "correct"}
+          />
 
-        <HangmanGuessInput
-          wordGuess={wordGuess}
-          setWordGuess={setWordGuess}
-          handleWordGuess={handleWordGuess}
-          disabled={disabled}
-        />
+          <HangmanGuessInput
+            wordGuess={wordGuess}
+            setWordGuess={setWordGuess}
+            handleWordGuess={handleWordGuess}
+            disabled={disabled}
+          />
 
-        <HangmanKeyboard
-          guessed={guessed}
-          hangmanWord={hangmanWord}
-          guessLetter={guessLetter}
-          disabled={disabled}
-        />
-      </div>
+          <HangmanKeyboard
+            guessed={guessed}
+            hangmanWord={hangmanWord}
+            guessLetter={guessLetter}
+            disabled={disabled}
+          />
+        </div>
 
-      <AnimatePresence>
-        {wordGuessResult === "incorrect" && (
-          <motion.div
-            initial={{ opacity: 0, y: 4 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -6 }}
-            transition={{ duration: 0.28 }}
-            className="flex flex-col items-center"
-          >
-            <div className="text-red-500 font-bold text-sm">Incorrect</div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+        <AnimatePresence>
+          {wordGuessResult === "incorrect" && (
+            <motion.div
+              initial={{ opacity: 0, y: 4 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.28 }}
+              className="flex flex-col items-center"
+            >
+              <div className="text-red-500 font-bold text-sm">Incorrect</div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-      {/* Return button fixed near bottom center of viewport (72px above bottom) */}
-      <div className="fixed left-1/2 transform -translate-x-1/2 bottom-[72px] z-50 pointer-events-auto">
-        <ReturnToMainButton />
-      </div>
-      {showGameOver && (
-        <HangmanGameOverModal
-          onRestart={() => {
-            // fully reset hangman session and restart at first item of current difficulty
-            const state = (useGameStore as any).getState?.();
-            const diff = state?.hangmanDifficulty ?? "all";
-            try {
-              const pool = getElementsByDifficulty(diff as any);
-              if (pool && pool.length > 0) {
-                // reset guessed letters & incorrect count and index
-                (useGameStore as any).getState().resetHangman &&
-                  (useGameStore as any).getState().resetHangman();
-                (useGameStore as any).getState().setHangmanIndex &&
-                  (useGameStore as any).getState().setHangmanIndex(0);
-                // set first word in pool
-                (useGameStore as any).getState().setHangmanWord(pool[0].name);
-                // ensure difficulty kept
-                (useGameStore as any).getState().setHangmanDifficulty &&
-                  (useGameStore as any).getState().setHangmanDifficulty(diff);
-              } else {
+        {/* Return button fixed near bottom center of viewport (72px above bottom) */}
+        <div className="fixed left-1/2 transform -translate-x-1/2 bottom-[72px] z-50 pointer-events-auto">
+          <ReturnToMainButton />
+        </div>
+        {showGameOver && (
+          <HangmanGameOverModal
+            onRestart={() => {
+              // fully reset hangman session and restart at first item of current difficulty
+              const state = (useGameStore as any).getState?.();
+              const diff = state?.hangmanDifficulty ?? "all";
+              try {
+                const pool = getElementsByDifficulty(diff as any);
+                if (pool && pool.length > 0) {
+                  // reset guessed letters & incorrect count and index
+                  (useGameStore as any).getState().resetHangman &&
+                    (useGameStore as any).getState().resetHangman();
+                  (useGameStore as any).getState().setHangmanIndex &&
+                    (useGameStore as any).getState().setHangmanIndex(0);
+                  // set first word in pool
+                  (useGameStore as any).getState().setHangmanWord(pool[0].name);
+                  // ensure difficulty kept
+                  (useGameStore as any).getState().setHangmanDifficulty &&
+                    (useGameStore as any).getState().setHangmanDifficulty(diff);
+                } else {
+                  // fallback reset only
+                  (useGameStore as any).getState().resetHangman &&
+                    (useGameStore as any).getState().resetHangman();
+                }
+              } catch (err) {
                 // fallback reset only
                 (useGameStore as any).getState().resetHangman &&
                   (useGameStore as any).getState().resetHangman();
               }
-            } catch (err) {
-              // fallback reset only
-              (useGameStore as any).getState().resetHangman &&
-                (useGameStore as any).getState().resetHangman();
-            }
-            // clear local UI inputs
-            setWordGuess("");
-            setInput("");
-            setWordGuessResult(null);
-            setShowGameOver(false);
-            setDisabled(false);
-          }}
-          onReturn={() => {
-            // clear session and navigate to main via store
-            try {
-              localStorage.removeItem("atomology.session");
-            } catch {}
-            (useGameStore as any).getState().setGameMode("");
-            (useGameStore as any).getState().setGameStarted(false);
-            setShowGameOver(false);
-            setDisabled(true);
-          }}
-        />
-      )}
-    </div>
+              // clear local UI inputs
+              setWordGuess("");
+              setInput("");
+              setWordGuessResult(null);
+              setShowGameOver(false);
+              setDisabled(false);
+            }}
+            onReturn={() => {
+              // clear session and navigate to main via store
+              try {
+                localStorage.removeItem("atomology.session");
+              } catch {}
+              (useGameStore as any).getState().setGameMode("");
+              (useGameStore as any).getState().setGameStarted(false);
+              setShowGameOver(false);
+              setDisabled(true);
+            }}
+          />
+        )}
+      </div>
+    </>
   );
 }
