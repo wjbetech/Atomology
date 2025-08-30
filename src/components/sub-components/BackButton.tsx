@@ -1,4 +1,5 @@
 import React from "react";
+import { FiArrowLeft } from "react-icons/fi";
 
 type Props = {
   to?: string;
@@ -18,26 +19,14 @@ export default function BackButton({
         onClick={() => (window.location.href = to)}
         aria-label="Back to home"
         className={
-          "btn btn-outline border-2 rounded-full mt-10 flex items-center pr-6 " +
+          "btn btn-sm md:btn-md btn-outline border-2 rounded-full mt-10 flex items-center justify-center gap-0.5" +
           className
         }
       >
-        <svg
-          className="w-5 h-5"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          aria-hidden="true"
-        >
-          <path
-            d="M15 18L9 12l6-6"
-            stroke="currentColor"
-            strokeWidth={2}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-        <span>{label}</span>
+        <FiArrowLeft className="w-5 h-5 shrink-0" aria-hidden="true" />
+        <span className="whitespace-nowrap ml-0.5 leading-none pr-1">
+          {label}
+        </span>
       </button>
     </div>
   );

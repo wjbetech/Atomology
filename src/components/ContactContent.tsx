@@ -1,5 +1,6 @@
 import React from "react";
 import ContactForm from "./sub-components/ContactForm";
+import BackButton from "./sub-components/BackButton";
 
 type Props = {};
 
@@ -11,6 +12,9 @@ export default function ContactContent({}: Props) {
     >
       <div className="w-full max-w-3xl">
         <ContactForm />
+        <div className="mt-8">
+          <BackButton />
+        </div>
       </div>
     </div>
   );

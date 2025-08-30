@@ -145,7 +145,6 @@ export default function ContactForm() {
                 Send
               </button>
             </div>
-            <BackButton />
           </form>
         </section>
       </div>
