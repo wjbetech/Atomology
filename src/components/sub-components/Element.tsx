@@ -152,7 +152,7 @@ export default function Element() {
         <ConfettiSparks trigger={celebrate} anchor={anchor} />
         <div
           ref={boxRef}
-          className="relative p-4 md:p-6 lg:p-8 rounded-lg bg-opacity-50 bg-gradient-to-rshadow-lg backdrop-blur-md transition-all duration-500 lg:h-[125px] *:overflow-hidden"
+          className="relative p-4 md:p-6 lg:p-8 rounded-lg bg-opacity-50 bg-gradient-to-rshadow-lg backdrop-blur-md transition-all duration-500 *:overflow-hidden"
         >
           {/* static blurred background */}
           <div className="absolute -inset-1 rounded-lg bg-gradient-to-r from-black to-transparent blur opacity-20"></div>
@@ -169,7 +169,7 @@ export default function Element() {
                 className="absolute inset-0 pointer-events-none rounded-lg"
               >
                 <div
-                  style={{ boxShadow: "0 12px 32px rgba(34,197,94,0.18)" }}
+                  style={{ boxShadow: "0px 12px 32px rgba(34,197,94,0.18)" }}
                   className="w-full h-full rounded-lg"
                 />
               </motion.div>
@@ -180,7 +180,7 @@ export default function Element() {
           <motion.div
             animate={celebrate ? { scale: [1, 1.12, 1] } : { scale: 1 }}
             transition={{ duration: 0.9 }}
-            className="relative z-10 flex flex-col items-center justify-center "
+            className="relative z-10 flex flex-col items-center justify-center h-[74px] md:h-[100px]"
             style={{ willChange: "transform" }}
           >
             <span className="drop-shadow-lg text">{answer?.number}</span>
