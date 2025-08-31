@@ -96,7 +96,7 @@ export const PeriodicTableHUD: React.FC<PeriodicTableHUDProps> = ({
                   return (
                     <td
                       key={x}
-                      className="text-center align-middle py-[2px] px-0"
+                      className="text-center align-middle py-[0px] px-0"
                       style={
                         cellSize
                           ? {
@@ -120,7 +120,7 @@ export const PeriodicTableHUD: React.FC<PeriodicTableHUDProps> = ({
                 return (
                   <td
                     key={x}
-                    className="text-center align-middle py-[2px] px-0"
+                    className="text-center align-middle py-[8px] px-2"
                     style={
                       emptySize
                         ? {
@@ -135,7 +135,7 @@ export const PeriodicTableHUD: React.FC<PeriodicTableHUDProps> = ({
                       className={
                         inModal
                           ? "block w-full h-full"
-                          : "inline-block w-6 h-6 md:h-8 md:w-6"
+                          : "inline-block w-6 h-6 md:h-8 md:w-8"
                       }
                     />
                   </td>

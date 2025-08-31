@@ -15,7 +15,7 @@
   --site-navbar-height-lg: var(--site-footer-height);
   /* theme-aware edge shadow used by Navbar/Footer (edge highlight)
      light theme: darker grey shadow; dark theme: subtle light shadow */
-  --site-edge-shadow: rgba(0, 0, 0, 0.14);
+  --site-edge-shadow: rgba(0,0,0,0.14);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -53,8 +53,7 @@ body {
 
 /* Responsive overall scaling wrapper for very small screens */
 .atomology-scale-wrap {
-  /* center the scaled content so it remains vertically centered on small screens */
-  transform-origin: center center;
+  transform-origin: top center;
 }
 
 /* iPhone SE-ish and small phones: scale down */
@@ -85,7 +84,7 @@ body {
 
 /* Dialogs should use the base surface and content tokens as well */
 [data-theme] [role="dialog"] {
-  @apply bg-base-100 text-base-content;
+  @apply bg-base-100 text-base-content border;
 }
 
 /* Specific helper: hangman input */
@@ -119,9 +118,6 @@ body {
 }
 
 /* Night/dark theme overrides (daisyui/data-theme="night" or html[data-theme]) */
-:root[data-theme="night"],
-:root[data-theme="dark"],
-html[data-theme="night"],
-html[data-theme="dark"] {
-  --site-edge-shadow: rgba(255, 255, 255, 0.06);
+:root[data-theme="night"], :root[data-theme="dark"], html[data-theme="night"], html[data-theme="dark"] {
+  --site-edge-shadow: rgba(255,255,255,0.06);
 }

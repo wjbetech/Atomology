@@ -287,8 +287,6 @@ Goal: Ensure the app layout and components behave and look correct across common
 High-level tasks:
 
 - Audit: capture screenshots and device sizes to reproduce layout issues (320px, 375px, 412px, 768px, 1024px, 1366px, 1440px, 1920px+).
-- Audit: capture screenshots and device sizes to reproduce layout issues (320px, 375px, 412px, 768px, 1024px, 1366px, 1440px, 1920px+).
-- DONE: Main page (logo/title/buttons) centered responsively across breakpoints; spacing and optical-centering tweaks applied.
 - Replace fragile `100vh`/`100vw` usage with `100dvh` or JS-driven `--vh` where necessary. Prefer `w-full` over `w-screen` and explicit header/footer reserved heights.
 - Ensure fixed headers/footers reserve space (use `calc(100dvh - <header> - <footer>)`) and avoid content jumps when theme or fonts load.
 - Prevent horizontal overflow: audit `w-screen`/absolute positioned elements and add `overflow-x: hidden` at root where appropriate.
@@ -400,20 +398,6 @@ Tasks:
 3. Add social clickables on the Contact page
 
 - Add icons for GitHub, Twitter, LinkedIn, etc., with accessible labels and `rel="noopener noreferrer" target="_blank"`.
-
-4. Refactor all 'Back' buttons to a single reusable Back component
-
-- Replace inline/back-link markup across pages (`About`, `FAQ`, `Contact`, any modal footers) with a single `Back` component (e.g. `src/components/Back.tsx`).
-- Implementation notes:
-  - Props: `href?: string`, `onClick?: () => void`, `label?: string` (default "Back"), `ariaLabel?: string`, `variant?: 'ghost'|'primary'`.
-  - Use a small left-arrow SVG icon and daisyUI `btn btn-ghost` styling by default.
-  - Prefer `onClick` navigation when tighter control is needed (e.g., SPA navigation) and `href` for plain links; forward refs for accessibility if needed.
-  - Ensure keyboard focus, visible focus ring, and screen-reader label/role are present.
-  - Add unit tests to verify rendering, click/callback behavior, and presence of accessible attributes.
-- Acceptance criteria:
-  - All existing Back anchors/buttons are replaced with the new `Back` component.
-  - Visual and keyboard behaviour matches previous/back-link semantics.
-  - Tests added/updated and passing for any impacted components.
 - Make them keyboard-focusable with visible focus styles.
 
 4. Ensure About, FAQ and Contact pages are responsive at all resolutions
