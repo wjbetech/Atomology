@@ -82,7 +82,7 @@ export default function InGameNavbar({}: Props) {
       <nav
         className="fixed inset-x-0 top-0 w-full flex items-center justify-between px-4 py-2"
         style={{
-          height: "var(--site-navbar-height)",
+          height: "var(--site-navbar-height) + 20px",
           paddingLeft: "env(safe-area-inset-left)",
           paddingRight: "env(safe-area-inset-right)",
           zIndex: 3000,
