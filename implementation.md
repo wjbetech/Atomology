@@ -6,8 +6,8 @@
 
 ## 2. Improve Feedback (Sounds & Visualizations)
 
-- Add sound effects for correct and incorrect answers.
-- Add visual feedback (animations, color flashes, confetti, etc.) for right/wrong answers.
+- DONE: Add sound effects for correct and incorrect answers.
+- DONE: Add visual feedback (animations, color flashes, confetti, etc.) for right/wrong answers.
 - Consider haptic feedback for mobile.
 
 - DONE: Incorrect sound plays for Open Answer mode (centralised via `message` watcher in `Answer.tsx`).
@@ -15,17 +15,17 @@
 - DONE: Celebration sound added for Hangman mode when correct (plays when `wordGuessResult === 'correct'`).
 - DONE: Sound toggle exposed in the `Footer` for Hangman mode and duplicate per-page toggle removed (single source of truth in `Footer.tsx`).
 
-## 3. More Fluid Stylings (Wordle-like)
+## 3. More Fluid Stylings (Wordle-like) - DONE
 
-- Refine UI/UX to be more fluid and interactive, inspired by Wordle.
-- Add smooth transitions, responsive layouts, and engaging color schemes.
-- Consider dark/light mode and accessibility improvements.
+- DONE: Refine UI/UX to be more fluid and interactive, inspired by Wordle.
+- DONE: Add smooth transitions, responsive layouts, and engaging color schemes.
+- DONE: Consider dark/light mode and accessibility improvements.
 
-## 4. Hangman-Style Game Mode
+## 4. Hangman-Style Game Mode - DONE
 
-- Implement a new mode where users guess the element name letter by letter (like Hangman).
-- Show blanks for each letter, track incorrect guesses, and provide hints.wwwwwwwwwwwww
-- Integrate with existing state management and scoring.
+- DONE: Implement a new mode where users guess the element name letter by letter (like Hangman).
+- DONE: Show blanks for each letter, track incorrect guesses, and provide hints.
+- DONE: Integrate with existing state management and scoring.
 
 ## 5. Localized Personal Hiscores
 
@@ -33,10 +33,9 @@
 - Display hiscores on the main menu or after each game.
 - Optionally, allow resetting or exporting scores.
 
-## 6. Prevent Repeating Elements in a Game
+## 6. Prevent Repeating Elements in a Game - DONE
 
-- Ensure that each element is only presented once per game session, in any mode.
-- Track which elements have been used and only reset after all 150 have been played.
+- DONE: Ensure that each element is only presented once per game session, in any mode.
 - Consider shuffling the element list at the start of each game for randomness.
 
 # MVP
@@ -45,14 +44,14 @@
 
 # Component Breakdown:
 
-# Navbar Component:
+# Navbar Component - DONE:
 
-- A simple functional component that renders the navigation bar, e.g., game title or links to home/about pages.
+- DONE: A simple functional component that renders the navigation bar, e.g., game title or links to home/about pages.
 
 ## Top Section — Game-focused header
 
 - When a player is "in a game" the top area of the app should switch from a generic navbar to a game-focused header.
-- Layout (desktop / responsive):
+- DONE: Layout (desktop / responsive):
   - Left: level/progress indicator (e.g., "1/10"). This should be fixed to the left edge and clearly readable.
   - Center: the game mode title (e.g., "Hangman") — visually prominent, centered horizontally.
   - Right: live counter (e.g., heart or numeric lives left) — fixed to the right edge and animated on change.
@@ -61,7 +60,7 @@
   - All three regions must be responsive: on small screens consider stacking or reducing font sizes, but keep the title centered.
   - Use semantic markup and ARIA where appropriate (e.g., `role="status"` for live count changes) so screen readers announce important changes.
   - Keep the header lightweight and avoid heavy animations that cause layout shifts; use transform/opacity for visual transitions.
-- Implementation notes:
+- DONE: Implementation notes:
   - Create a small, reusable `GameHeader` component that reads from the game store: progress/index, difficulty/total, lives, and current mode.
   - For Hangman specifically, compute `current/total` from the difficulty pool and `hangmanIndex` stored in the store so progress is deterministic.
   - Animate the lives counter with a small scale/opacity animation on change (use `framer-motion` or CSS transitions).
@@ -69,31 +68,31 @@
 
 # GameMode Component:
 
-- Manages switching between different game modes: typing or multiple choice.
-- This could store the selected mode in a state and pass the mode down as props to other components.
+- DONE: Manages switching between different game modes: typing or multiple choice.
+- DONE: This could store the selected mode in a state and pass the mode down as props to other components.
 
 # Element Component:
 
-- Responsible for fetching and displaying a random element.
-- Use this component to pull from an API (like the periodic table data) and display the element’s atomic number.
+- DONE: Responsible for fetching and displaying a random element.
+- DONE: Use this component to pull from an API (like the periodic table data) and display the element’s atomic number.
 
 # Answer Component:
 
-- Renders either an input field (for typing) or four buttons (for multiple-choice).
-- This component can take props like the current game mode (from GameMode) and the correct answer (from Element) to handle user interaction.
+- DONE: Renders either an input field (for typing) or four buttons (for multiple-choice).
+- DONE: This component can take props like the current game mode (from GameMode) and the correct answer (from Element) to handle user interaction.
 
 # Score Component:
 
-- Displays the user’s score.
-- It could be responsible for tracking how many correct/incorrect answers the user has submitted.
+- DONE: Displays the user’s score.
+- DONE: It could be responsible for tracking how many correct/incorrect answers the user has submitted.
 
 # Data Flow and State Management:
 
 ## Parent Component (App.tsx):
 
-## Use App.tsx to hold the game state (e.g., element data, user input, game mode, and score). Pass down the relevant state and functions as props to child components.
+## DONE: Use App.tsx to hold the game state (e.g., element data, user input, game mode, and score). Pass down the relevant state and functions as props to child components.
 
-## Custom Hook (useGameLogic): This hook could encapsulate logic such as fetching random elements, checking answers, and managing the score. It keeps your logic separate from UI code.
+## DONE: Custom Hook (useGameLogic): This hook could encapsulate logic such as fetching random elements, checking answers, and managing the score. It keeps your logic separate from UI code.
 
 By splitting the components this way, you'll maintain cleaner code and separation of concerns. Each component will have a clear responsibility, and state/data can be easily shared via props or context if needed.
 
@@ -103,21 +102,11 @@ By splitting the components this way, you'll maintain cleaner code and separatio
 
 ## Immersive & Next-Gen Experiences
 
-- Augmented Reality (AR) mode: Scan real-world objects to unlock elements or play mini-games.
-- Virtual Reality (VR) periodic table exploration and quizzes.
-- Cross-platform play: seamless experience on web, mobile, tablet, and desktop.
-- Smartwatch mini-games for quick learning bursts.
-
-## AI-Powered Features
-
-- Adaptive difficulty: AI adjusts question difficulty based on user performance.
-- AI-generated custom quizzes based on user weaknesses.
-- AI tutor: personalized hints, explanations, and encouragement.
+- DONE: Cross-platform play: seamless experience on web, mobile, tablet, and desktop.
 
 ## Partnerships & Community
 
 - Collaborate with science museums or educational organizations for exclusive content.
-- Host live events or tournaments with prizes.
 - Integrate with school systems for classroom leaderboards and assignments.
 
 ## Deeper Educational Content
@@ -125,22 +114,6 @@ By splitting the components this way, you'll maintain cleaner code and separatio
 - Add video or interactive lessons about atomic theory, chemistry history, and element uses.
 - Include real-world applications and news about elements (e.g., "Element in the News").
 - Provide links to external resources for further learning.
-
-## Gamification & Progression
-
-- Season passes or progression tracks with unlockable content.
-- Collectible badges, stickers, or digital trophies.
-- Leveling system for users and/or avatars.
-
-## User-Generated Content
-
-- Allow users to create and share their own quizzes, puzzles, or stories.
-- Voting and rating system for community content.
-
-## Parental & Teacher Tools
-
-- Progress dashboards for parents/teachers.
-- Customizable assignments and homework tracking.
 
 ## Creative Game Modes
 
@@ -641,5 +614,3 @@ Below are focused, actionable items I recommend adding to this implementation ba
 
 - What to do: create `public/sitemap.xml` and `public/robots.txt` with basic entries and point to the canonical URL when available.
 - Acceptance: files present in `public/` and reachable at `/<file>`.
-
-If you want, I can implement any of the above now — tell me which to pick first and I'll start with a small patch, tests, and verification run.
