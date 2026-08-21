@@ -1,6 +1,5 @@
 export default {
   testEnvironment: "jsdom",
-  preset: "ts-jest",
   moduleNameMapper: {
     "\\.(css|less|scss|sass)$": "identity-obj-proxy",
     "^@/(.*)$": "<rootDir>/src/$1",
