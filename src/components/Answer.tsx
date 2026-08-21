@@ -220,7 +220,7 @@ export default function Answer() {
     const givenAnswer = sanitiseAnswer(inputElement?.value);
     setPlayerAnswer(givenAnswer);
 
-    if (answer && givenAnswer == answer.name) {
+    if (answer && givenAnswer === answer.name) {
       setScore((prevScore: number) => prevScore + 1);
       setInput("");
       // Add guessed element symbol to HUD
