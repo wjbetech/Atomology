@@ -18,7 +18,6 @@ export default function Answer() {
     playerAnswer,
     setPlayerAnswer,
     answerElementName,
-    setFetchTrigger,
     addGuessedElement,
   } = useGameStore();
   const soundEnabled = useUIStore((s) => s.soundEnabled);
@@ -198,8 +197,6 @@ export default function Answer() {
         setAnsweredCorrect(false);
         // clear player answer in store so next round's UI doesn't mark it incorrect
         setPlayerAnswer("");
-        // trigger a fresh fetch for the next round
-        setFetchTrigger();
         // stop celebration after the round advances
         setCelebrate(false);
       }, 2000);
@@ -235,8 +232,6 @@ export default function Answer() {
         setAnsweredCorrect(false);
         // clear player answer in store so next round's UI doesn't mark it incorrect
         setPlayerAnswer("");
-        // trigger a fresh fetch for the next round
-        setFetchTrigger();
         setCelebrate(false);
       }, 2000);
     } else {
