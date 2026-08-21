@@ -35,7 +35,7 @@ export const fetchUniqueElements = async (
         name: data.name,
         number: data.number,
         period: data.period,
-        phase: data.phase || data.phase?.toLowerCase() || "",
+        phase: (data.phase || "").toLowerCase(),
         symbol: data.symbol,
       };
 
