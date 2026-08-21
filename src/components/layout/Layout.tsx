@@ -11,13 +11,17 @@ type Props = {
 
 export default function Layout({ children }: Props) {
   const gameMode = useGameStore((s) => s.gameMode);
+  const gameStarted = useGameStore((s) => s.gameStarted);
+  // Only hide the site navbar while a game is actually running; those
+  // screens render their own in-game navbar.
+  const inActiveGame =
+    gameStarted && ["multi", "open", "hangman"].includes(gameMode);
   return (
     <div
       className="flex flex-col w-full relative overflow-x-hidden"
       style={{ minHeight: "calc(var(--vh, 1vh) * 100)" }}
     >
-      {/* Don't render the default Navbar inside active game modes; those pages render their own in-game navbars */}
-      {!["multi", "open", "hangman"].includes(gameMode) && <Navbar />}
+      {!inActiveGame && <Navbar />}
       <main
         className="flex flex-col items-center justify-start max-w-full m-auto w-full overflow-y-auto min-h-0"
         style={{
