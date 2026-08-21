@@ -53,6 +53,7 @@ describe("returnToMain", () => {
       hangmanGuessedLetters: ["h"],
       hangmanIncorrectGuesses: 4,
       hangmanIndex: 2,
+      hangmanPool: ["Helium", "Hydrogen"],
       hangmanDifficulty: "easy10",
     });
     localStorage.setItem(
@@ -75,6 +76,22 @@ describe("returnToMain", () => {
     expect(s.hangmanIncorrectGuesses).toBe(0);
     expect(s.hangmanIndex).toBe(0);
     expect(s.hangmanDifficulty).toBeNull();
+    expect(s.hangmanPool).toEqual([]);
     expect(localStorage.getItem("atomology.session")).toBeNull();
+  });
+});
+
+describe("hangmanPool", () => {
+  beforeEach(() => {
+    localStorage.clear();
+  });
+
+  it("setHangmanPool stores the shuffled word pool", () => {
+    useGameStore.getState().setHangmanPool(["Oxygen", "Gold", "Iron"]);
+    expect(useGameStore.getState().hangmanPool).toEqual([
+      "Oxygen",
+      "Gold",
+      "Iron",
+    ]);
   });
 });

@@ -16,6 +16,7 @@ export default function HangmanDifficultySelect() {
   const setHangmanDifficulty = useGameStore((s) => s.setHangmanDifficulty);
   const setHangmanWord = useGameStore((s) => s.setHangmanWord);
   const setHangmanIndex = useGameStore((s) => s.setHangmanIndex);
+  const setHangmanPool = useGameStore((s) => s.setHangmanPool);
   const setShowHUD = useUIStore((s) => s.setShowHUD);
   const [selected, setSelected] = React.useState<DifficultyLevel>("easy10");
 
@@ -31,12 +32,9 @@ export default function HangmanDifficultySelect() {
 
   const handleStart = () => {
     setHangmanDifficulty(selected);
+    // Shuffle once per session; the game then walks this exact order.
     const pool = shuffle(getElementsByDifficulty(selected));
-    // Store the shuffled pool in sessionStorage for this session
-    sessionStorage.setItem(
-      "hangmanPool",
-      JSON.stringify(pool.map((e) => e.name))
-    );
+    setHangmanPool(pool.map((e) => e.name));
     setHangmanIndex(0);
     setHangmanWord(pool[0].name);
   };
