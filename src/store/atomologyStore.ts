@@ -91,6 +91,7 @@ export const useGameStore = create<GameState>((set, get) => {
         playerAnswer: s.playerAnswer,
         gameMode: s.gameMode,
         gameStarted: s.gameStarted,
+        guessedElements: s.guessedElements,
       };
       localStorage.setItem("atomology.session", JSON.stringify(toSave));
     } catch (err) {
@@ -111,7 +112,7 @@ export const useGameStore = create<GameState>((set, get) => {
     playerAnswer: (persisted?.playerAnswer as any) ?? null,
     answerElementName: (persisted?.answerElementName as any) ?? "",
     fetchTrigger: 0,
-    guessedElements: [],
+    guessedElements: (persisted?.guessedElements as any) ?? [],
     // Hangman state
     hangmanWord: null,
     hangmanGuessedLetters: [],
