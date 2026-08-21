@@ -15,6 +15,7 @@ import {
   shuffle,
   asDifficultyLevel,
 } from "../../utils/hangmanDifficulty";
+import { playCelebration } from "../../utils/audio";
 
 export default function HangmanGame() {
   const hangmanWord = useGameStore((s) => s.hangmanWord);
@@ -41,79 +42,6 @@ export default function HangmanGame() {
 
   const soundEnabled = useUIStore((s) => s.soundEnabled);
   const setShowHUD = useUIStore((s) => s.setShowHUD);
-
-  // richer short celebration: three-note arpeggio + bright sparkle overlay
-  const playCelebration = () => {
-    try {
-      const Ctx =
-        window.AudioContext ??
-        (window as Window & { webkitAudioContext?: typeof AudioContext })
-          .webkitAudioContext;
-      if (!Ctx) return;
-      const ctx = new Ctx();
-      const now = ctx.currentTime;
-      const master = ctx.createGain();
-      master.gain.value = 0.001;
-      master.connect(ctx.destination);
-
-      // quick fade-in
-      master.gain.exponentialRampToValueAtTime(0.6, now + 0.02);
-
-      const notes = [523.25, 659.25, 783.99]; // C5, E5, G5 arpeggio
-      const noteDur = 0.14;
-
-      notes.forEach((freq, i) => {
-        const t = now + i * (noteDur * 0.9);
-        const o = ctx.createOscillator();
-        const g = ctx.createGain();
-        // slightly detuned saw + triangle mix for warmth
-        o.type = "sawtooth" as OscillatorType;
-        o.frequency.value = freq;
-        const o2 = ctx.createOscillator();
-        o2.type = "triangle" as OscillatorType;
-        o2.frequency.value = freq * 0.999;
-
-        g.gain.setValueAtTime(0.0001, t);
-        g.gain.exponentialRampToValueAtTime(0.35, t + 0.01);
-        g.gain.exponentialRampToValueAtTime(0.0001, t + noteDur);
-
-        o.connect(g);
-        o2.connect(g);
-        g.connect(master);
-
-        o.start(t);
-        o2.start(t);
-        o.stop(t + noteDur + 0.02);
-        o2.stop(t + noteDur + 0.02);
-      });
-
-      // sparkle overlay
-      const sparkle = ctx.createOscillator();
-      const sg = ctx.createGain();
-      sparkle.type = "sine" as OscillatorType;
-      sparkle.frequency.value = 1400;
-      sg.gain.setValueAtTime(0.0001, now);
-      sg.gain.exponentialRampToValueAtTime(0.18, now + 0.02);
-      sg.gain.exponentialRampToValueAtTime(
-        0.0001,
-        now + notes.length * noteDur
-      );
-      sparkle.connect(sg);
-      sg.connect(master);
-      sparkle.start(now);
-      sparkle.stop(now + notes.length * noteDur + 0.02);
-
-      // schedule context close
-      setTimeout(() => {
-        try {
-          master.disconnect();
-          ctx.close();
-        } catch (e) {}
-      }, (notes.length * noteDur + 0.2) * 1000);
-    } catch (e) {
-      // ignore audio errors silently
-    }
-  };
 
   // Play celebration when the word guess result becomes correct
   useEffect(() => {
