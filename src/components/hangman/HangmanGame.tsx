@@ -13,14 +13,15 @@ import canonicalElements from "../../data/elements";
 import {
   getElementsByDifficulty,
   shuffle,
+  asDifficultyLevel,
 } from "../../utils/hangmanDifficulty";
 
 export default function HangmanGame() {
   const hangmanWord = useGameStore((s) => s.hangmanWord);
   const hangmanPool = useGameStore((s) => s.hangmanPool);
   const hangmanDifficulty = useGameStore((s) => s.hangmanDifficulty);
-  const hangmanIndex = useGameStore((s) => (s as any).hangmanIndex ?? 0);
-  const setHangmanIndex = useGameStore((s) => (s as any).setHangmanIndex);
+  const hangmanIndex = useGameStore((s) => s.hangmanIndex ?? 0);
+  const setHangmanIndex = useGameStore((s) => s.setHangmanIndex);
   const guessed = useGameStore((s) => s.hangmanGuessedLetters);
   const incorrect = useGameStore((s) => s.hangmanIncorrectGuesses);
   const maxAttempts = useGameStore((s) => s.hangmanMaxAttempts);
@@ -44,7 +45,11 @@ export default function HangmanGame() {
   // richer short celebration: three-note arpeggio + bright sparkle overlay
   const playCelebration = () => {
     try {
-      const Ctx = window.AudioContext || (window as any).webkitAudioContext;
+      const Ctx =
+        window.AudioContext ??
+        (window as Window & { webkitAudioContext?: typeof AudioContext })
+          .webkitAudioContext;
+      if (!Ctx) return;
       const ctx = new Ctx();
       const now = ctx.currentTime;
       const master = ctx.createGain();
@@ -161,10 +166,10 @@ export default function HangmanGame() {
   // cleanup timers on unmount
   useEffect(() => {
     return () => {
-      if (resultTimeoutRef.current)
-        window.clearTimeout(resultTimeoutRef.current as any);
-      if (advanceTimeoutRef.current)
-        window.clearTimeout(advanceTimeoutRef.current as any);
+      if (resultTimeoutRef.current !== null)
+        window.clearTimeout(resultTimeoutRef.current);
+      if (advanceTimeoutRef.current !== null)
+        window.clearTimeout(advanceTimeoutRef.current);
     };
   }, []);
 
@@ -190,10 +195,10 @@ export default function HangmanGame() {
     if (allRevealed && wordGuessResult !== "correct") {
       // mark correct and use the same timed flow as a typed correct guess
       setWordGuessResult("correct");
-      if (resultTimeoutRef.current)
-        window.clearTimeout(resultTimeoutRef.current as any);
-      if (advanceTimeoutRef.current)
-        window.clearTimeout(advanceTimeoutRef.current as any);
+      if (resultTimeoutRef.current !== null)
+        window.clearTimeout(resultTimeoutRef.current);
+      if (advanceTimeoutRef.current !== null)
+        window.clearTimeout(advanceTimeoutRef.current);
       resultTimeoutRef.current = window.setTimeout(() => {
         setWordGuessResult(null);
         advanceTimeoutRef.current = window.setTimeout(() => {
@@ -206,11 +211,10 @@ export default function HangmanGame() {
 
   // start a fresh shuffled session at the same difficulty
   const handlePlayAgain = () => {
-    const state = (useGameStore as any).getState();
-    const diff = state.hangmanDifficulty ?? "all";
-    const freshPool = shuffle(getElementsByDifficulty(diff)).map(
-      (e: any) => e.name
-    );
+    const state = useGameStore.getState();
+    const freshPool = shuffle(
+      getElementsByDifficulty(asDifficultyLevel(state.hangmanDifficulty))
+    ).map((e) => e.name);
     state.setHangmanPool(freshPool);
     state.resetHangman();
     state.setHangmanWord(freshPool[0]);
@@ -228,7 +232,7 @@ export default function HangmanGame() {
       <>
         <InGameNavbar />
         <HangmanWinScreen
-          difficulty={(hangmanDifficulty ?? "all") as any}
+          difficulty={asDifficultyLevel(hangmanDifficulty)}
           totalWords={total}
           livesRemaining={Math.max(0, maxAttempts - incorrect)}
           onPlayAgain={handlePlayAgain}
@@ -266,10 +270,10 @@ export default function HangmanGame() {
     if (guess.toLowerCase() === hangmanWord.toLowerCase()) {
       setWordGuessResult("correct");
       // clear any existing timers
-      if (resultTimeoutRef.current)
-        window.clearTimeout(resultTimeoutRef.current as any);
-      if (advanceTimeoutRef.current)
-        window.clearTimeout(advanceTimeoutRef.current as any);
+      if (resultTimeoutRef.current !== null)
+        window.clearTimeout(resultTimeoutRef.current);
+      if (advanceTimeoutRef.current !== null)
+        window.clearTimeout(advanceTimeoutRef.current);
       // after DISPLAY_MS, clear the result so AnimatePresence exit runs
       resultTimeoutRef.current = window.setTimeout(() => {
         setWordGuessResult(null);
@@ -294,14 +298,14 @@ export default function HangmanGame() {
         (e) => e.name === currentName
       );
       if (currentEl?.symbol)
-        (useGameStore as any).getState().addGuessedElement(currentEl.symbol);
+        useGameStore.getState().addGuessedElement(currentEl.symbol);
     } catch (err) {}
 
     const nextIndex = (hangmanIndex ?? 0) + 1;
     if (nextIndex < total) {
       setHangmanIndex(nextIndex);
       const nextName = pool[nextIndex];
-      if (nextName) (useGameStore as any).getState().setHangmanWord(nextName);
+      if (nextName) useGameStore.getState().setHangmanWord(nextName);
       // clear local UI
       setWordGuess("");
       setInput("");
@@ -361,16 +365,15 @@ export default function HangmanGame() {
           <HangmanGameOverModal
             onRestart={() => {
               // replay the same shuffled pool from the start
-              const state = (useGameStore as any).getState?.();
+              const state = useGameStore.getState();
               const sessionPool: string[] = state?.hangmanPool ?? [];
               if (sessionPool.length > 0) {
-                (useGameStore as any).getState().resetHangman();
-                (useGameStore as any).getState().setHangmanIndex(0);
-                (useGameStore as any)
-                  .getState()
+                useGameStore.getState().resetHangman();
+                useGameStore.getState().setHangmanIndex(0);
+                useGameStore.getState()
                   .setHangmanWord(sessionPool[0]);
               } else {
-                (useGameStore as any).getState().resetHangman();
+                useGameStore.getState().resetHangman();
               }
               // clear local UI inputs
               setWordGuess("");
@@ -381,7 +384,7 @@ export default function HangmanGame() {
             }}
             onReturn={() => {
               // single reset action clears session, score, HUD and hangman state
-              (useGameStore as any).getState().returnToMain();
+              useGameStore.getState().returnToMain();
               setShowGameOver(false);
               setDisabled(true);
             }}

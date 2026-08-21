@@ -75,8 +75,12 @@ export default function Answer() {
     type: OscillatorType = "sine"
   ) => {
     try {
-      const ctx = new (window.AudioContext ||
-        (window as any).webkitAudioContext)();
+      const Ctx =
+        window.AudioContext ??
+        (window as Window & { webkitAudioContext?: typeof AudioContext })
+          .webkitAudioContext;
+      if (!Ctx) return;
+      const ctx = new Ctx();
       const o = ctx.createOscillator();
       const g = ctx.createGain();
       o.type = type;
@@ -99,7 +103,11 @@ export default function Answer() {
   // richer short celebration: three-note arpeggio + bright sparkle overlay
   const playCelebration = () => {
     try {
-      const Ctx = window.AudioContext || (window as any).webkitAudioContext;
+      const Ctx =
+        window.AudioContext ??
+        (window as Window & { webkitAudioContext?: typeof AudioContext })
+          .webkitAudioContext;
+      if (!Ctx) return;
       const ctx = new Ctx();
       const now = ctx.currentTime;
       const master = ctx.createGain();

@@ -5,7 +5,6 @@ export default function HomeContent() {
   return (
     <div
       className="w-3/4 lg:w-1/2 mx-auto px-6 flex flex-col items-center text-center my-auto py-12 sm:py-16 md:py-20"
-      style={{ WebkitOverflowScrolling: "touch" as any }}
     >
       <div className="flex flex-col gap-y-8">
         <h3 className="text-center text-xl font-serif font-semibold mt-8 mb-10 underline decoration-2 underline-offset-4">

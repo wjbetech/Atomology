@@ -42,8 +42,8 @@ export default tseslint.config(
         'warn',
         { allowConstantExport: true },
       ],
-      // the codebase leans on `as any` in places; warn for now, tighten later
-      '@typescript-eslint/no-explicit-any': 'warn',
+      // no explicit anys allowed anywhere in the app
+      '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/no-unused-vars': [
         'warn',
         { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },

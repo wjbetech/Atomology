@@ -5,7 +5,7 @@ export interface ElementType {
   atomicMass: number;
   category: string;
   density: number;
-  discoveredBy: string;
+  discoveredBy: string | null;
   melt: number | null;
   name: string;
   number: number;
@@ -47,7 +47,7 @@ export interface GameState {
   guessHangmanLetter: (letter: string) => void;
   resetHangman: () => void;
   setHangmanIndex: (index: number) => void;
-  setHangmanDifficulty: (difficulty: string) => void;
+  setHangmanDifficulty: (difficulty: string | null) => void;
   setHangmanPool: (pool: string[]) => void;
 }
 
@@ -105,14 +105,14 @@ export const useGameStore = create<GameState>((set, get) => {
   return {
     gameMode: persisted?.gameMode ?? "multi",
     score: persisted?.score ?? 0,
-    elements: (persisted?.elements as any) ?? [],
+    elements: persisted?.elements ?? [],
     loading: false,
     error: null,
     gameStarted: persisted?.gameStarted ?? false,
-    answer: (persisted?.answer as any) ?? null,
-    playerAnswer: (persisted?.playerAnswer as any) ?? null,
-    answerElementName: (persisted?.answerElementName as any) ?? "",
-    guessedElements: (persisted?.guessedElements as any) ?? [],
+    answer: persisted?.answer ?? null,
+    playerAnswer: persisted?.playerAnswer ?? null,
+    answerElementName: persisted?.answerElementName ?? "",
+    guessedElements: persisted?.guessedElements ?? [],
     // Hangman state
     hangmanWord: null,
     hangmanGuessedLetters: [],

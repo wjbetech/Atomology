@@ -1,6 +1,9 @@
 import { Link, useLocation } from "react-router-dom";
 import { useGameStore, useUIStore } from "../../store/atomologyStore";
-import { getElementsByDifficulty } from "../../utils/hangmanDifficulty";
+import {
+  getElementsByDifficulty,
+  asDifficultyLevel,
+} from "../../utils/hangmanDifficulty";
 
 export default function InGameNavbar() {
   const location = useLocation();
@@ -16,7 +19,7 @@ export default function InGameNavbar() {
   let total = 0;
   try {
     if (hangmanDifficulty) {
-      const pool = getElementsByDifficulty(hangmanDifficulty as any);
+      const pool = getElementsByDifficulty(asDifficultyLevel(hangmanDifficulty));
       total = pool.length;
     }
   } catch (err) {
