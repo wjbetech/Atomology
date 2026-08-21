@@ -6,6 +6,23 @@ import HUDWrapper from "../components/sub-components/HUDWrapper";
 import { useGameStore } from "../store/atomologyStore";
 import { act } from "react";
 
+function mockMatchMedia(matches: boolean) {
+  Object.defineProperty(window, "matchMedia", {
+    writable: true,
+    configurable: true,
+    value: jest.fn().mockImplementation((query: string) => ({
+      matches,
+      media: query,
+      onchange: null,
+      addListener: jest.fn(),
+      removeListener: jest.fn(),
+      addEventListener: jest.fn(),
+      removeEventListener: jest.fn(),
+      dispatchEvent: jest.fn(),
+    })),
+  });
+}
+
 describe("PeriodicTableHUD", () => {
   it("fills the element box when symbol is in guessed set", () => {
     const guessed = new Set<string>(["H"]);
@@ -43,6 +60,9 @@ describe("PeriodicTableHUD", () => {
   });
 
   it("integration: store action addGuessedElement updates HUD", () => {
+    // HUD renders on desktop viewports only
+    mockMatchMedia(true);
+
     // Ensure clean state
     act(() => {
       useGameStore.getState().resetGuessedElements();
