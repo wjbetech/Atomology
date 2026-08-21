@@ -32,3 +32,49 @@ describe("useGameStore guessedElements", () => {
     expect(useGameStore.getState().guessedElements).toHaveLength(0);
   });
 });
+
+describe("returnToMain", () => {
+  beforeEach(() => {
+    localStorage.clear();
+  });
+
+  it("resets all session state and clears persisted storage", () => {
+    // seed a dirty mid-game state across every mode
+    useGameStore.setState({
+      gameMode: "hangman",
+      gameStarted: true,
+      score: 9,
+      playerAnswer: "Gold",
+      answerElementName: "Silver",
+      guessedElements: ["H", "He"],
+      elements: [{ number: 1 }] as any,
+      answer: { number: 1 } as any,
+      hangmanWord: "Helium",
+      hangmanGuessedLetters: ["h"],
+      hangmanIncorrectGuesses: 4,
+      hangmanIndex: 2,
+      hangmanDifficulty: "easy10",
+    });
+    localStorage.setItem(
+      "atomology.session",
+      JSON.stringify({ score: 9 })
+    );
+
+    useGameStore.getState().returnToMain();
+
+    const s = useGameStore.getState();
+    expect(s.gameMode).toBe("");
+    expect(s.gameStarted).toBe(false);
+    expect(s.score).toBe(0);
+    expect(s.playerAnswer).toBe("");
+    expect(s.guessedElements).toEqual([]);
+    expect(s.elements).toEqual([]);
+    expect(s.answer).toBeNull();
+    expect(s.hangmanWord).toBeNull();
+    expect(s.hangmanGuessedLetters).toEqual([]);
+    expect(s.hangmanIncorrectGuesses).toBe(0);
+    expect(s.hangmanIndex).toBe(0);
+    expect(s.hangmanDifficulty).toBeNull();
+    expect(localStorage.getItem("atomology.session")).toBeNull();
+  });
+});

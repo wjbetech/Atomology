@@ -14,20 +14,13 @@ import ReturnToMainButton from "./ReturnToMainButton";
 export default function Score() {
   const {
     score,
-    setScore,
     gameStarted,
-    setGameStarted,
-    resetAnswerInput,
-    resetGuessedElements,
+    returnToMain,
   } = useGameStore();
 
   const handleGameMode = () => {
-    // clear persisted session and navigate home
-    localStorage.removeItem("atomology.session");
-    setGameStarted(false);
-    setScore(0);
-    resetAnswerInput();
-    resetGuessedElements();
+    // clear persisted session and navigate home via the single reset action
+    returnToMain();
   };
 
   const [showConfirm, setShowConfirm] = useState(false);

@@ -56,6 +56,7 @@ export interface GameState {
   resetAnswerInput: () => void;
   addGuessedElement: (symbol: string) => void;
   resetGuessedElements: () => void;
+  returnToMain: () => void;
 }
 
 export interface uiSlice {
@@ -207,6 +208,28 @@ export const useGameStore = create<GameState>((set, get) => {
       set({
         playerAnswer: "",
       }),
+    returnToMain: () => {
+      try {
+        localStorage.removeItem("atomology.session");
+      } catch {
+        // ignore storage errors (restricted contexts)
+      }
+      set({
+        gameMode: "",
+        gameStarted: false,
+        score: 0,
+        playerAnswer: "",
+        answerElementName: "",
+        guessedElements: [],
+        elements: [],
+        answer: null,
+        hangmanWord: null,
+        hangmanGuessedLetters: [],
+        hangmanIncorrectGuesses: 0,
+        hangmanIndex: 0,
+        hangmanDifficulty: null,
+      });
+    },
   } as GameState;
 });
 
