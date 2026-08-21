@@ -24,7 +24,6 @@ export interface GameState {
   answer: ElementType | null;
   answerElementName: ElementType["name"] | null;
   playerAnswer: string | null;
-  fetchTrigger: number;
   guessedElements: string[];
   // Hangman mode state
   hangmanWord: string | null;
@@ -52,7 +51,6 @@ export interface GameState {
 
 export interface GameState {
   setPlayerAnswer: (answer: string | null) => void;
-  setFetchTrigger: () => void;
   resetAnswerInput: () => void;
   addGuessedElement: (symbol: string) => void;
   resetGuessedElements: () => void;
@@ -112,7 +110,6 @@ export const useGameStore = create<GameState>((set, get) => {
     answer: (persisted?.answer as any) ?? null,
     playerAnswer: (persisted?.playerAnswer as any) ?? null,
     answerElementName: (persisted?.answerElementName as any) ?? "",
-    fetchTrigger: 0,
     guessedElements: (persisted?.guessedElements as any) ?? [],
     // Hangman state
     hangmanWord: null,
@@ -202,8 +199,6 @@ export const useGameStore = create<GameState>((set, get) => {
       set({ answer });
       persist();
     },
-    setFetchTrigger: () =>
-      set((state) => ({ fetchTrigger: state.fetchTrigger + 1 })),
     resetAnswerInput: () =>
       set({
         playerAnswer: "",

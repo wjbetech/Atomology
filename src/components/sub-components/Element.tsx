@@ -28,7 +28,6 @@ export default function Element() {
     setAnswerElementName,
     playerAnswer,
     setPlayerAnswer,
-    fetchTrigger,
   } = useGameStore();
 
   const [celebrate, setCelebrate] = useState(false);
@@ -96,7 +95,9 @@ export default function Element() {
       }
     };
     fetchData();
-  }, [gameStarted, fetchTrigger]);
+    // Round advancement happens exclusively via the prefetch-and-swap path
+    // below; this effect only loads the first round when a game starts.
+  }, [gameStarted]);
 
   // Prefetch next elements when the user answers correctly, then swap after 2s
   useEffect(() => {
