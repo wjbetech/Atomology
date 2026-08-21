@@ -157,13 +157,13 @@ export const useGameStore = create<GameState>((set, get) => {
     setHangmanDifficulty: (difficulty) =>
       set({ hangmanDifficulty: difficulty }),
 
-    addGuessedElement: (symbol) =>
-      set((state) => {
-        if (state.guessedElements.includes(symbol)) return {};
-        const updated = [...state.guessedElements, symbol];
-        persist();
-        return { guessedElements: updated };
-      }),
+    addGuessedElement: (symbol) => {
+      if (get().guessedElements.includes(symbol)) return;
+      set((state) => ({
+        guessedElements: [...state.guessedElements, symbol],
+      }));
+      persist();
+    },
     resetGuessedElements: () => {
       set({ guessedElements: [] });
       persist();
@@ -178,15 +178,12 @@ export const useGameStore = create<GameState>((set, get) => {
       set({ gameMode: mode });
       persist();
     },
-    setScore: (update) =>
-      set((state) => {
-        const next =
-          typeof update === "function" ? update(state.score) : update;
-        const ret = { score: next } as any;
-        // update then persist
-        persist();
-        return ret;
-      }),
+    setScore: (update) => {
+      set((state) => ({
+        score: typeof update === "function" ? update(state.score) : update,
+      }));
+      persist();
+    },
     setElements: (elements) => {
       set({ elements });
       persist();
