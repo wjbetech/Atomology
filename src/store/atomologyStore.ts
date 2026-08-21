@@ -19,7 +19,7 @@ export interface GameState {
   score: number;
   elements: ElementType[];
   loading: boolean;
-  error: boolean;
+  error: string | null;
   gameStarted: boolean;
   answer: ElementType | null;
   answerElementName: ElementType["name"] | null;
@@ -38,7 +38,7 @@ export interface GameState {
   setScore: (update: number | ((prevScore: number) => number)) => void;
   setElements: (elements: ElementType[]) => void;
   setLoading: (loading: boolean) => void;
-  setError: (error: boolean) => void;
+  setError: (error: string | null) => void;
   setGameStarted: (gameStarted: boolean) => void;
   setAnswer: (answer: ElementType | null) => void;
   setAnswerElementName: (name: ElementType["name"] | null) => void;
@@ -107,7 +107,7 @@ export const useGameStore = create<GameState>((set, get) => {
     score: persisted?.score ?? 0,
     elements: (persisted?.elements as any) ?? [],
     loading: false,
-    error: false,
+    error: null,
     gameStarted: persisted?.gameStarted ?? false,
     answer: (persisted?.answer as any) ?? null,
     playerAnswer: (persisted?.playerAnswer as any) ?? null,
