@@ -35,8 +35,6 @@ export default function Element() {
   const [anchor, setAnchor] = useState<{ x: number; y: number } | null>(null);
   const boxRef = useRef<HTMLDivElement | null>(null);
   const [prefetching, setPrefetching] = useState(false);
-  const [nextElements, setNextElements] = useState(null);
-  const [nextAnswer, setNextAnswer] = useState(null);
   const swapTimerRef = React.useRef<number | null>(null);
 
   // trigger celebration when player answers correctly
@@ -114,14 +112,12 @@ export default function Element() {
           Math.random() * randomElements.length
         );
         const correctElement = randomElements[randomCorrectIndex];
-        setNextElements(randomElements as any);
-        setNextAnswer(correctElement as any);
 
         // swap after 2s to allow celebration
         swapTimerRef.current = window.setTimeout(() => {
           // apply prepared next round
-          setElements(randomElements as any);
-          setAnswer(correctElement as any);
+          setElements(randomElements);
+          setAnswer(correctElement);
           setAnswerElementName(correctElement.name);
           // clear playerAnswer so UI resets
           setPlayerAnswer("");

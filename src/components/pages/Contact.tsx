@@ -8,7 +8,6 @@ export default function Contact() {
       <div
         className="w-full flex-1 flex items-center justify-center overflow-auto"
         style={{
-          WebkitOverflowScrolling: "touch" as any,
           paddingTop: "var(--site-navbar-height)",
           paddingBottom: "var(--site-footer-height)",
         }}
