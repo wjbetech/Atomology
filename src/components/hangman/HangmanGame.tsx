@@ -8,11 +8,11 @@ import HangmanLetters from "./HangmanLetters.tsx";
 import HangmanGuessInput from "./HangmanGuessInput.tsx";
 import HangmanKeyboard from "./HangmanKeyboard.tsx";
 import HangmanGameOverModal from "./HangmanGameOverModal.tsx";
-import { getElementsByDifficulty } from "../../utils/hangmanDifficulty";
+import canonicalElements from "../../data/elements";
 
 export default function HangmanGame() {
   const hangmanWord = useGameStore((s) => s.hangmanWord);
-  const hangmanDifficulty = useGameStore((s) => s.hangmanDifficulty);
+  const hangmanPool = useGameStore((s) => s.hangmanPool);
   const hangmanIndex = useGameStore((s) => (s as any).hangmanIndex ?? 0);
   const setHangmanIndex = useGameStore((s) => (s as any).setHangmanIndex);
   const guessed = useGameStore((s) => s.hangmanGuessedLetters);
@@ -118,15 +118,9 @@ export default function HangmanGame() {
     }
   }, [incorrect, maxAttempts]);
 
-  // progress counter: compute current index and total from difficulty pool
-  const pool = React.useMemo(() => {
-    try {
-      if (!hangmanDifficulty) return [] as any[];
-      return getElementsByDifficulty(hangmanDifficulty as any);
-    } catch (err) {
-      return [] as any[];
-    }
-  }, [hangmanDifficulty]);
+  // progress counter: the shuffled pool set at session start defines both
+  // the word order and the total
+  const pool = hangmanPool;
   const total = pool.length;
   const current = total > 0 ? hangmanIndex + 1 : 0;
 
@@ -255,17 +249,20 @@ export default function HangmanGame() {
 
   // helper to advance to next element or finish the session
   const advanceToNext = () => {
-    // add current word to guessed HUD if available
+    // add current word's symbol to the guessed HUD if available
     try {
-      const curr = pool[hangmanIndex];
-      if (curr && curr.symbol)
-        (useGameStore as any).getState().addGuessedElement(curr.symbol);
+      const currentName = pool[hangmanIndex];
+      const currentEl = canonicalElements.find(
+        (e) => e.name === currentName
+      );
+      if (currentEl?.symbol)
+        (useGameStore as any).getState().addGuessedElement(currentEl.symbol);
     } catch (err) {}
 
     const nextIndex = (hangmanIndex ?? 0) + 1;
     if (nextIndex < total) {
       setHangmanIndex && setHangmanIndex(nextIndex);
-      const nextName = pool[nextIndex]?.name;
+      const nextName = pool[nextIndex];
       nextName && (useGameStore as any).getState().setHangmanWord(nextName);
       // clear local UI
       setWordGuess("");
@@ -325,29 +322,18 @@ export default function HangmanGame() {
         {showGameOver && (
           <HangmanGameOverModal
             onRestart={() => {
-              // fully reset hangman session and restart at first item of current difficulty
+              // replay the same shuffled pool from the start
               const state = (useGameStore as any).getState?.();
-              const diff = state?.hangmanDifficulty ?? "all";
-              try {
-                const pool = getElementsByDifficulty(diff as any);
-                if (pool && pool.length > 0) {
-                  // reset guessed letters & incorrect count and index
-                  (useGameStore as any).getState().resetHangman &&
-                    (useGameStore as any).getState().resetHangman();
-                  (useGameStore as any).getState().setHangmanIndex &&
-                    (useGameStore as any).getState().setHangmanIndex(0);
-                  // set first word in pool
-                  (useGameStore as any).getState().setHangmanWord(pool[0].name);
-                  // ensure difficulty kept
-                  (useGameStore as any).getState().setHangmanDifficulty &&
-                    (useGameStore as any).getState().setHangmanDifficulty(diff);
-                } else {
-                  // fallback reset only
-                  (useGameStore as any).getState().resetHangman &&
-                    (useGameStore as any).getState().resetHangman();
-                }
-              } catch (err) {
-                // fallback reset only
+              const sessionPool: string[] = state?.hangmanPool ?? [];
+              if (sessionPool.length > 0) {
+                (useGameStore as any).getState().resetHangman &&
+                  (useGameStore as any).getState().resetHangman();
+                (useGameStore as any).getState().setHangmanIndex &&
+                  (useGameStore as any).getState().setHangmanIndex(0);
+                (useGameStore as any)
+                  .getState()
+                  .setHangmanWord(sessionPool[0]);
+              } else {
                 (useGameStore as any).getState().resetHangman &&
                   (useGameStore as any).getState().resetHangman();
               }

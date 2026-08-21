@@ -58,12 +58,6 @@ function safeStorageCheck({ storage, key, validator }) {
 }
 
 safeStorageCheck({
-  storage: sessionStorage,
-  key: "hangmanPool",
-  validator: (parsed) => Array.isArray(parsed) && parsed.length > 118,
-});
-
-safeStorageCheck({
   storage: localStorage,
   key: "atomology.session",
   validator: (parsed) =>
