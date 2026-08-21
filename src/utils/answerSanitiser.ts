@@ -1,6 +1,8 @@
 export function sanitiseAnswer(answer: string) {
-  let baseAnswer = answer.toLowerCase();
-  let idxZeroChar = answer.slice(0, 1);
+  const trimmed = answer.trim();
+  if (!trimmed) return "";
+  let baseAnswer = trimmed.toLowerCase();
+  let idxZeroChar = trimmed.slice(0, 1);
   let capitalisedIdxZero = idxZeroChar.toUpperCase();
   return capitalisedIdxZero.concat(baseAnswer.slice(1));
 }
