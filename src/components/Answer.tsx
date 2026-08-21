@@ -50,7 +50,6 @@ export default function Answer() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
-    console.log(e.target.value);
   };
 
   const showMessage = (type: "incorrect" | "correct", duration = 3000) => {
@@ -213,7 +212,6 @@ export default function Answer() {
 
   const handleOpenSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("you submitted your guess!");
 
     // game logic
     const inputElement = e.currentTarget.elements.namedItem(
