@@ -33,11 +33,11 @@ export default function Footer({}: Props) {
             gameMode === "open" ||
             gameMode === "hangman") && (
             <>
-              {/* Sound toggle sits above HUD toggle */}
+              {/* Sound toggle sits above HUD toggle; HUD is desktop-only */}
               <div>
                 <SoundToggle />
               </div>
-              <div>
+              <div className="hidden sm:block">
                 <label
                   htmlFor="footer-hud-toggle"
                   className={
