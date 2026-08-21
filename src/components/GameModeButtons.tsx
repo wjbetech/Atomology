@@ -37,7 +37,7 @@ export default function GameModeButtons() {
         id="hangman"
         value="hangman"
         onClick={() => {
-          resetHangman && resetHangman();
+          resetHangman();
           try {
             (useGameStore as any).getState?.().setHangmanDifficulty(null);
           } catch {}

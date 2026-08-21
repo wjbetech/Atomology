@@ -17,7 +17,7 @@ export default function HangmanGameOverModal({
     const focusable = dialogRef.current?.querySelectorAll<HTMLElement>(
       'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
     );
-    focusable && focusable[0]?.focus();
+    focusable?.[0]?.focus();
 
     function onKey(e: KeyboardEvent) {
       if (e.key === "Escape") {
@@ -47,7 +47,7 @@ export default function HangmanGameOverModal({
     document.addEventListener("keydown", onKey);
     return () => {
       document.removeEventListener("keydown", onKey);
-      previouslyFocused.current && previouslyFocused.current.focus();
+      previouslyFocused.current?.focus();
     };
   }, [onReturn]);
 
@@ -63,7 +63,7 @@ export default function HangmanGameOverModal({
         className="bg-[#0b1220] border border-red-300 rounded-lg p-6 w-[90%] max-w-md shadow-lg text-center"
       >
         <h3 className="text-lg font-bold mb-2 text-red-400">Game Over!</h3>
-        <p className="text-gray-400 mb-4">You've run out of lives.</p>
+        <p className="text-gray-400 mb-4">You&apos;ve run out of lives.</p>
         <div className="grid grid-cols-2 gap-3 mt-6">
           <button
             className="btn btn-sm btn-success w-full light:border-content border-2"

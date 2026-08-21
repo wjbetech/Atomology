@@ -212,7 +212,7 @@ export default function HangmanGame() {
       (e: any) => e.name
     );
     state.setHangmanPool(freshPool);
-    state.resetHangman && state.resetHangman();
+    state.resetHangman();
     state.setHangmanWord(freshPool[0]);
     setWordGuess("");
     setInput("");
@@ -299,9 +299,9 @@ export default function HangmanGame() {
 
     const nextIndex = (hangmanIndex ?? 0) + 1;
     if (nextIndex < total) {
-      setHangmanIndex && setHangmanIndex(nextIndex);
+      setHangmanIndex(nextIndex);
       const nextName = pool[nextIndex];
-      nextName && (useGameStore as any).getState().setHangmanWord(nextName);
+      if (nextName) (useGameStore as any).getState().setHangmanWord(nextName);
       // clear local UI
       setWordGuess("");
       setInput("");
@@ -364,16 +364,13 @@ export default function HangmanGame() {
               const state = (useGameStore as any).getState?.();
               const sessionPool: string[] = state?.hangmanPool ?? [];
               if (sessionPool.length > 0) {
-                (useGameStore as any).getState().resetHangman &&
-                  (useGameStore as any).getState().resetHangman();
-                (useGameStore as any).getState().setHangmanIndex &&
-                  (useGameStore as any).getState().setHangmanIndex(0);
+                (useGameStore as any).getState().resetHangman();
+                (useGameStore as any).getState().setHangmanIndex(0);
                 (useGameStore as any)
                   .getState()
                   .setHangmanWord(sessionPool[0]);
               } else {
-                (useGameStore as any).getState().resetHangman &&
-                  (useGameStore as any).getState().resetHangman();
+                (useGameStore as any).getState().resetHangman();
               }
               // clear local UI inputs
               setWordGuess("");

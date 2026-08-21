@@ -2,9 +2,7 @@ import React from "react";
 import Layout from "../layout/Layout";
 import ContactContent from "../ContactContent";
 
-type Props = {};
-
-export default function Contact({}: Props) {
+export default function Contact() {
   return (
     <Layout>
       <div

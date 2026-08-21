@@ -20,7 +20,7 @@ export default function ConfirmModal({
     const focusable = dialogRef.current?.querySelectorAll<HTMLElement>(
       'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
     );
-    focusable && focusable[0]?.focus();
+    focusable?.[0]?.focus();
 
     function onKey(e: KeyboardEvent) {
       if (e.key === "Escape") {
@@ -51,7 +51,7 @@ export default function ConfirmModal({
     return () => {
       document.removeEventListener("keydown", onKey);
       // restore focus
-      previouslyFocused.current && previouslyFocused.current.focus();
+      previouslyFocused.current?.focus();
     };
   }, [onCancel]);
 

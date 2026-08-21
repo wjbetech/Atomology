@@ -1,9 +1,7 @@
 import React from "react";
 import BackButton from "./sub-components/BackButton";
 
-type Props = {};
-
-export default function FaqContent({}: Props) {
+export default function FaqContent() {
   return (
     <div
       className="w-3/4 lg:w-1/2 mx-auto px-6 flex flex-col items-center text-center my-auto py-12 sm:py-16 md:py-20"

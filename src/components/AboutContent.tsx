@@ -1,9 +1,7 @@
 import React from "react";
 import BackButton from "./sub-components/BackButton";
 
-type Props = {};
-
-export default function HomeContent({}: Props) {
+export default function HomeContent() {
   return (
     <div
       className="w-3/4 lg:w-1/2 mx-auto px-6 flex flex-col items-center text-center my-auto py-12 sm:py-16 md:py-20"
@@ -26,7 +24,7 @@ export default function HomeContent({}: Props) {
             brilliantly.
           </p>
           <p>
-            I hope that players feel they can "drop in" to playing Atomology,
+            I hope that players feel they can &ldquo;drop in&rdquo; to playing Atomology,
             give it a few rounds, get the dopamine hit they were craving, and
             then put it down or close it away without a sense of missing out,
             compulsion to continue, or over-disappointment if they happened to

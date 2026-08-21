@@ -4,9 +4,7 @@ import AboutContent from "../AboutContent";
 
 // ...existing code...
 
-type Props = {};
-
-export default function About({}: Props) {
+export default function About() {
   return (
     <Layout>
       <div

@@ -3,9 +3,7 @@ import { useUIStore, useGameStore } from "../../store/atomologyStore";
 import ThemeToggle from "../sub-components/ThemeToggle";
 import SoundToggle from "../sub-components/SoundToggle";
 
-type Props = {};
-
-export default function Footer({}: Props) {
+export default function Footer() {
   const theme = useUIStore((s) => s.theme);
   const setTheme = useUIStore((s) => s.setTheme);
   const showHUD = useUIStore((s) => s.showHUD);
