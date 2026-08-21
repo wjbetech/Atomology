@@ -9,7 +9,7 @@ export default function ContactForm() {
         Contact
       </h3>
       <p className="mb-6 text-sm text-gray-600 dark:text-gray-300 text-center md:text-left">
-        I'm always open to collaboration opportunities, constructive feedback,
+        I&apos;m always open to collaboration opportunities, constructive feedback,
         bug reports, and suggestions for new game modes. Use the form below to
         get in touch — or email me directly!
       </p>

@@ -9,7 +9,7 @@ const sizes = [16, 32, 192, 512];
 async function ensurePublic() {
   try {
     await fs.access(publicDir);
-  } catch (e) {
+  } catch {
     await fs.mkdir(publicDir, { recursive: true });
   }
 }
@@ -21,7 +21,7 @@ async function generate() {
     let svgBuffer;
     try {
       svgBuffer = await fs.readFile(svgPath);
-    } catch (e) {
+    } catch {
       console.warn(`Skipped ${svg} (missing)`);
       continue;
     }

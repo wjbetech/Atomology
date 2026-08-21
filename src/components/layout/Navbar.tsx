@@ -2,9 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useGameStore, useUIStore } from "../../store/atomologyStore";
 import { getElementsByDifficulty } from "../../utils/hangmanDifficulty";
 
-type Props = {};
-
-export default function Navbar({}: Props) {
+export default function Navbar() {
   const location = useLocation();
   const gameMode = useGameStore((s) => s.gameMode);
   const gameStarted = useGameStore((s) => s.gameStarted);
