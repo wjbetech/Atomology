@@ -204,6 +204,23 @@ export default function HangmanGame() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [guessed, hangmanWord]);
 
+  // start a fresh shuffled session at the same difficulty
+  const handlePlayAgain = () => {
+    const state = (useGameStore as any).getState();
+    const diff = state.hangmanDifficulty ?? "all";
+    const freshPool = shuffle(getElementsByDifficulty(diff)).map(
+      (e: any) => e.name
+    );
+    state.setHangmanPool(freshPool);
+    state.resetHangman && state.resetHangman();
+    state.setHangmanWord(freshPool[0]);
+    setWordGuess("");
+    setInput("");
+    setWordGuessResult(null);
+    setShowWin(false);
+    setDisabled(false);
+  };
+
   if (!hangmanWord) return null;
 
   if (showWin) {
@@ -294,23 +311,6 @@ export default function HangmanGame() {
       setShowWin(true);
       setDisabled(true);
     }
-  };
-
-  // start a fresh shuffled session at the same difficulty
-  const handlePlayAgain = () => {
-    const state = (useGameStore as any).getState();
-    const diff = state.hangmanDifficulty ?? "all";
-    const freshPool = shuffle(getElementsByDifficulty(diff)).map(
-      (e: any) => e.name
-    );
-    state.setHangmanPool(freshPool);
-    state.resetHangman && state.resetHangman();
-    state.setHangmanWord(freshPool[0]);
-    setWordGuess("");
-    setInput("");
-    setWordGuessResult(null);
-    setShowWin(false);
-    setDisabled(false);
   };
 
   return (

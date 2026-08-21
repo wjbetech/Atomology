@@ -9,9 +9,7 @@ export default function InGameNavbar({}: Props) {
   const gameMode = useGameStore((s) => s.gameMode);
   const gameStarted = useGameStore((s) => s.gameStarted);
   const hangmanDifficulty = useGameStore((s) => s.hangmanDifficulty);
-  const hangmanIndex = (useGameStore as any)(
-    (s) => (s as any).hangmanIndex ?? 0
-  );
+  const hangmanIndex = useGameStore((s) => s.hangmanIndex ?? 0);
   const hangmanIncorrect = useGameStore((s) => s.hangmanIncorrectGuesses);
   const hangmanMaxAttempts = useGameStore((s) => s.hangmanMaxAttempts);
   const theme = useUIStore((s) => s.theme);
