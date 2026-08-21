@@ -167,12 +167,43 @@ export default function HangmanGame() {
     };
   }, []);
 
-  if (!hangmanWord) return null;
-
   // Ensure HUD is turned off when entering actual Hangman game
   React.useEffect(() => {
     setShowHUD(false);
   }, [setShowHUD]);
+
+  // Auto-advance when all letters have been revealed via guessed letters
+  React.useEffect(() => {
+    if (!hangmanWord) return;
+    if (disabled || showGameOver) return;
+
+    // compute unique letters in the word (ignore spaces and non-letters)
+    const letters = hangmanWord
+      .toLowerCase()
+      .split("")
+      .filter((c) => /[a-z]/.test(c));
+    const unique = Array.from(new Set(letters));
+    if (unique.length === 0) return;
+
+    const allRevealed = unique.every((ch) => guessed.includes(ch));
+    if (allRevealed && wordGuessResult !== "correct") {
+      // mark correct and use the same timed flow as a typed correct guess
+      setWordGuessResult("correct");
+      if (resultTimeoutRef.current)
+        window.clearTimeout(resultTimeoutRef.current as any);
+      if (advanceTimeoutRef.current)
+        window.clearTimeout(advanceTimeoutRef.current as any);
+      resultTimeoutRef.current = window.setTimeout(() => {
+        setWordGuessResult(null);
+        advanceTimeoutRef.current = window.setTimeout(() => {
+          advanceToNext();
+        }, EXIT_MS);
+      }, DISPLAY_MS);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [guessed, hangmanWord]);
+
+  if (!hangmanWord) return null;
 
   // Build display for blanks and correct letters, all capitalized
   const display = hangmanWord.split("").map((char, i) => {
@@ -246,37 +277,6 @@ export default function HangmanGame() {
       setDisabled(true);
     }
   };
-
-  // Auto-advance when all letters have been revealed via guessed letters
-  React.useEffect(() => {
-    if (!hangmanWord) return;
-    if (disabled || showGameOver) return;
-
-    // compute unique letters in the word (ignore spaces and non-letters)
-    const letters = hangmanWord
-      .toLowerCase()
-      .split("")
-      .filter((c) => /[a-z]/.test(c));
-    const unique = Array.from(new Set(letters));
-    if (unique.length === 0) return;
-
-    const allRevealed = unique.every((ch) => guessed.includes(ch));
-    if (allRevealed && wordGuessResult !== "correct") {
-      // mark correct and use the same timed flow as a typed correct guess
-      setWordGuessResult("correct");
-      if (resultTimeoutRef.current)
-        window.clearTimeout(resultTimeoutRef.current as any);
-      if (advanceTimeoutRef.current)
-        window.clearTimeout(advanceTimeoutRef.current as any);
-      resultTimeoutRef.current = window.setTimeout(() => {
-        setWordGuessResult(null);
-        advanceTimeoutRef.current = window.setTimeout(() => {
-          advanceToNext();
-        }, EXIT_MS);
-      }, DISPLAY_MS);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [guessed, hangmanWord]);
 
   return (
     <>
