@@ -8,11 +8,17 @@ import HangmanLetters from "./HangmanLetters.tsx";
 import HangmanGuessInput from "./HangmanGuessInput.tsx";
 import HangmanKeyboard from "./HangmanKeyboard.tsx";
 import HangmanGameOverModal from "./HangmanGameOverModal.tsx";
+import HangmanWinScreen from "./HangmanWinScreen.tsx";
 import canonicalElements from "../../data/elements";
+import {
+  getElementsByDifficulty,
+  shuffle,
+} from "../../utils/hangmanDifficulty";
 
 export default function HangmanGame() {
   const hangmanWord = useGameStore((s) => s.hangmanWord);
   const hangmanPool = useGameStore((s) => s.hangmanPool);
+  const hangmanDifficulty = useGameStore((s) => s.hangmanDifficulty);
   const hangmanIndex = useGameStore((s) => (s as any).hangmanIndex ?? 0);
   const setHangmanIndex = useGameStore((s) => (s as any).setHangmanIndex);
   const guessed = useGameStore((s) => s.hangmanGuessedLetters);
@@ -25,6 +31,7 @@ export default function HangmanGame() {
   const [wordGuess, setWordGuess] = useState("");
   const [wordGuessResult, setWordGuessResult] = useState<string | null>(null);
   const [showGameOver, setShowGameOver] = useState(false);
+  const [showWin, setShowWin] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const resultTimeoutRef = React.useRef<number | null>(null);
   const advanceTimeoutRef = React.useRef<number | null>(null);
@@ -199,6 +206,20 @@ export default function HangmanGame() {
 
   if (!hangmanWord) return null;
 
+  if (showWin) {
+    return (
+      <>
+        <InGameNavbar />
+        <HangmanWinScreen
+          difficulty={(hangmanDifficulty ?? "all") as any}
+          totalWords={total}
+          livesRemaining={Math.max(0, maxAttempts - incorrect)}
+          onPlayAgain={handlePlayAgain}
+        />
+      </>
+    );
+  }
+
   // Build display for blanks and correct letters, all capitalized
   const display = hangmanWord.split("").map((char, i) => {
     if (char === " ") return <span key={i} className="w-3 inline-block" />;
@@ -269,10 +290,27 @@ export default function HangmanGame() {
       setInput("");
       setWordGuessResult(null);
     } else {
-      // finished all words -> show finished state/modal
-      setShowGameOver(true);
+      // finished all words -> celebrate with the win screen
+      setShowWin(true);
       setDisabled(true);
     }
+  };
+
+  // start a fresh shuffled session at the same difficulty
+  const handlePlayAgain = () => {
+    const state = (useGameStore as any).getState();
+    const diff = state.hangmanDifficulty ?? "all";
+    const freshPool = shuffle(getElementsByDifficulty(diff)).map(
+      (e: any) => e.name
+    );
+    state.setHangmanPool(freshPool);
+    state.resetHangman && state.resetHangman();
+    state.setHangmanWord(freshPool[0]);
+    setWordGuess("");
+    setInput("");
+    setWordGuessResult(null);
+    setShowWin(false);
+    setDisabled(false);
   };
 
   return (

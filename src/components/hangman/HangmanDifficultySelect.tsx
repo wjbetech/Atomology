@@ -3,14 +3,10 @@ import { useGameStore, useUIStore } from "../../store/atomologyStore";
 import ReturnToMainButton from "../sub-components/ReturnToMainButton";
 import {
   getElementsByDifficulty,
+  shuffle,
   DifficultyLevel,
 } from "../../utils/hangmanDifficulty";
-
-const DIFFICULTY_LABELS: Record<DifficultyLevel, string> = {
-  easy10: "10 Easiest Elements",
-  easy20: "20 Easiest Elements",
-  all: "All Elements",
-};
+import { DIFFICULTY_LABELS } from "./difficultyLabels";
 
 export default function HangmanDifficultySelect() {
   const setHangmanDifficulty = useGameStore((s) => s.setHangmanDifficulty);
@@ -19,16 +15,6 @@ export default function HangmanDifficultySelect() {
   const setHangmanPool = useGameStore((s) => s.setHangmanPool);
   const setShowHUD = useUIStore((s) => s.setShowHUD);
   const [selected, setSelected] = React.useState<DifficultyLevel>("easy10");
-
-  // Fisher-Yates shuffle
-  function shuffle<T>(array: T[]): T[] {
-    const arr = [...array];
-    for (let i = arr.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [arr[i], arr[j]] = [arr[j], arr[i]];
-    }
-    return arr;
-  }
 
   const handleStart = () => {
     setHangmanDifficulty(selected);
