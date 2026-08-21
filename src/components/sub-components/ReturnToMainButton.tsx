@@ -19,28 +19,13 @@ export default function ReturnToMainButton({
   label,
   fixed = true,
 }: Props) {
-  const setGameMode = useGameStore((s) => s.setGameMode);
-  const setGameStarted = useGameStore((s) => s.setGameStarted);
+  const returnToMain = useGameStore((s) => s.returnToMain);
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
 
   const handleConfirm = () => {
     setShowModal(false);
-    try {
-      localStorage.removeItem("atomology.session");
-    } catch {
-      /* ignore */
-    }
-    setGameMode("");
-    setGameStarted(false);
-    const state = (useGameStore as any).getState?.();
-    if (state) {
-      if (typeof state.setScore === "function") state.setScore(0);
-      if (typeof state.resetAnswerInput === "function")
-        state.resetAnswerInput();
-      if (typeof state.resetGuessedElements === "function")
-        state.resetGuessedElements();
-    }
+    returnToMain();
     navigate("/");
   };
 

@@ -359,12 +359,8 @@ export default function HangmanGame() {
               setDisabled(false);
             }}
             onReturn={() => {
-              // clear session and navigate to main via store
-              try {
-                localStorage.removeItem("atomology.session");
-              } catch {}
-              (useGameStore as any).getState().setGameMode("");
-              (useGameStore as any).getState().setGameStarted(false);
+              // single reset action clears session, score, HUD and hangman state
+              (useGameStore as any).getState().returnToMain();
               setShowGameOver(false);
               setDisabled(true);
             }}
