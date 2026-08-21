@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useGameStore, useUIStore } from "../../store/atomologyStore";
-import InGameNavbar from "../layout/InGameNavbar";
 import { motion, AnimatePresence } from "framer-motion";
 import ConfettiSparks from "../sub-components/ConfettiSparks.tsx";
 import ReturnToMainButton from "../sub-components/ReturnToMainButton.tsx";
@@ -158,7 +157,6 @@ export default function HangmanGame() {
   if (showWin) {
     return (
       <>
-        <InGameNavbar />
         <HangmanWinScreen
           difficulty={asDifficultyLevel(hangmanDifficulty)}
           totalWords={total}
@@ -247,7 +245,6 @@ export default function HangmanGame() {
 
   return (
     <>
-      <InGameNavbar />
       <div className="w-full flex-1 flex flex-col items-center gap-4 mt-6 max-w-[420px] mx-auto relative">
         {/* Group display, input, and keyboard with equal vertical spacing */}
         <div className="w-full flex flex-1 flex-col items-center justify-center gap-3">

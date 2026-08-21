@@ -1,12 +1,52 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useGameStore, useUIStore } from "../../store/atomologyStore";
 import {
   getElementsByDifficulty,
   asDifficultyLevel,
 } from "../../utils/hangmanDifficulty";
 
+function getLivesColor(lives: number, max: number) {
+  const rem = Math.max(0, Math.min(max, Math.round(lives)));
+  if (max === 6) {
+    const palette = [
+      "#ff1744",
+      "#ff3d00",
+      "#ff7043",
+      "#ffcc33",
+      "#ccff33",
+      "#66ff66",
+      "#00e676",
+    ];
+    return palette[rem] ?? palette[0];
+  }
+  if (max === 10) {
+    const palette = [
+      "#ff1744",
+      "#ff4000",
+      "#ff6f00",
+      "#ff9d00",
+      "#ffbf00",
+      "#dbc60b",
+      "#d4db0b",
+      "#b7ff00",
+      "#91ff00",
+      "#51ff00",
+      "#00ff0d",
+    ];
+    return palette[rem] ?? palette[0];
+  }
+  const percent = Math.max(0, Math.min(1, lives / max));
+  const green = { r: 56, g: 230, b: 120 };
+  const red = { r: 255, g: 90, b: 90 };
+  const r = Math.round(green.r * percent + red.r * (1 - percent));
+  const g = Math.round(green.g * percent + red.g * (1 - percent));
+  const b = Math.round(green.b * percent + red.b * (1 - percent));
+  return `rgb(${r},${g},${b})`;
+}
+
+// Single navbar for the whole app. It decides what to show based on game
+// state: the in-game header while playing, site links otherwise.
 export default function Navbar() {
-  const location = useLocation();
   const gameMode = useGameStore((s) => s.gameMode);
   const gameStarted = useGameStore((s) => s.gameStarted);
   const hangmanDifficulty = useGameStore((s) => s.hangmanDifficulty);
@@ -16,71 +56,36 @@ export default function Navbar() {
   const theme = useUIStore((s) => s.theme);
   const isDark = theme === "dark" || theme === "night";
 
-  // compute pool total and current for hangman
+  const prettyMode =
+    gameMode === "multi"
+      ? "Multiple Choice"
+      : gameMode === "open"
+      ? "Open Answer"
+      : gameMode === "hangman"
+      ? "Hangman"
+      : "";
+
+  const inActiveGame =
+    gameStarted && ["multi", "open", "hangman"].includes(gameMode);
+
   let total = 0;
   try {
-    if (hangmanDifficulty) {
-      const pool = getElementsByDifficulty(asDifficultyLevel(hangmanDifficulty));
-      total = pool.length;
+    if (gameMode === "hangman") {
+      total = getElementsByDifficulty(
+        asDifficultyLevel(hangmanDifficulty)
+      ).length;
     }
-  } catch (err) {
+  } catch {
     total = 0;
   }
-
   const current = total > 0 ? hangmanIndex + 1 : 0;
 
-  // Color interpolation: green (#22c55e) to red (#ef4444)
-  function getLivesColor(lives: number, max: number) {
-    // If max is 6 (default), use a fixed bright palette for each remaining value
-    const rem = Math.max(0, Math.min(max, Math.round(lives)));
-    if (max === 6) {
-      const palette = [
-        "#ff1744", // 0 - very vivid red
-        "#ff3d00", // 1
-        "#ff7043", // 2
-        "#ffcc33", // 3 - bright amber
-        "#ccff33", // 4 - lime
-        "#66ff66", // 5 - light green
-        "#00e676", // 6 - vivid green
-      ];
-      return palette[rem] ?? palette[0];
-    }
-
-    // If max is 10, use an 11-step palette with red at low, orange mid, green high
-    if (max === 10) {
-      const palette = [
-        "#ff1744", // 0 - red
-        "#ff4000", // 1
-        "#ff6f00", // 2
-        "#ff9d00", // 3
-        "#ffbf00", // 4 - orange
-        "#dbc60b", // 5 - amber
-        "#d4db0b", // 6 - yellowish
-        "#b7ff00", // 7 - lime
-        "#91ff00", // 8 - greenish
-        "#51ff00", // 9 - light green
-        "#00ff0d", // 10 - vivid green
-      ];
-      return palette[rem] ?? palette[0];
-    }
-
-    // Fallback: brighter interpolation for non-standard max values
-    const percent = Math.max(0, Math.min(1, lives / max));
-    const green = { r: 56, g: 230, b: 120 };
-    const red = { r: 255, g: 90, b: 90 };
-    const r = Math.round(green.r * percent + red.r * (1 - percent));
-    const g = Math.round(green.g * percent + red.g * (1 - percent));
-    const b = Math.round(green.b * percent + red.b * (1 - percent));
-    return `rgb(${r},${g},${b})`;
-  }
-
-  // If we're actively in hangman mode, show game header
-  if (gameMode === "hangman" && gameStarted) {
+  if (inActiveGame && gameMode === "hangman") {
     return (
       <nav
-        className="fixed inset-x-0 top-0 w-full bg-base-100 flex items-center justify-between p-4 border-b-2 border-gray-200/60 dark:border-[#ffffff0d]"
+        className="fixed inset-x-0 top-0 w-full flex items-center justify-between px-4 py-2"
         style={{
-          height: "var(--site-navbar-height)",
+          height: "calc(var(--site-navbar-height) + 20px)",
           paddingLeft: "env(safe-area-inset-left)",
           paddingRight: "env(safe-area-inset-right)",
           zIndex: 3000,
@@ -90,7 +95,7 @@ export default function Navbar() {
           <div className="bg-transparent rounded-full text-lg md:text-xl font-semibold text-center">
             <div
               className={
-                "text-base md:text-lg lg:text-xl uppercase tracking-wider hangman-level " +
+                "text-base md:text-lg lg:text-xl uppercase tracking-wider hangman-level mt-1 " +
                 (isDark ? "text-gray-300" : "text-gray-800")
               }
             >
@@ -103,8 +108,8 @@ export default function Navbar() {
         </div>
 
         <div className="absolute left-1/2 transform -translate-x-1/2 text-center h-full flex items-center">
-          <div className="font-semibold text-lg text-center hangman-title">
-            Hangman Mode
+          <div className="font-serif font-semibold text-lg text-center hangman-title">
+            {prettyMode}
           </div>
         </div>
 
@@ -112,7 +117,7 @@ export default function Navbar() {
           <div className="text-right text-lg md:text-xl font-semibold">
             <span
               className={
-                "text-base md:text-lg lg:text-xl uppercase tracking-wider block " +
+                "text-base md:text-lg lg:text-xl uppercase tracking-wider block mt-1 " +
                 (isDark ? "text-gray-300" : "text-gray-800")
               }
             >
@@ -132,6 +137,28 @@ export default function Navbar() {
             </span>
           </div>
         </div>
+      </nav>
+    );
+  }
+
+  if (inActiveGame) {
+    return (
+      <nav
+        className="fixed inset-x-0 top-0 w-full z-[3000] flex items-center justify-between gap-4 p-4"
+        style={{
+          height: "var(--site-navbar-height)",
+          paddingLeft: "env(safe-area-inset-left)",
+          paddingRight: "env(safe-area-inset-right)",
+          zIndex: 3000,
+        }}
+      >
+        <div className="px-4" />
+
+        <div className="absolute left-1/2 transform -translate-x-1/2 h-full flex items-center">
+          <div className="font-serif font-semibold text-lg">{prettyMode}</div>
+        </div>
+
+        <div className="px-4" />
       </nav>
     );
   }
