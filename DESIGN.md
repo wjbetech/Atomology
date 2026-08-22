@@ -1,0 +1,145 @@
+# Atomology Design Language — "Spectral Dark"
+
+> Every element has its own light.
+
+Committed design language for the Atomology redesign. Produced via the
+`frontend-design` skill; all UI tickets (#40–#52) must derive their visual
+decisions from this document and may not introduce colours or typefaces
+outside it without amending this file first.
+
+---
+
+## Grounding
+
+Atomology teaches the periodic table through play. The subject's own world —
+excited atoms emitting discrete wavelengths of light, flame tests, darkened
+labs, specimen labels — is the source of every choice below. The signature
+insight: **each element literally has a colour** (its emission/flame-test
+hue), so colour in this app encodes information rather than decorating it.
+
+- **Audience:** curious solo learners first; teacher-presentable always.
+- **Feeling:** a lab at night where specimens glow — precise, luminous,
+  quietly playful. Texture lives in components (tactile cards, squishy
+  presses, light that responds); never in mascots or clutter.
+- **Banned:** purple/violet in any shade. Also banned: the generic AI looks —
+  cream+serif+terracotta, black-with-one-acid-accent, broadsheet hairlines.
+
+## Palette
+
+### Surfaces & ink (dark flagship)
+
+| Token        | Hex       | Role                                    |
+| ------------ | --------- | --------------------------------------- |
+| `void`       | `#060A12` | Page background (blue-black, not grey)  |
+| `bench`      | `#0D1522` | Card / surface                          |
+| `slide`      | `#131E30` | Raised surface, hover, inputs           |
+| `hairline`   | `#1F2C42` | Borders, grid lines                     |
+| `specimen`   | `#E9F1FA` | Primary text ("the specimen lit")       |
+| `annotation` | `#8FA3BC` | Secondary text, captions, unit labels   |
+
+### Spectral accents (semantic, multi-hue on purpose)
+
+Real emission spectra are multi-coloured — that physics justifies departing
+from the single-accent-on-black default. Accents are assigned by element
+category so hue carries meaning:
+
+| Token       | Hex       | Flame/discharge source            | Semantic role              |
+| ----------- | --------- | --------------------------------- | -------------------------- |
+| `sodium`    | `#FFCB47` | Sodium D-line (gold)              | Primary action, highlight  |
+| `copper`    | `#35D99A` | Copper flame (emerald)            | Success / correct          |
+| `strontium` | `#FF5470` | Strontium flame (crimson)         | Error / wrong / danger     |
+| `argon`     | `#45C4FF` | Discharge-tube cyan               | Links, info, focus ring    |
+| `calcium`   | `#FF8A5C` | Calcium flame (orange)            | Streaks, milestones, warn  |
+
+### Category → accent mapping
+
+| Category                  | Accent     |
+| ------------------------- | ---------- |
+| Alkali metal              | strontium  |
+| Alkaline earth metal      | calcium    |
+| Transition metal          | argon      |
+| Post-transition metal     | copper     |
+| Metalloid                 | sodium     |
+| Diatomic nonmetal         | copper     |
+| Halogen                   | sodium     |
+| Noble gas                 | argon      |
+| Lanthanide                | calcium    |
+| Actinide                  | strontium  |
+| Unknown                   | annotation |
+
+### Daylight Lab (light counterpart)
+
+Paper `#F4F7FB`, ink `#0E1626`, same accents darkened ~15% for contrast on
+light surfaces. Implemented as the existing theme toggle's light side during
+the application pass (#47).
+
+## Typography
+
+Three roles, loaded only when the application pass consumes them:
+
+| Role               | Face                  | Weights   | Use                                            |
+| ------------------ | --------------------- | --------- | ---------------------------------------------- |
+| Display / specimen | **Michroma**          | 400       | Element symbols, big numerals, page titles     |
+| Body               | **Atkinson Hyperlegible** | 400/700 | All prose; chosen for low-vision readability (education story) |
+| Data / utility     | **IBM Plex Mono**     | 400/500   | Atomic masses, configs, eyebrows, labels       |
+
+Type scale (desktop → mobile): display `clamp(2rem, 6vw, 4.5rem)` · h2 `1.5rem`
+· body `1rem` · caption/mono-label `0.75rem` uppercase, letter-spacing `0.12em`.
+
+Michroma is used with restraint: if text is not an element symbol, a numeral,
+or a title being treated as a specimen label, it is not Michroma.
+
+## Texture & depth rules
+
+1. Cards sit on `bench` with a 1px `hairline` border at 60% opacity and an
+   inner top-edge **emission strip** (see Signature).
+2. Corner ticks: measurement-mark details on primary cards (CSS pseudo-
+   elements), like a photographed specimen slide frame.
+3. Glow is earned: outer shadows are tinted by the card's accent at ≤25%
+   alpha, and appear on interaction or achievement — never as ambient decor.
+4. Rounded geometry everywhere: radius tokens `sm 8px / md 14px / lg 22px /
+   pill 999px`.
+5. Backgrounds may carry a barely-visible grid of `hairline` verticals spaced
+   on the 8px rhythm, evoking a spectrum readout scale.
+
+## Signature: the emission-line motif
+
+Thin discrete light streaks with gaps — a real spectrum barcode. It appears
+as:
+
+- **Progress:** session progress renders as spectrum lines filling left to
+  right (not a plain bar).
+- **Card edge:** the 2px top strip of key cards, coloured by the element's
+  category accent.
+- **Dividers:** short line-triplets between content sections.
+- **Focus rings:** 2px argon-cyan offset ring drawn as paired lines.
+
+This motif is the memorable element of the identity; when in doubt about a
+decorative decision, reach for it instead of inventing new ornament.
+
+## Motion personality
+
+- **Staggered line-draw reveals** — spectral strips animate in sequence on
+  page load (80ms stagger).
+- **Spring squish** — buttons/cards compress ~3% with a spring on press
+  (framer-motion springs, stiffness ~400 / damping ~17).
+- **Photon burst** — celebrations emit particles in the element's accent hue;
+  replaces generic confetti during the application pass.
+- Score/count numerals tick up with a mono-font roll.
+- **All motion collapses under `prefers-reduced-motion: reduce`** to instant
+  states; celebration becomes a static glow.
+
+## Counterfactual check (skill requirement)
+
+Tested against the three AI-default looks: not warm-cream+serif+terracotta
+(dark, cool, multi-hue); not single-acid-accent-on-black (multi-hue semantic
+palette justified by emission physics); not broadsheet (rounded, glowing,
+textured). The category→colour mapping and emission-line motif would not be
+produced for a brief about anything other than chemistry.
+
+## Application notes
+
+- Tokens land inertly in this ticket (`tailwind.config` extensions + CSS
+  variables); screens keep current styling until #47 applies them.
+- Fonts (Michroma, Atkinson Hyperlegible, IBM Plex Mono) are loaded during
+  #47, not before, so no bytes are spent on unused assets here.
