@@ -72,7 +72,7 @@ try {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "Atomology",
-    url: "/",
+    url: "https://atomology.vercel.app/",
   };
 
   const s = document.createElement("script");
