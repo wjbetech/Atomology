@@ -11,9 +11,9 @@ import HangmanWinScreen from "./HangmanWinScreen.tsx";
 import canonicalElements from "../../data/elements";
 import {
   getElementsByDifficulty,
-  shuffle,
   asDifficultyLevel,
 } from "../../utils/hangmanDifficulty";
+import { shuffle } from "../../utils/shuffle";
 import { playCelebration } from "../../utils/audio";
 
 export default function HangmanGame() {

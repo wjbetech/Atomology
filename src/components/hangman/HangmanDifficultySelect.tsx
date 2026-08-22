@@ -3,9 +3,9 @@ import { useGameStore, useUIStore } from "../../store/atomologyStore";
 import ReturnToMainButton from "../sub-components/ReturnToMainButton";
 import {
   getElementsByDifficulty,
-  shuffle,
   DifficultyLevel,
 } from "../../utils/hangmanDifficulty";
+import { shuffle } from "../../utils/shuffle";
 import { DIFFICULTY_LABELS } from "./difficultyLabels";
 
 export default function HangmanDifficultySelect() {

@@ -1,4 +1,6 @@
 import { create } from "zustand";
+import { gameElements, getElementByName } from "../data/elements";
+import { shuffle } from "../utils/shuffle";
 
 // define the shape of items inside ElementType array & for answer
 export interface ElementType {
@@ -25,6 +27,8 @@ export interface GameState {
   answerElementName: ElementType["name"] | null;
   playerAnswer: string | null;
   guessedElements: string[];
+  // Names still to be shown as the correct answer this cycle (multi/open)
+  answerQueue: string[];
   // Hangman mode state
   hangmanWord: string | null;
   hangmanGuessedLetters: string[];
@@ -57,6 +61,10 @@ export interface GameState {
   addGuessedElement: (symbol: string) => void;
   resetGuessedElements: () => void;
   returnToMain: () => void;
+  /** Builds the next round from the no-repeat queue and sets elements/answer. */
+  generateNextRound: () => void;
+  /** Empties the queue so the next round starts a fresh shuffled cycle. */
+  resetAnswerQueue: () => void;
 }
 
 export interface uiSlice {
@@ -93,6 +101,7 @@ export const useGameStore = create<GameState>((set, get) => {
         gameMode: s.gameMode,
         gameStarted: s.gameStarted,
         guessedElements: s.guessedElements,
+        answerQueue: s.answerQueue,
       };
       localStorage.setItem("atomology.session", JSON.stringify(toSave));
     } catch (err) {
@@ -113,6 +122,7 @@ export const useGameStore = create<GameState>((set, get) => {
     playerAnswer: persisted?.playerAnswer ?? null,
     answerElementName: persisted?.answerElementName ?? "",
     guessedElements: persisted?.guessedElements ?? [],
+    answerQueue: persisted?.answerQueue ?? [],
     // Hangman state
     hangmanWord: null,
     hangmanGuessedLetters: [],
@@ -222,6 +232,7 @@ export const useGameStore = create<GameState>((set, get) => {
         guessedElements: [],
         elements: [],
         answer: null,
+        answerQueue: [],
         hangmanWord: null,
         hangmanGuessedLetters: [],
         hangmanIncorrectGuesses: 0,
@@ -229,6 +240,40 @@ export const useGameStore = create<GameState>((set, get) => {
         hangmanDifficulty: null,
         hangmanPool: [],
       });
+    },
+    resetAnswerQueue: () => {
+      set({ answerQueue: [] });
+      persist();
+    },
+    generateNextRound: () => {
+      const state = get();
+      // Drop any persisted names that no longer resolve (stale sessions),
+      // then refill with a full shuffled cycle when exhausted.
+      let queue = state.answerQueue.filter((n) => !!getElementByName(n));
+      if (queue.length === 0) {
+        queue = shuffle(gameElements.map((e) => e.name));
+      }
+
+      const [correctName, ...rest] = queue;
+      const correct = getElementByName(correctName);
+      if (!correct) return;
+
+      const options: ElementType[] = [correct];
+      while (options.length < 4) {
+        const candidate =
+          gameElements[Math.floor(Math.random() * gameElements.length)];
+        if (!options.some((o) => o.name === candidate.name)) {
+          options.push(candidate);
+        }
+      }
+
+      set({
+        answerQueue: rest,
+        elements: shuffle(options),
+        answer: correct,
+        answerElementName: correct.name,
+      });
+      persist();
     },
   } as GameState;
 });
