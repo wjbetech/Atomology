@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useGameStore, useUIStore } from "../../store/atomologyStore";
 import { motion, AnimatePresence } from "framer-motion";
-import ConfettiSparks from "../sub-components/ConfettiSparks.tsx";
 import ReturnToMainButton from "../sub-components/ReturnToMainButton.tsx";
 import HangmanLetters from "./HangmanLetters.tsx";
 import HangmanGuessInput from "./HangmanGuessInput.tsx";
@@ -26,9 +25,6 @@ export default function HangmanGame() {
   const incorrect = useGameStore((s) => s.hangmanIncorrectGuesses);
   const maxAttempts = useGameStore((s) => s.hangmanMaxAttempts);
   const guessLetter = useGameStore((s) => s.guessHangmanLetter);
-  const setGameMode = useGameStore((s) => s.setGameMode);
-  const setGameStarted = useGameStore((s) => s.setGameStarted);
-  const [input, setInput] = useState("");
   const [wordGuess, setWordGuess] = useState("");
   const [wordGuessResult, setWordGuessResult] = useState<string | null>(null);
   const [showGameOver, setShowGameOver] = useState(false);
@@ -61,7 +57,6 @@ export default function HangmanGame() {
   // the word order and the total
   const pool = hangmanPool;
   const total = pool.length;
-  const current = total > 0 ? hangmanIndex + 1 : 0;
 
   // keyboard support: press A-Z to guess letters
   useEffect(() => {
@@ -146,7 +141,6 @@ export default function HangmanGame() {
     state.resetHangman();
     state.setHangmanWord(freshPool[0]);
     setWordGuess("");
-    setInput("");
     setWordGuessResult(null);
     setShowWin(false);
     setDisabled(false);
@@ -212,7 +206,6 @@ export default function HangmanGame() {
       setWordGuessResult("incorrect");
     }
     // keep the guess visible for the result display
-    setInput("");
   };
 
   // helper to advance to next element or finish the session
@@ -225,7 +218,7 @@ export default function HangmanGame() {
       );
       if (currentEl?.symbol)
         useGameStore.getState().addGuessedElement(currentEl.symbol);
-    } catch (err) {}
+    } catch {}
 
     const nextIndex = (hangmanIndex ?? 0) + 1;
     if (nextIndex < total) {
@@ -234,7 +227,6 @@ export default function HangmanGame() {
       if (nextName) useGameStore.getState().setHangmanWord(nextName);
       // clear local UI
       setWordGuess("");
-      setInput("");
       setWordGuessResult(null);
     } else {
       // finished all words -> celebrate with the win screen
@@ -302,7 +294,6 @@ export default function HangmanGame() {
               }
               // clear local UI inputs
               setWordGuess("");
-              setInput("");
               setWordGuessResult(null);
               setShowGameOver(false);
               setDisabled(false);

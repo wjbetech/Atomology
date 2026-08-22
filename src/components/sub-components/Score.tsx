@@ -1,15 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useGameStore } from "../../store/atomologyStore";
-
-// routing back to main page to reset/exit game
-import { Link } from "react-router-dom";
-
-// import zustand store
-// ...existing code...
 import ConfirmModal from "../ConfirmModal";
 import { useNavigate } from "react-router-dom";
-import ReturnToMainButton from "./ReturnToMainButton";
 
 export default function Score() {
   const {
@@ -32,18 +25,8 @@ export default function Score() {
     navigate("/");
   };
 
-  // Arrow celebration state
-  const { answer, playerAnswer } = useGameStore();
-  const [showArrow, setShowArrow] = useState(false);
-  useEffect(() => {
-    if (playerAnswer && answer && playerAnswer === answer.name) {
-      setShowArrow(true);
-      const t = setTimeout(() => setShowArrow(false), 1200);
-      return () => clearTimeout(t);
-    }
-  }, [playerAnswer, answer]);
-
   // Score scaling animation state
+  const { answer, playerAnswer } = useGameStore();
   const [scoreBump, setScoreBump] = useState(false);
   const prevScore = useRef(score);
   useEffect(() => {

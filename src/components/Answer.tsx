@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import AnswerButton from "./AnswerButton";
 import { motion, AnimatePresence } from "framer-motion";
 import { useGameStore, useUIStore } from "../store/atomologyStore";
-import ConfettiSparks from "./sub-components/ConfettiSparks";
 
 // sanitiser hook
 import { sanitiseAnswer } from "../utils/answerSanitiser";
@@ -40,7 +39,6 @@ export default function Answer() {
   // used to disable all buttons and show the deep-green celebration style.
   const [answeredCorrect, setAnsweredCorrect] = useState(false);
   // brief celebration trigger for confetti
-  const [celebrate, setCelebrate] = useState(false);
 
   useEffect(() => {
     if (!gameStarted) {
@@ -92,8 +90,6 @@ export default function Answer() {
       setAnsweredCorrect(true);
       // show correct message (this cancels any 'incorrect' message instantly)
       showMessage("correct", 2000);
-      // celebration visual + tone
-      setCelebrate(true);
       if (soundEnabled) playCelebration();
       // clear disabled answers and unlock after celebration (2s)
       setTimeout(() => {
@@ -101,8 +97,6 @@ export default function Answer() {
         setAnsweredCorrect(false);
         // clear player answer in store so next round's UI doesn't mark it incorrect
         setPlayerAnswer("");
-        // stop celebration after the round advances
-        setCelebrate(false);
       }, 2000);
     } else {
       // add this wrong answer to the disabled set for the round
@@ -129,14 +123,12 @@ export default function Answer() {
       // lock round and show deep-green celebration; clear disabled after celebration
       setAnsweredCorrect(true);
       showMessage("correct", 2000);
-      setCelebrate(true);
       if (soundEnabled) playCelebration();
       setTimeout(() => {
         setDisabledAnswers(new Set());
         setAnsweredCorrect(false);
         // clear player answer in store so next round's UI doesn't mark it incorrect
         setPlayerAnswer("");
-        setCelebrate(false);
       }, 2000);
     } else {
       showMessage("incorrect", 4000);
@@ -223,7 +215,7 @@ export default function Answer() {
               ) : null}
             </AnimatePresence>
           </div>
-          {/* Confetti is now anchored and rendered by <Element />; keep celebrate state here for audio/timing only */}
+          {/* Confetti is anchored and rendered by <Element /> */}
         </>
       );
     }
@@ -274,7 +266,7 @@ export default function Answer() {
               ) : null}
             </AnimatePresence>
           </div>
-          {/* Confetti is now anchored and rendered by <Element />; keep celebrate state here for audio/timing only */}
+          {/* Confetti is anchored and rendered by <Element /> */}
         </form>
       );
     }

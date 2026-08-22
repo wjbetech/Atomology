@@ -1,6 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import BackButton from "./BackButton";
 
 export default function ContactForm() {
   return (

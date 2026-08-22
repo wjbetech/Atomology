@@ -5,14 +5,6 @@ describe("useGameStore guessedElements", () => {
   beforeEach(() => {
     // clear localStorage and reset store
     localStorage.clear();
-    const {
-      setElements,
-      setAnswer,
-      setAnswerElementName,
-      setPlayerAnswer,
-      setGameMode,
-      setGameStarted,
-    } = useGameStore.getState();
     // reset core fields
     useGameStore.setState({
       guessedElements: [],

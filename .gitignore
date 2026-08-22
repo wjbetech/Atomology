@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# local pnpm artifacts (repo uses npm)
+pnpm-lock.yaml
+pnpm-workspace.yaml

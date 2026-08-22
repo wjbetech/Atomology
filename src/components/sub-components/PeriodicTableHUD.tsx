@@ -3,7 +3,6 @@ import canonicalElements from "../../data/elements";
 
 interface PeriodicTableHUDProps {
   guessed: Set<string>;
-  current: string;
   /** When true, render without absolute offsets so HUD fits in a modal */
   inModal?: boolean;
 }
@@ -24,7 +23,6 @@ const maxY = Math.max(
 
 export const PeriodicTableHUD: React.FC<PeriodicTableHUDProps> = ({
   guessed,
-  current,
   inModal = false,
 }) => {
   // Build a 2D array for the table
