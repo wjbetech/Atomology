@@ -1,20 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ConfettiSparks from "./ConfettiSparks";
-import { messages } from "../../utils/loadingMessages";
 
 // zustand store
 import { useGameStore } from "../../store/atomologyStore";
 
 export default function Element() {
-  // get random loading message
-  const randomLoadingMessage = () => {
-    const randomIndex = Math.floor(Math.random() * messages.length);
-    return messages[randomIndex];
-  };
-
-  const { loading, error, gameStarted, answer, playerAnswer } =
-    useGameStore();
+  const { gameStarted, answer, playerAnswer } = useGameStore();
 
   const [celebrate, setCelebrate] = useState(false);
   // anchor in viewport coords for ConfettiSparks
@@ -73,10 +65,6 @@ export default function Element() {
   }, [playerAnswer, answer]);
 
   if (gameStarted) {
-    // conditional rendering for loading and errors
-    if (loading) return <p className="mt-24">{randomLoadingMessage()}</p>;
-    if (error) return <p className="mt-24">Error: {error}</p>;
-
     return (
       <div className="place-self-center py-8">
         {/* Confetti/sparks celebration effect overlays the entire element box */}

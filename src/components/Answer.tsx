@@ -9,7 +9,6 @@ import { playCelebration, playTone } from "../utils/audio";
 
 export default function Answer() {
   const {
-    loading,
     answer,
     setScore,
     gameMode,
@@ -151,7 +150,7 @@ export default function Answer() {
     const isIncorrect =
       playerAnswer !== answerElementName && playerAnswer !== "";
 
-    if (gameStarted && gameMode === "multi" && !loading) {
+    if (gameStarted && gameMode === "multi") {
       return (
         <>
           <div className="w-full lg:mb-10 px-4 lg:px-20 lg:max-w-none mx-auto grid grid-cols-2 justify-center gap-3">
@@ -186,7 +185,7 @@ export default function Answer() {
                 : ""}
             </span>
             <AnimatePresence>
-              {message === "incorrect" && !loading ? (
+              {message === "incorrect" ? (
                 <motion.span
                   key={`incorrect-${messageNonce}`}
                   initial={{ opacity: 0, y: -6 }}
@@ -200,7 +199,7 @@ export default function Answer() {
                 </motion.span>
               ) : null}
 
-              {!loading && message === "correct" ? (
+              {message === "correct" ? (
                 <motion.span
                   key={`correct-${messageNonce}`}
                   initial={{ opacity: 0, y: -6 }}
@@ -239,7 +238,7 @@ export default function Answer() {
             style={{ minHeight: "24px" }}
           >
             <AnimatePresence>
-              {!loading && message === "incorrect" ? (
+              {message === "incorrect" ? (
                 <motion.span
                   key={`open-incorrect-${messageNonce}`}
                   initial={{ opacity: 0, y: -6 }}
@@ -252,7 +251,7 @@ export default function Answer() {
                 </motion.span>
               ) : null}
 
-              {!loading && message === "correct" ? (
+              {message === "correct" ? (
                 <motion.span
                   key={`open-correct-${messageNonce}`}
                   initial={{ opacity: 0, y: -6 }}

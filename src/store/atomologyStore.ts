@@ -20,8 +20,6 @@ export interface GameState {
   gameMode: string;
   score: number;
   elements: ElementType[];
-  loading: boolean;
-  error: string | null;
   gameStarted: boolean;
   answer: ElementType | null;
   answerElementName: ElementType["name"] | null;
@@ -40,12 +38,7 @@ export interface GameState {
   // Actions
   setGameMode: (mode: string) => void;
   setScore: (update: number | ((prevScore: number) => number)) => void;
-  setElements: (elements: ElementType[]) => void;
-  setLoading: (loading: boolean) => void;
-  setError: (error: string | null) => void;
   setGameStarted: (gameStarted: boolean) => void;
-  setAnswer: (answer: ElementType | null) => void;
-  setAnswerElementName: (name: ElementType["name"] | null) => void;
   // Hangman actions
   setHangmanWord: (word: string) => void;
   guessHangmanLetter: (letter: string) => void;
@@ -115,8 +108,6 @@ export const useGameStore = create<GameState>((set, get) => {
     gameMode: persisted?.gameMode ?? "multi",
     score: persisted?.score ?? 0,
     elements: persisted?.elements ?? [],
-    loading: false,
-    error: null,
     gameStarted: persisted?.gameStarted ?? false,
     answer: persisted?.answer ?? null,
     playerAnswer: persisted?.playerAnswer ?? null,
@@ -185,8 +176,6 @@ export const useGameStore = create<GameState>((set, get) => {
       set({ playerAnswer: playerAnswer });
       persist();
     },
-    setLoading: (loading) => set({ loading }),
-    setError: (error) => set({ error }),
     setGameMode: (mode) => {
       set({ gameMode: mode });
       persist();
@@ -197,20 +186,8 @@ export const useGameStore = create<GameState>((set, get) => {
       }));
       persist();
     },
-    setElements: (elements) => {
-      set({ elements });
-      persist();
-    },
-    setAnswerElementName: (name) => {
-      set({ answerElementName: name });
-      persist();
-    },
     setGameStarted: (gameStarted) => {
       set({ gameStarted });
-      persist();
-    },
-    setAnswer: (answer) => {
-      set({ answer });
       persist();
     },
     resetAnswerInput: () =>
