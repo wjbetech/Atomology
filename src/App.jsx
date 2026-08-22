@@ -1,15 +1,18 @@
 // components
+import React, { Suspense } from "react";
 import Layout from "./components/layout/Layout";
 import Home from "./components/layout/Home";
 import Score from "./components/sub-components/Score";
 import HUDWrapper from "./components/sub-components/HUDWrapper";
 import MultipleChoice from "./components/pages/MultipleChoice";
 import OpenAnswer from "./components/pages/OpenAnswer";
-import About from "./components/pages/About";
-import Faq from "./components/pages/Faq";
-import Contact from "./components/pages/Contact";
 import HangmanDifficultySelect from "./components/hangman/HangmanDifficultySelect";
 import HangmanGame from "./components/hangman/HangmanGame";
+
+// Static content pages load on demand
+const About = React.lazy(() => import("./components/pages/About"));
+const Faq = React.lazy(() => import("./components/pages/Faq"));
+const Contact = React.lazy(() => import("./components/pages/Contact"));
 
 // react-router
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -69,12 +72,14 @@ function App() {
       <div className="min-h-screen min-w-screen bg-content text-base-content">
         <HUDWrapper />
         <Layout>
-          <Routes>
-            <Route path="/about" element={<About />} />
-            <Route path="/faq" element={<Faq />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/" element={<MainGameContent />} />
-          </Routes>
+          <Suspense fallback={null}>
+            <Routes>
+              <Route path="/about" element={<About />} />
+              <Route path="/faq" element={<Faq />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/" element={<MainGameContent />} />
+            </Routes>
+          </Suspense>
         </Layout>
       </div>
     </Router>
