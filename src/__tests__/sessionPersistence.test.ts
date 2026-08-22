@@ -34,6 +34,17 @@ describe("session persistence writes fresh state", () => {
     );
     expect(saved.guessedElements).toContain("H");
   });
+
+  it("generateNextRound persists the remaining queue", () => {
+    useGameStore.getState().generateNextRound();
+
+    const saved = JSON.parse(
+      localStorage.getItem("atomology.session") || "{}"
+    );
+    expect(Array.isArray(saved.answerQueue)).toBe(true);
+    expect(saved.answerQueue).toHaveLength(117);
+    expect(saved.answer).toBeTruthy();
+  });
 });
 
 describe("session restore on load", () => {

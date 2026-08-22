@@ -6,9 +6,6 @@ import { messages } from "../../utils/loadingMessages";
 // zustand store
 import { useGameStore } from "../../store/atomologyStore";
 
-// API hook
-import { fetchUniqueElements } from "../../hooks/uniqueElements";
-
 export default function Element() {
   // get random loading message
   const randomLoadingMessage = () => {
@@ -16,25 +13,13 @@ export default function Element() {
     return messages[randomIndex];
   };
 
-  const {
-    setElements,
-    loading,
-    setLoading,
-    error,
-    setError,
-    gameStarted,
-    answer,
-    setAnswer,
-    setAnswerElementName,
-    playerAnswer,
-    setPlayerAnswer,
-  } = useGameStore();
+  const { loading, error, gameStarted, answer, playerAnswer } =
+    useGameStore();
 
   const [celebrate, setCelebrate] = useState(false);
   // anchor in viewport coords for ConfettiSparks
   const [anchor, setAnchor] = useState<{ x: number; y: number } | null>(null);
   const boxRef = useRef<HTMLDivElement | null>(null);
-  const [prefetching, setPrefetching] = useState(false);
   const swapTimerRef = React.useRef<number | null>(null);
 
   // trigger celebration when player answers correctly
@@ -64,75 +49,24 @@ export default function Element() {
     }
   }, [playerAnswer, answer]);
 
-  // async GET api call
+  // Load the first round when a game starts.
   useEffect(() => {
     if (!gameStarted) return;
-
-    // get the data for one random Element
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-
-        // call fetchUniqueElements to get answers
-        const randomElements = await fetchUniqueElements(4);
-        // Pick the correct answer and set all state in one go
-        const randomCorrectIndex = Math.floor(
-          Math.random() * randomElements.length
-        );
-        const correctElement = randomElements[randomCorrectIndex];
-
-        // Set all state together to ensure sync
-        setElements(randomElements);
-        setAnswer(correctElement);
-        setAnswerElementName(correctElement.name);
-
-        setLoading(false);
-      } catch (error) {
-        setError(error instanceof Error ? error.message : String(error));
-        setLoading(false);
-      }
-    };
-    fetchData();
-    // Round advancement happens exclusively via the prefetch-and-swap path
-    // below; this effect only loads the first round when a game starts.
+    useGameStore.getState().generateNextRound();
   }, [gameStarted]);
 
-  // Prefetch next elements when the user answers correctly, then swap after 2s
+  // Advance to the next queued round after the celebration window
   useEffect(() => {
     if (!(playerAnswer && answer && playerAnswer === answer.name)) return;
-    if (prefetching) return;
 
-    let cancelled = false;
-    const doPrefetch = async () => {
-      try {
-        setPrefetching(true);
-        const randomElements = await fetchUniqueElements(4);
-        if (cancelled) return;
-        const randomCorrectIndex = Math.floor(
-          Math.random() * randomElements.length
-        );
-        const correctElement = randomElements[randomCorrectIndex];
+    swapTimerRef.current = window.setTimeout(() => {
+      useGameStore.getState().generateNextRound();
+      // clear playerAnswer so UI resets
+      useGameStore.getState().setPlayerAnswer("");
+    }, 2000);
 
-        // swap after 2s to allow celebration
-        swapTimerRef.current = window.setTimeout(() => {
-          // apply prepared next round
-          setElements(randomElements);
-          setAnswer(correctElement);
-          setAnswerElementName(correctElement.name);
-          // clear playerAnswer so UI resets
-          setPlayerAnswer("");
-          setPrefetching(false);
-        }, 2000) as unknown as number;
-      } catch (err) {
-        // ignore prefetch errors
-        setPrefetching(false);
-      }
-    };
-
-    doPrefetch();
     return () => {
-      cancelled = true;
-      if (swapTimerRef.current) {
+      if (swapTimerRef.current !== null) {
         window.clearTimeout(swapTimerRef.current);
       }
     };
