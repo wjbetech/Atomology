@@ -83,7 +83,7 @@ export const useGameStore = create<GameState>((set, get) => {
       const raw = localStorage.getItem("atomology.session");
       if (!raw) return null;
       return JSON.parse(raw) as Partial<GameState>;
-    } catch (err) {
+    } catch {
       return null;
     }
   };
@@ -104,7 +104,7 @@ export const useGameStore = create<GameState>((set, get) => {
         answerQueue: s.answerQueue,
       };
       localStorage.setItem("atomology.session", JSON.stringify(toSave));
-    } catch (err) {
+    } catch {
       // ignore persistence errors
     }
   };
@@ -300,9 +300,9 @@ export const useUIStore = create<uiSlice>((set) => ({
       try {
         if (typeof document !== "undefined")
           document.documentElement.setAttribute("data-theme", initial);
-      } catch (err) {}
+      } catch {}
       return initial;
-    } catch (err) {
+    } catch {
       return "cupcake";
     }
   })(),
@@ -319,10 +319,10 @@ export const useUIStore = create<uiSlice>((set) => ({
       } else {
         document.documentElement.classList.remove("dark");
       }
-    } catch (err) {}
+    } catch {}
     try {
       localStorage.setItem("atomology.theme", t);
-    } catch (err) {}
+    } catch {}
   },
   // HUD visibility persisted in localStorage
   showHUD: (() => {
@@ -333,7 +333,7 @@ export const useUIStore = create<uiSlice>((set) => ({
           ? localStorage.getItem("atomology.showHUD")
           : null;
       return stored ? stored === "1" : true;
-    } catch (err) {
+    } catch {
       return true;
     }
   })(),
@@ -341,7 +341,7 @@ export const useUIStore = create<uiSlice>((set) => ({
     set({ showHUD: show });
     try {
       localStorage.setItem("atomology.showHUD", show ? "1" : "0");
-    } catch (err) {}
+    } catch {}
   },
   // sound enabled toggle persisted in localStorage
   soundEnabled: (() => {
@@ -352,7 +352,7 @@ export const useUIStore = create<uiSlice>((set) => ({
           ? localStorage.getItem("atomology.soundEnabled")
           : null;
       return stored ? stored === "1" : true;
-    } catch (err) {
+    } catch {
       return true;
     }
   })(),
@@ -360,6 +360,6 @@ export const useUIStore = create<uiSlice>((set) => ({
     set({ soundEnabled: enabled });
     try {
       localStorage.setItem("atomology.soundEnabled", enabled ? "1" : "0");
-    } catch (err) {}
+    } catch {}
   },
 }));

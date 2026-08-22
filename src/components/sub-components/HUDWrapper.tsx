@@ -43,7 +43,7 @@ const HUDWrapper = () => {
         transformOrigin: "top left",
       }}
     >
-      <PeriodicTableHUD guessed={new Set(guessedElements)} current={""} />
+      <PeriodicTableHUD guessed={new Set(guessedElements)} />
     </div>
   );
 };

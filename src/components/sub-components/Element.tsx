@@ -36,7 +36,7 @@ export default function Element() {
             y: rect.top + rect.height / 2,
           });
         }
-      } catch (e) {
+      } catch {
         setAnchor(null);
       }
 

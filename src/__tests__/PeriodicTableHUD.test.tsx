@@ -26,7 +26,7 @@ function mockMatchMedia(matches: boolean) {
 describe("PeriodicTableHUD", () => {
   it("fills the element box when symbol is in guessed set", () => {
     const guessed = new Set<string>(["H"]);
-    render(<PeriodicTableHUD guessed={guessed} current={""} />);
+    render(<PeriodicTableHUD guessed={guessed} />);
 
     // Hydrogen element in data has name 'Hydrogen' and symbol 'H'
     const hydrogen = screen.getByTitle("Hydrogen");
@@ -35,7 +35,7 @@ describe("PeriodicTableHUD", () => {
 
   it("renders empty boxes for non-guessed elements", () => {
     const guessed = new Set<string>();
-    render(<PeriodicTableHUD guessed={guessed} current={""} />);
+    render(<PeriodicTableHUD guessed={guessed} />);
 
     const hydrogen = screen.getByTitle("Hydrogen");
     expect(hydrogen).not.toHaveClass("bg-green-400");
@@ -45,7 +45,7 @@ describe("PeriodicTableHUD", () => {
     // not guessed
     const guessedEmpty = new Set<string>();
     const { rerender } = render(
-      <PeriodicTableHUD guessed={guessedEmpty} current={""} />
+      <PeriodicTableHUD guessed={guessedEmpty} />
     );
 
     const erb = screen.getByTitle("Erbium");
@@ -54,7 +54,7 @@ describe("PeriodicTableHUD", () => {
 
     // guessed
     const guessedEr = new Set<string>(["Er"]);
-    rerender(<PeriodicTableHUD guessed={guessedEr} current={""} />);
+    rerender(<PeriodicTableHUD guessed={guessedEr} />);
     const erbAfter = screen.getByTitle("Erbium");
     expect(erbAfter).toHaveClass("bg-green-400");
   });
