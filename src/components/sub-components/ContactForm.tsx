@@ -40,11 +40,11 @@ export default function ContactForm() {
               </a>
 
               <a
-                href="https://twitter.com/"
+                href="https://x.com/wjbetech"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn btn-ghost btn-sm btn-circle"
-                aria-label="Twitter"
+                aria-label="X (Twitter)"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -58,7 +58,7 @@ export default function ContactForm() {
               </a>
 
               <a
-                href="https://www.linkedin.com/"
+                href="https://www.linkedin.com/in/wjbetech/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn btn-ghost btn-sm btn-circle"
