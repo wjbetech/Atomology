@@ -2,6 +2,7 @@
   "name": "atomology",
   "private": true,
   "version": "0.0.0",
+  "packageManager": "pnpm@11.21.0",
   "type": "module",
   "scripts": {
     "generate-favicons": "node ./scripts/generateFavicons.mjs",
