@@ -8,6 +8,7 @@ import MultipleChoice from "./components/pages/MultipleChoice";
 import OpenAnswer from "./components/pages/OpenAnswer";
 import HangmanDifficultySelect from "./components/hangman/HangmanDifficultySelect";
 import HangmanGame from "./components/hangman/HangmanGame";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 // Static content pages load on demand
 const About = React.lazy(() => import("./components/pages/About"));
@@ -68,20 +69,23 @@ function MainGameContent() {
 function App() {
   return (
     <Router>
-      {/* Single source of truth for app background and base text color */}
-      <div className="min-h-screen min-w-screen bg-content text-base-content">
-        <HUDWrapper />
-        <Layout>
-          <Suspense fallback={null}>
-            <Routes>
-              <Route path="/about" element={<About />} />
-              <Route path="/faq" element={<Faq />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/" element={<MainGameContent />} />
-            </Routes>
-          </Suspense>
-        </Layout>
-      </div>
+      {/* Crash guard: fallback uses navigation, so it must live inside Router */}
+      <ErrorBoundary>
+        {/* Single source of truth for app background and base text color */}
+        <div className="min-h-screen min-w-screen bg-content text-base-content">
+          <HUDWrapper />
+          <Layout>
+            <Suspense fallback={null}>
+              <Routes>
+                <Route path="/about" element={<About />} />
+                <Route path="/faq" element={<Faq />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/" element={<MainGameContent />} />
+              </Routes>
+            </Suspense>
+          </Layout>
+        </div>
+      </ErrorBoundary>
     </Router>
   );
 }
