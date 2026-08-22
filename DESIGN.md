@@ -139,7 +139,7 @@ produced for a brief about anything other than chemistry.
 
 ## Application notes
 
-- Tokens land inertly in this ticket (`tailwind.config` extensions + CSS
-  variables); screens keep current styling until #47 applies them.
-- Fonts (Michroma, Atkinson Hyperlegible, IBM Plex Mono) are loaded during
-  #47, not before, so no bytes are spent on unused assets here.
+- Tokens land inertly (#38); Michroma loads with the Home hero (#40) — the
+  display face is part of that page's identity. Atkinson Hyperlegible and
+  IBM Plex Mono load during the application pass (#47), so no bytes are
+  spent on unused assets before then.
