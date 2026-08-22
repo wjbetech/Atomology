@@ -1,14 +1,15 @@
 // components
 import React, { Suspense } from "react";
 import Layout from "./components/layout/Layout";
-import Home from "./components/layout/Home";
-import Score from "./components/sub-components/Score";
 import HUDWrapper from "./components/sub-components/HUDWrapper";
-import MultipleChoice from "./components/pages/MultipleChoice";
-import OpenAnswer from "./components/pages/OpenAnswer";
-import HangmanDifficultySelect from "./components/hangman/HangmanDifficultySelect";
-import HangmanGame from "./components/hangman/HangmanGame";
 import ErrorBoundary from "./components/ErrorBoundary";
+import ResumeToPlay from "./components/ResumeToPlay";
+import HomePage from "./components/pages/HomePage";
+import InstructionsPage from "./components/pages/InstructionsPage";
+import ConfigurePage from "./components/pages/ConfigurePage";
+import PlayPage from "./components/pages/PlayPage";
+import ResultsPage from "./components/pages/ResultsPage";
+import NotFoundPage from "./components/pages/NotFoundPage";
 
 // Static content pages load on demand
 const About = React.lazy(() => import("./components/pages/About"));
@@ -17,54 +18,6 @@ const Contact = React.lazy(() => import("./components/pages/Contact"));
 
 // react-router
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { useGameStore } from "./store/atomologyStore";
-
-function MainGameContent() {
-  const gameMode = useGameStore((s) => s.gameMode);
-  const hangmanDifficulty = useGameStore((s) => s.hangmanDifficulty);
-  const hangmanWord = useGameStore((s) => s.hangmanWord);
-  const gameStarted = useGameStore((s) => s.gameStarted);
-
-  // Show difficulty select if Hangman mode and no difficulty
-  if (gameMode === "hangman" && !hangmanDifficulty && gameStarted) {
-    return <HangmanDifficultySelect />;
-  }
-
-  // Show Hangman game if Hangman mode, difficulty, and word are set
-  if (
-    gameMode === "hangman" &&
-    hangmanDifficulty &&
-    hangmanWord &&
-    gameStarted
-  ) {
-    return <HangmanGame />;
-  }
-
-  // Show Multiple Choice mode
-  if (gameMode === "multi" && gameStarted) {
-    return <MultipleChoice />;
-  }
-
-  // Show Open Answer mode
-  if (gameMode === "open" && gameStarted) {
-    return <OpenAnswer />;
-  }
-
-  // Default: show game mode selection and HUD
-  return (
-    <>
-      {/* HUDWrapper is now rendered at the top level, so remove this duplicate */}
-      <div className="atomology-scale-wrap flex-1 h-full flex place-content-center items-center">
-        <div className="flex-1 h-full w-full flex flex-col  justify-center items-center place-content-center place-items-center min-h-[calc(var(--vh,1vh)*100-var(--site-navbar-height)-var(--site-footer-height))]">
-          <Home />
-          <div className="static lg:absolute lg:bottom-20">
-            <Score />
-          </div>
-        </div>
-      </div>
-    </>
-  );
-}
 
 function App() {
   return (
@@ -75,12 +28,18 @@ function App() {
         <div className="min-h-screen min-w-screen bg-content text-base-content">
           <HUDWrapper />
           <Layout>
+            <ResumeToPlay />
             <Suspense fallback={null}>
               <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/instructions" element={<InstructionsPage />} />
+                <Route path="/configure" element={<ConfigurePage />} />
+                <Route path="/play" element={<PlayPage />} />
+                <Route path="/results" element={<ResultsPage />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/faq" element={<Faq />} />
                 <Route path="/contact" element={<Contact />} />
-                <Route path="/" element={<MainGameContent />} />
+                <Route path="*" element={<NotFoundPage />} />
               </Routes>
             </Suspense>
           </Layout>
