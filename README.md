@@ -20,22 +20,24 @@ where you left off after a refresh.
 
 ## Getting started
 
+This repo uses **pnpm** as its package manager.
+
 ```bash
-npm install
-npm run dev       # start the dev server
+pnpm install
+pnpm run dev      # start the dev server
 ```
 
 ## Scripts
 
-| Script                   | What it does                                  |
-| ------------------------ | --------------------------------------------- |
-| `npm run dev`            | Vite dev server                               |
-| `npm run build`          | Production build (content-hashed assets)      |
-| `npm run preview`        | Preview the production build locally          |
-| `npm run lint`           | ESLint across JS/JSX/TS/TSX                   |
-| `npm run typecheck`      | `tsc --noEmit` strict type check              |
-| `npm test`               | Jest test suite                               |
-| `npm run generate-favicons` | Regenerate PNG favicons from the SVGs in `public/` |
+| Script                    | What it does                                  |
+| ------------------------- | --------------------------------------------- |
+| `pnpm run dev`            | Vite dev server                               |
+| `pnpm run build`          | Production build (content-hashed assets)      |
+| `pnpm run preview`        | Preview the production build locally          |
+| `pnpm run lint`           | ESLint across JS/JSX/TS/TSX                   |
+| `pnpm run typecheck`      | `tsc --noEmit` strict type check              |
+| `pnpm test`               | Jest test suite                               |
+| `pnpm run generate-favicons` | Regenerate PNG favicons from the SVGs in `public/` |
 
 ## Testing
 
