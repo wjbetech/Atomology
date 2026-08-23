@@ -197,6 +197,10 @@ export default function ResultsPage() {
           <span className="text-sodium font-bold">
             Flawless — every single answer correct!
           </span>
+        ) : lastRun.endedBy === "lives" ? (
+          <span className="text-strontium font-bold">
+            Out of lives — the lab got you at {lastRun.correct} elements.
+          </span>
         ) : lastRun.endedBy === "finished" ? (
           <span className="text-annotation">Session ended on your call. Solid work.</span>
         ) : (

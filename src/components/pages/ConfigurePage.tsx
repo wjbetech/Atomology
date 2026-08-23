@@ -65,6 +65,8 @@ export default function ConfigurePage() {
   const setEducationalMode = useUIStore((s) => s.setEducationalMode);
   const showHUD = useUIStore((s) => s.showHUD);
   const setShowHUD = useUIStore((s) => s.setShowHUD);
+  const livesMode = useGameStore((s) => s.livesMode);
+  const setLivesMode = useGameStore((s) => s.setLivesMode);
 
   // Preselect a persisted mode if there is one; otherwise nothing is chosen.
   const [selected, setSelected] = useState<ModeId | null>(
@@ -218,6 +220,21 @@ export default function ConfigurePage() {
             checked={educationalMode}
             onChange={(e) => setEducationalMode(e.target.checked)}
             aria-label="Educational mode"
+          />
+        </div>
+        <div className="flex items-center justify-between p-4">
+          <div>
+            <span className="text-specimen text-sm">Arcade lives</span>
+            <p className="text-xs text-annotation mt-0.5">
+              Quiz modes: three wrong answers end the run
+            </p>
+          </div>
+          <input
+            type="checkbox"
+            className="toggle toggle-sm"
+            checked={livesMode}
+            onChange={(e) => setLivesMode(e.target.checked)}
+            aria-label="Arcade lives"
           />
         </div>
       </div>

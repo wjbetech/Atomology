@@ -29,6 +29,8 @@ export interface GameState {
   answerQueue: string[];
   /** Run length chosen on Configure; consumed by the win-states ticket. */
   sessionLength: "q10" | "q25" | "cycle" | "endless";
+  /** Arcade lives (opt-in): three wrong answers end the quiz run. */
+  livesMode: boolean;
   // Current-run progress (quiz modes)
   questionsAnswered: number;
   correctCount: number;
@@ -42,7 +44,7 @@ export interface GameState {
     answered: number;
     correct: number;
     bestStreak: number;
-    endedBy: "completed" | "finished";
+    endedBy: "completed" | "finished" | "lives";
   } | null;
   // Hangman mode state
   hangmanWord: string | null;
@@ -57,10 +59,11 @@ export interface GameState {
   setScore: (update: number | ((prevScore: number) => number)) => void;
   setGameStarted: (gameStarted: boolean) => void;
   setSessionLength: (length: "q10" | "q25" | "cycle" | "endless") => void;
+  setLivesMode: (enabled: boolean) => void;
   /** Records one quiz attempt and updates streak/progress. */
   recordAnswer: (wasCorrect: boolean) => void;
   /** Ends the current run: builds lastRun and stops the session. */
-  finishRun: (endedBy?: "completed" | "finished") => void;
+  finishRun: (endedBy?: "completed" | "finished" | "lives") => void;
   resetRunProgress: () => void;
   // Hangman actions
   setHangmanWord: (word: string) => void;
@@ -129,6 +132,7 @@ export const useGameStore = create<GameState>((set, get) => {
         guessedElements: s.guessedElements,
         answerQueue: s.answerQueue,
         sessionLength: s.sessionLength,
+        livesMode: s.livesMode,
         lastRun: s.lastRun,
       };
       localStorage.setItem("atomology.session", JSON.stringify(toSave));
@@ -150,6 +154,7 @@ export const useGameStore = create<GameState>((set, get) => {
     guessedElements: persisted?.guessedElements ?? [],
     answerQueue: persisted?.answerQueue ?? [],
     sessionLength: persisted?.sessionLength ?? "q25",
+    livesMode: persisted?.livesMode ?? false,
     questionsAnswered: 0,
     correctCount: 0,
     currentStreak: 0,
@@ -205,6 +210,10 @@ export const useGameStore = create<GameState>((set, get) => {
       set({ sessionLength: length });
       persist();
     },
+    setLivesMode: (enabled) => {
+      set({ livesMode: enabled });
+      persist();
+    },
     recordAnswer: (wasCorrect) => {
       set((state) => ({
         questionsAnswered: state.questionsAnswered + 1,
@@ -215,8 +224,17 @@ export const useGameStore = create<GameState>((set, get) => {
           wasCorrect ? state.currentStreak + 1 : 0
         ),
       }));
-      // Finite sessions end the moment their limit is reached.
+      // Arcade lives: three wrong answers end the run immediately.
       const s = get();
+      if (
+        s.livesMode &&
+        !wasCorrect &&
+        s.questionsAnswered - s.correctCount >= 3
+      ) {
+        get().finishRun("lives");
+        return;
+      }
+      // Finite sessions end the moment their limit is reached.
       const limits = { q10: 10, q25: 25, cycle: 118 } as const;
       if (
         s.sessionLength !== "endless" &&

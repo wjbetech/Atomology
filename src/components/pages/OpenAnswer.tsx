@@ -10,6 +10,10 @@ export default function OpenAnswer() {
   const setGameStarted = useGameStore((s) => s.setGameStarted);
   const isEndless = useGameStore((s) => s.sessionLength === "endless");
   const finishRun = useGameStore((s) => s.finishRun);
+  const livesMode = useGameStore((s) => s.livesMode);
+  const questionsAnswered = useGameStore((s) => s.questionsAnswered);
+  const correctCount = useGameStore((s) => s.correctCount);
+  const livesLeft = Math.max(0, 3 - (questionsAnswered - correctCount));
   React.useEffect(() => {
     if (!gameStarted) setGameStarted(true);
   }, [gameStarted, setGameStarted]);
@@ -27,6 +31,15 @@ export default function OpenAnswer() {
       {/* fixed bottom bar for controls on open answer screen */}
       <div className="flex justify-center">
         <div className="w-full max-w-xs mx-auto px-4 flex flex-col items-center gap-2">
+          {livesMode && (
+            <p
+              className="font-mono text-xs tracking-[0.3em] text-strontium"
+              aria-label={`${livesLeft} lives remaining`}
+            >
+              LIVES {"● ".repeat(livesLeft)}
+              {"○ ".repeat(3 - livesLeft)}
+            </p>
+          )}
           {isEndless && (
             <button
               type="button"
