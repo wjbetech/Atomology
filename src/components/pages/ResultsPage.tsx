@@ -2,6 +2,10 @@ import { useMemo } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useGameStore } from "../../store/atomologyStore";
+import {
+  saveRunIfBest,
+  type BestCategory,
+} from "../../utils/personalBests";
 
 /**
  * End-of-run celebration per DESIGN.md: spectral photon burst, run stats
@@ -68,13 +72,26 @@ function StatCard({
   label,
   value,
   accent,
+  isRecord = false,
 }: {
   label: string;
   value: string;
   accent?: string;
+  isRecord?: boolean;
 }) {
   return (
-    <div className="rounded-md border border-hairline bg-bench px-6 py-5 text-center min-w-[120px]">
+    <div
+      className={`relative rounded-md border px-6 py-5 text-center min-w-[120px] ${
+        isRecord
+          ? "border-sodium/70 bg-sodium/10"
+          : "border-hairline bg-bench"
+      }`}
+    >
+      {isRecord && (
+        <span className="absolute -top-2 left-1/2 -translate-x-1/2 font-mono text-[9px] uppercase tracking-[0.18em] bg-void border border-sodium/60 text-sodium rounded-pill px-2 py-0.5 whitespace-nowrap">
+          New best
+        </span>
+      )}
       <p
         className="font-display text-3xl md:text-4xl"
         style={{ color: accent ?? "#E9F1FA" }}
@@ -91,6 +108,21 @@ function StatCard({
 export default function ResultsPage() {
   const lastRun = useGameStore((s) => s.lastRun);
   const reduce = useReducedMotion();
+
+  // Record the run against local bests exactly once per mount.
+  const recorded = useMemo(() => {
+    if (!lastRun) return null;
+    return saveRunIfBest({
+      mode: lastRun.mode,
+      length: lastRun.length,
+      score: lastRun.score,
+      answered: lastRun.answered,
+      correct: lastRun.correct,
+      bestStreak: lastRun.bestStreak,
+    });
+  }, [lastRun]);
+
+  const newRecords = recorded?.newRecords ?? [];
 
   if (!lastRun) {
     // Direct visit without a finished run.
@@ -175,9 +207,24 @@ export default function ResultsPage() {
       </motion.p>
 
       <div className="flex flex-wrap justify-center gap-4 mb-12">
-        <StatCard label="Score" value={String(lastRun.score)} accent="#FFCB47" />
-        <StatCard label="Accuracy" value={`${accuracy}%`} accent="#35D99A" />
-        <StatCard label="Best streak" value={String(lastRun.bestStreak)} accent="#45C4FF" />
+        <StatCard
+          label="Score"
+          value={String(lastRun.score)}
+          accent="#FFCB47"
+          isRecord={newRecords.includes("bestScore" as BestCategory)}
+        />
+        <StatCard
+          label="Accuracy"
+          value={`${accuracy}%`}
+          accent="#35D99A"
+          isRecord={newRecords.includes("bestAccuracy" as BestCategory)}
+        />
+        <StatCard
+          label="Best streak"
+          value={String(lastRun.bestStreak)}
+          accent="#45C4FF"
+          isRecord={newRecords.includes("bestStreak" as BestCategory)}
+        />
       </div>
 
       <div className="flex flex-col sm:flex-row justify-center gap-4">
