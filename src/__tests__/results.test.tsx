@@ -70,6 +70,39 @@ describe("ResultsPage", () => {
     expect(screen.getByText("100%")).toBeTruthy();
   });
 
+  it("badges NEW BEST on beaten categories only", () => {
+    // establish prior bests: score 8, accuracy 80%, streak 5
+    useGameStore.setState({
+      lastRun: {
+        mode: "multi",
+        length: "q10",
+        score: 8,
+        answered: 10,
+        correct: 8,
+        bestStreak: 5,
+        endedBy: "completed",
+      },
+    });
+    const first = renderPage();
+    expect(screen.getAllByText("New best")).toHaveLength(3);
+    first.unmount();
+
+    // new run beats streak only
+    useGameStore.setState({
+      lastRun: {
+        mode: "multi",
+        length: "q10",
+        score: 6,
+        answered: 10,
+        correct: 6,
+        bestStreak: 9,
+        endedBy: "completed",
+      },
+    });
+    renderPage();
+    expect(screen.getAllByText("New best")).toHaveLength(1);
+  });
+
   it("offers Play again and Home exits", () => {
     useGameStore.setState({
       lastRun: {
