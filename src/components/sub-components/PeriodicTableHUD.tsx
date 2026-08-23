@@ -86,10 +86,10 @@ export const PeriodicTableHUD: React.FC<PeriodicTableHUDProps> = ({
                   // table packs tightly.
                   const cellSize = inModal ? 15 : undefined; // px for small boxes
                   const boxClass = inModal
-                    ? "rounded-sm border border-primary-content dark:border-primary block w-full h-full box-border"
-                    : "w-8 h-8 md:w-10 md:h-10 rounded-sm border border-primary-content dark:border-primary flex items-center justify-center";
+                    ? "rounded-sm border border-primary-content dark:border-hairline block w-full h-full box-border"
+                    : "w-8 h-8 md:w-10 md:h-10 rounded-sm border border-primary-content dark:border-hairline flex items-center justify-center";
                   const bgClass = guessed.has(el.symbol)
-                    ? "bg-green-400"
+                    ? "bg-copper"
                     : "bg-transparent";
                   return (
                     <td

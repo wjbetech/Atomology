@@ -25,7 +25,7 @@ function App() {
       {/* Crash guard: fallback uses navigation, so it must live inside Router */}
       <ErrorBoundary>
         {/* Single source of truth for app background and base text color */}
-        <div className="min-h-screen min-w-screen bg-content text-base-content">
+        <div className="min-h-screen min-w-screen bg-void text-specimen transition-colors">
           <HUDWrapper />
           <Layout>
             <ResumeToPlay />

@@ -16,7 +16,7 @@ export default function Footer() {
   // only the site-wide theme switch.
   return (
     <footer
-      className="fixed bottom-0 z-[3000] bg-base-100 w-full"
+      className="fixed bottom-0 z-[3000] bg-bench/90 backdrop-blur w-full border-t border-hairline"
       aria-label="site footer"
       style={{ height: "var(--site-footer-height)" }}
     >

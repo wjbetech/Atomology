@@ -6,26 +6,27 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
-      // Spectral Dark design language (DESIGN.md).
-      // Inert until consumed by the application pass (#47): no component
-      // references these tokens yet, so screens render exactly as before.
+      // Spectral Dark design language (DESIGN.md). Values resolve through
+      // CSS variables (index.css) so token classes theme automatically:
+      // dark lab by default, Daylight Lab under [data-theme="cupcake"].
       colors: {
-        void: "#060A12",
-        bench: "#0D1522",
-        slide: "#131E30",
-        hairline: "#1F2C42",
-        specimen: "#E9F1FA",
-        annotation: "#8FA3BC",
-        sodium: "#FFCB47",
-        copper: "#35D99A",
-        strontium: "#FF5470",
-        argon: "#45C4FF",
-        calcium: "#FF8A5C",
+        void: "var(--at-void)",
+        bench: "var(--at-bench)",
+        slide: "var(--at-slide)",
+        hairline: "var(--at-hairline)",
+        specimen: "var(--at-specimen)",
+        annotation: "var(--at-annotation)",
+        sodium: "var(--at-sodium)",
+        copper: "var(--at-copper)",
+        strontium: "var(--at-strontium)",
+        argon: "var(--at-argon)",
+        calcium: "var(--at-calcium)",
       },
       fontFamily: {
         display: ['"Michroma"', "sans-serif"],
         body: ['"Atkinson Hyperlegible"', "sans-serif"],
         data: ['"IBM Plex Mono"', "monospace"],
+        mono: ['"IBM Plex Mono"', "ui-monospace", "monospace"],
       },
       borderRadius: {
         sm: "8px",

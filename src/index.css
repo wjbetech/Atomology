@@ -2,8 +2,41 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Spectral Dark design tokens (DESIGN.md).
+   Dark lab is the flagship; [data-theme="cupcake"] carries the
+   Daylight Lab counterpart so every token class auto-themes. */
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --at-void: #060a12;
+  --at-bench: #0d1522;
+  --at-slide: #131e30;
+  --at-hairline: #1f2c42;
+  --at-specimen: #e9f1fa;
+  --at-annotation: #8fa3bc;
+  --at-sodium: #ffcb47;
+  --at-copper: #35d99a;
+  --at-strontium: #ff5470;
+  --at-argon: #45c4ff;
+  --at-calcium: #ff8a5c;
+}
+
+[data-theme="cupcake"] {
+  --at-void: #f4f7fb;
+  --at-bench: #ffffff;
+  --at-slide: #eef3f8;
+  --at-hairline: #d7e0ea;
+  --at-specimen: #0e1626;
+  --at-annotation: #5a6b80;
+  /* accents darkened for contrast on light surfaces */
+  --at-sodium: #b8860b;
+  --at-copper: #1fa873;
+  --at-strontium: #e03a55;
+  --at-argon: #1f9ed9;
+  --at-calcium: #e06a33;
+}
+
+:root {
+  font-family: "Atkinson Hyperlegible", Inter, system-ui, Avenir, Helvetica,
+    Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
   font-size: 16px;

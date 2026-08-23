@@ -24,15 +24,13 @@ export default function HangmanKeyboard({
 
           const classes = used
             ? inWord
-              ? base + " bg-green-700 text-white border-0 disabled:opacity-100"
-              : // keep the existing light-theme look, but in dark mode use a semi-transparent
-                // error background so incorrect picks read as 'picked' more clearly.
+              ? base + " bg-copper text-void border-0 disabled:opacity-100"
+              : // struck-out picks: strontium wash, clearly 'spent'
                 base +
-                " bg-gray-400/50 text-gray-700 border-0 opacity-60 dark:bg-error/60 dark:text-white"
+                " bg-strontium/20 text-strontium/80 border-0 opacity-60"
             : base +
-              // use theme tokens for normal/hover states so dark/light behave consistently
-              " bg-base-200 text-base-content dark:bg-slate-700 dark:text-white" +
-              " hover:bg-base-300 dark:hover:bg-slate-600 cursor-pointer disabled:opacity-60";
+              " bg-slide text-specimen border border-hairline" +
+              " hover:bg-hairline cursor-pointer disabled:opacity-60 active:scale-[0.94] motion-reduce:active:scale-100 transition-transform";
 
           return (
             <button

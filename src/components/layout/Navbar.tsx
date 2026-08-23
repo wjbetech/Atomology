@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useGameStore, useUIStore } from "../../store/atomologyStore";
+import { useGameStore } from "../../store/atomologyStore";
 import {
   getElementsByDifficulty,
   asDifficultyLevel,
@@ -53,8 +53,6 @@ export default function Navbar() {
   const hangmanIndex = useGameStore((s) => s.hangmanIndex ?? 0);
   const hangmanIncorrect = useGameStore((s) => s.hangmanIncorrectGuesses);
   const hangmanMaxAttempts = useGameStore((s) => s.hangmanMaxAttempts);
-  const theme = useUIStore((s) => s.theme);
-  const isDark = theme === "dark" || theme === "night";
 
   const prettyMode =
     gameMode === "multi"
@@ -96,7 +94,7 @@ export default function Navbar() {
             <div
               className={
                 "text-base md:text-lg lg:text-xl uppercase tracking-wider hangman-level mt-1 " +
-                (isDark ? "text-gray-300" : "text-gray-800")
+                "text-specimen/80"
               }
             >
               LEVEL:
@@ -118,7 +116,7 @@ export default function Navbar() {
             <span
               className={
                 "text-base md:text-lg lg:text-xl uppercase tracking-wider block mt-1 " +
-                (isDark ? "text-gray-300" : "text-gray-800")
+                "text-specimen/80"
               }
             >
               LIVES:
@@ -167,7 +165,7 @@ export default function Navbar() {
   return (
     <>
       <nav
-        className="fixed inset-x-0 top-0 w-full bg-base-100 z-[3000] flex items-center justify-between gap-4 p-4 border-b-2 border-gray-200/60 dark:border-[#ffffff0d]"
+        className="fixed inset-x-0 top-0 w-full bg-bench/90 backdrop-blur z-[3000] flex items-center justify-between gap-4 p-4 border-b border-hairline"
         style={{
           height: "var(--site-navbar-height)",
           paddingLeft: "env(safe-area-inset-left)",
