@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useGameStore } from "../../store/atomologyStore";
+import LeaderboardPanel from "../LeaderboardPanel";
 import {
   saveRunIfBest,
   type BestCategory,
@@ -231,7 +232,18 @@ export default function ResultsPage() {
         />
       </div>
 
-      <div className="flex flex-col sm:flex-row justify-center gap-4">
+      {/* Global board: ranked modes only, never blocks the page */}
+      {lastRun.mode !== "hangman" && lastRun.length !== "endless" && (
+        <LeaderboardPanel
+          mode={lastRun.mode}
+          length={lastRun.length}
+          score={lastRun.score}
+          answered={lastRun.answered}
+          correct={lastRun.correct}
+        />
+      )}
+
+      <div className="flex flex-col sm:flex-row justify-center gap-4 mt-12">
         <Link
           to="/configure"
           className="btn border-0 rounded-pill px-10 bg-sodium text-void font-semibold hover:brightness-110"
