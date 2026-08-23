@@ -65,3 +65,52 @@ describe("session win states", () => {
     expect(useGameStore.getState().gameStarted).toBe(false);
   });
 });
+
+describe("lives mode", () => {
+  beforeEach(() => {
+    localStorage.clear();
+    useGameStore.setState({
+      gameMode: "multi",
+      gameStarted: true,
+      sessionLength: "endless",
+      livesMode: true,
+      score: 0,
+      questionsAnswered: 0,
+      correctCount: 0,
+      currentStreak: 0,
+      bestStreak: 0,
+      lastRun: null,
+    });
+  });
+
+  it("ends the run on the third wrong answer", () => {
+    const s = useGameStore.getState();
+    s.recordAnswer(true);
+    s.recordAnswer(false);
+    s.recordAnswer(false);
+    s.recordAnswer(false);
+
+    const after = useGameStore.getState();
+    expect(after.lastRun?.endedBy).toBe("lives");
+    expect(after.gameStarted).toBe(false);
+    expect(after.questionsAnswered).toBe(4);
+  });
+
+  it("does not end when wrongs stay under three", () => {
+    const s = useGameStore.getState();
+    s.recordAnswer(false);
+    s.recordAnswer(false);
+
+    expect(useGameStore.getState().lastRun).toBeNull();
+    expect(useGameStore.getState().gameStarted).toBe(true);
+  });
+
+  it("stays off when the toggle is off", () => {
+    useGameStore.setState({ livesMode: false });
+    const s = useGameStore.getState();
+    for (let i = 0; i < 5; i++) s.recordAnswer(false);
+
+    expect(useGameStore.getState().lastRun).toBeNull();
+    expect(useGameStore.getState().gameStarted).toBe(true);
+  });
+});
