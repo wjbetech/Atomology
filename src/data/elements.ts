@@ -25,6 +25,19 @@ export interface RawElement {
   density: number | { [key: string]: unknown } | null;
   discovered_by: string | null;
   melt: number | null;
+  // Educational-mode fields (present for all/some elements)
+  appearance?: string | null;
+  summary?: string;
+  source?: string;
+  named_by?: string | null;
+  bohr_model_image?: string;
+  shells?: number[];
+  electron_configuration_semantic?: string;
+  image?: {
+    title?: string;
+    url?: string;
+    attribution?: string;
+  } | null;
 }
 
 const arr: RawElement[] = Array.isArray(raw)
@@ -60,6 +73,13 @@ const gameElementsByName = new Map(gameElements.map((e) => [e.name, e]));
 
 export function getElementByName(name: string): ElementType | undefined {
   return gameElementsByName.get(name);
+}
+
+const rawByName = new Map(canonicalElements.map((e) => [e.name, e]));
+
+/** Full raw dataset entry (educational fields included) by exact name. */
+export function getRawElementByName(name: string): RawElement | undefined {
+  return rawByName.get(name);
 }
 
 export default canonicalElements;

@@ -1,9 +1,11 @@
 // components
 import React, { Suspense } from "react";
+import { useUIStore } from "./store/atomologyStore";
 import Layout from "./components/layout/Layout";
 import HUDWrapper from "./components/sub-components/HUDWrapper";
 import ErrorBoundary from "./components/ErrorBoundary";
 import ResumeToPlay from "./components/ResumeToPlay";
+import EduInfoPage from "./components/EduInfoPage";
 import HomePage from "./components/pages/HomePage";
 import InstructionsPage from "./components/pages/InstructionsPage";
 import ConfigurePage from "./components/pages/ConfigurePage";
@@ -20,6 +22,10 @@ const Contact = React.lazy(() => import("./components/pages/Contact"));
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {
+  // Educational mode: a correct answer flips the whole UI to the
+  // element's info page; its manual exit continues the run.
+  const eduInfoName = useUIStore((s) => s.eduInfoName);
+
   return (
     <Router>
       {/* Crash guard: fallback uses navigation, so it must live inside Router */}
@@ -43,6 +49,7 @@ function App() {
               </Routes>
             </Suspense>
           </Layout>
+          {eduInfoName && <EduInfoPage />}
         </div>
       </ErrorBoundary>
     </Router>

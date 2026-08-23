@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import ConfettiSparks from "./ConfettiSparks";
 
 // zustand store
-import { useGameStore } from "../../store/atomologyStore";
+import { useGameStore, useUIStore } from "../../store/atomologyStore";
 import { accentForCategory } from "../../utils/spectral";
 
 export default function Element() {
@@ -48,9 +48,28 @@ export default function Element() {
     useGameStore.getState().generateNextRound();
   }, [gameStarted]);
 
-  // Advance to the next queued round after the celebration window
+  // Advance to the next queued round after the celebration window.
+  // In educational mode the run pauses on the element's info page instead;
+  // its manual exit performs the same advance.
   useEffect(() => {
     if (!(playerAnswer && answer && playerAnswer === answer.name)) return;
+
+    const edu = useUIStore.getState();
+    if (edu.educationalMode) {
+      // If this answer ended a finite session, let /results take over.
+      if (useGameStore.getState().lastRun) return;
+      swapTimerRef.current = window.setTimeout(() => {
+        useUIStore.getState().openEduInfo(answer.name, () => {
+          useGameStore.getState().generateNextRound();
+          useGameStore.getState().setPlayerAnswer("");
+        });
+      }, 1400);
+      return () => {
+        if (swapTimerRef.current !== null) {
+          window.clearTimeout(swapTimerRef.current);
+        }
+      };
+    }
 
     swapTimerRef.current = window.setTimeout(() => {
       useGameStore.getState().generateNextRound();
