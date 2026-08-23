@@ -45,6 +45,23 @@ Tests live next to the code in `src/__tests__/` and cover game logic (round
 generation, session persistence, answer normalisation) as well as key components.
 Run them with `npm test`.
 
+## Leaderboard setup (optional)
+
+The global leaderboard is a Vercel Serverless Function backed by a free
+Neon Postgres database. The game works fully without it — the Results page
+simply shows local personal bests.
+
+1. In the Vercel dashboard: **Project → Storage → Marketplace → Neon →
+   provision the free tier**.
+2. Copy the connection string (`DATABASE_URL`) from the Neon integration.
+3. Set it as an environment variable `DATABASE_URL` (Production +
+   Preview) and redeploy.
+4. Create the table once — paste `api/schema.sql` into the Neon SQL editor.
+
+Endpoints: `POST /api/scores` submits a run; `GET /api/scores/top?mode=&length=`
+returns the top 10. Submissions are sanity-checked server-side (nickname
+rules, score ceilings per session length); Endless runs are unranked by design.
+
 ## CI
 
 Every push and PR runs: **typecheck → lint → build → tests**
