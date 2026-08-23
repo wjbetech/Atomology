@@ -80,6 +80,7 @@ export default function ConfigurePage() {
       setHangmanDifficulty(null);
     } else {
       resetHangman();
+      useGameStore.getState().resetRunProgress();
       useGameStore.getState().resetAnswerQueue();
       useGameStore.getState().generateNextRound();
       setPlayerAnswer("");
