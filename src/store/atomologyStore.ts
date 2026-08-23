@@ -93,6 +93,13 @@ export interface uiSlice {
   /** When on, a correct answer opens the element's info page first. */
   educationalMode: boolean;
   setEducationalMode: (enabled: boolean) => void;
+  /** Name of the element whose info page is currently open (transient). */
+  eduInfoName: string | null;
+  /** Registered continuation for whatever opened the info page. */
+  eduExit: (() => void) | null;
+  openEduInfo: (name: string, exit: () => void) => void;
+  /** Closes the info page and runs the registered continuation. */
+  closeEduInfo: () => void;
 }
 
 export const useGameStore = create<GameState>((set, get) => {
@@ -344,7 +351,7 @@ export const useGameStore = create<GameState>((set, get) => {
   } as GameState;
 });
 
-export const useUIStore = create<uiSlice>((set) => ({
+export const useUIStore = create<uiSlice>((set, get) => ({
   // prefer persisted theme, otherwise use system preference -> map light to 'cupcake'
   theme: (() => {
     try {
@@ -441,5 +448,14 @@ export const useUIStore = create<uiSlice>((set) => ({
     try {
       localStorage.setItem("atomology.educationalMode", enabled ? "1" : "0");
     } catch {}
+  },
+  eduInfoName: null,
+  eduExit: null,
+  openEduInfo: (name, exit) => set({ eduInfoName: name, eduExit: exit }),
+  closeEduInfo: () => {
+    const exit = get().eduExit;
+    set({ eduInfoName: null, eduExit: null });
+    // run the continuation after state has cleared
+    exit?.();
   },
 }));

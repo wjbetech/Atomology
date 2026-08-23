@@ -123,6 +123,13 @@ export default function HangmanGame() {
         window.clearTimeout(advanceTimeoutRef.current);
       resultTimeoutRef.current = window.setTimeout(() => {
         setWordGuessResult(null);
+        if (useUIStore.getState().educationalMode) {
+          // pause on the element's info page; its exit continues
+          useUIStore
+            .getState()
+            .openEduInfo(hangmanWord, () => advanceToNext());
+          return;
+        }
         advanceTimeoutRef.current = window.setTimeout(() => {
           advanceToNext();
         }, EXIT_MS);
@@ -197,6 +204,13 @@ export default function HangmanGame() {
       // after DISPLAY_MS, clear the result so AnimatePresence exit runs
       resultTimeoutRef.current = window.setTimeout(() => {
         setWordGuessResult(null);
+        if (useUIStore.getState().educationalMode) {
+          // pause on the element's info page; its exit continues
+          useUIStore
+            .getState()
+            .openEduInfo(hangmanWord, () => advanceToNext());
+          return;
+        }
         // after exit animation, advance to next
         advanceTimeoutRef.current = window.setTimeout(() => {
           advanceToNext();
