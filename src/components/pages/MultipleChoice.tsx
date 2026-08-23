@@ -4,7 +4,6 @@ import Answer from "../Answer";
 import Score from "../sub-components/Score";
 import ReturnToMainButton from "../sub-components/ReturnToMainButton";
 import { useGameStore } from "../../store/atomologyStore";
-import Layout from "../layout/Layout";
 
 export default function MultipleChoice() {
   const gameStarted = useGameStore((s) => s.gameStarted);
@@ -13,7 +12,7 @@ export default function MultipleChoice() {
     if (!gameStarted) setGameStarted(true);
   }, [gameStarted, setGameStarted]);
   return (
-    <Layout>
+    <>
       <div className="flex flex-col min-h-screen flex-1 w-full items-center justify-start sm:justify-between">
         <div className="flex flex-col items-center justify-start sm:justify-center flex-grow pt-[8rem] sm:pt-0">
           <Element />
@@ -28,6 +27,6 @@ export default function MultipleChoice() {
           </div>
         </div>
       </div>
-    </Layout>
+    </>
   );
 }
