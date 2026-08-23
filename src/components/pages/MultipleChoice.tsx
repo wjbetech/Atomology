@@ -8,6 +8,8 @@ import { useGameStore } from "../../store/atomologyStore";
 export default function MultipleChoice() {
   const gameStarted = useGameStore((s) => s.gameStarted);
   const setGameStarted = useGameStore((s) => s.setGameStarted);
+  const isEndless = useGameStore((s) => s.sessionLength === "endless");
+  const finishRun = useGameStore((s) => s.finishRun);
   React.useEffect(() => {
     if (!gameStarted) setGameStarted(true);
   }, [gameStarted, setGameStarted]);
@@ -22,7 +24,16 @@ export default function MultipleChoice() {
               <Score />
             </div>
           </div>
-          <div className="">
+          <div className="flex flex-col items-center gap-2">
+            {isEndless && (
+              <button
+                type="button"
+                onClick={() => finishRun("finished")}
+                className="btn btn-outline rounded-pill px-8 border-argon/60 text-argon hover:bg-argon/10"
+              >
+                Finish session
+              </button>
+            )}
             <ReturnToMainButton />
           </div>
         </div>

@@ -6,14 +6,19 @@ import HangmanGame from "../hangman/HangmanGame";
 import { useGameStore } from "../../store/atomologyStore";
 
 /**
- * The single in-game route. Renders whichever mode is configured; if a run
- * is somehow active with no mode set, sends the player back to Configure.
+ * The single in-game route. Renders whichever mode is configured; when a
+ * run finishes (limit reached or Finish pressed) routes to /results.
  */
 export default function PlayPage() {
   const gameMode = useGameStore((s) => s.gameMode);
   const hangmanDifficulty = useGameStore((s) => s.hangmanDifficulty);
   const hangmanWord = useGameStore((s) => s.hangmanWord);
   const gameStarted = useGameStore((s) => s.gameStarted);
+  const lastRun = useGameStore((s) => s.lastRun);
+
+  if (lastRun) {
+    return <Navigate to="/results" replace />;
+  }
 
   if (gameStarted && gameMode === "multi") {
     return <MultipleChoice />;

@@ -8,6 +8,8 @@ import ReturnToMainButton from "../sub-components/ReturnToMainButton";
 export default function OpenAnswer() {
   const gameStarted = useGameStore((s) => s.gameStarted);
   const setGameStarted = useGameStore((s) => s.setGameStarted);
+  const isEndless = useGameStore((s) => s.sessionLength === "endless");
+  const finishRun = useGameStore((s) => s.finishRun);
   React.useEffect(() => {
     if (!gameStarted) setGameStarted(true);
   }, [gameStarted, setGameStarted]);
@@ -25,6 +27,15 @@ export default function OpenAnswer() {
       {/* fixed bottom bar for controls on open answer screen */}
       <div className="flex justify-center">
         <div className="w-full max-w-xs mx-auto px-4 flex flex-col items-center gap-2">
+          {isEndless && (
+            <button
+              type="button"
+              onClick={() => finishRun("finished")}
+              className="btn btn-outline rounded-pill px-8 border-argon/60 text-argon hover:bg-argon/10"
+            >
+              Finish session
+            </button>
+          )}
           <ReturnToMainButton />
         </div>
       </div>

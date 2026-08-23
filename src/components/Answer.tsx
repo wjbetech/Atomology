@@ -18,6 +18,7 @@ export default function Answer() {
     setPlayerAnswer,
     answerElementName,
     addGuessedElement,
+    recordAnswer,
   } = useGameStore();
   const soundEnabled = useUIStore((s) => s.soundEnabled);
   const [input, setInput] = useState("");
@@ -82,6 +83,7 @@ export default function Answer() {
 
     if (answer && selectedAnswer === answer.name) {
       setScore((prevScore: number) => prevScore + 1);
+      recordAnswer(true);
       setInput("");
       // Add guessed element symbol to HUD
       if (answer.symbol) addGuessedElement(answer.symbol);
@@ -100,6 +102,7 @@ export default function Answer() {
     } else {
       // add this wrong answer to the disabled set for the round
       setDisabledAnswers((prev) => new Set(prev).add(selectedAnswer));
+      recordAnswer(false);
       showMessage("incorrect", 4000);
     }
   };
@@ -116,6 +119,7 @@ export default function Answer() {
 
     if (answer && givenAnswer === answer.name) {
       setScore((prevScore: number) => prevScore + 1);
+      recordAnswer(true);
       setInput("");
       // Add guessed element symbol to HUD
       if (answer.symbol) addGuessedElement(answer.symbol);
@@ -130,6 +134,7 @@ export default function Answer() {
         setPlayerAnswer("");
       }, 2000);
     } else {
+      recordAnswer(false);
       showMessage("incorrect", 4000);
     }
   };

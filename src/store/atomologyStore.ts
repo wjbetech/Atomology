@@ -29,6 +29,21 @@ export interface GameState {
   answerQueue: string[];
   /** Run length chosen on Configure; consumed by the win-states ticket. */
   sessionLength: "q10" | "q25" | "cycle" | "endless";
+  // Current-run progress (quiz modes)
+  questionsAnswered: number;
+  correctCount: number;
+  currentStreak: number;
+  bestStreak: number;
+  /** Set when a run ends; Results reads this. */
+  lastRun: {
+    mode: string;
+    length: "q10" | "q25" | "cycle" | "endless";
+    score: number;
+    answered: number;
+    correct: number;
+    bestStreak: number;
+    endedBy: "completed" | "finished";
+  } | null;
   // Hangman mode state
   hangmanWord: string | null;
   hangmanGuessedLetters: string[];
@@ -42,6 +57,11 @@ export interface GameState {
   setScore: (update: number | ((prevScore: number) => number)) => void;
   setGameStarted: (gameStarted: boolean) => void;
   setSessionLength: (length: "q10" | "q25" | "cycle" | "endless") => void;
+  /** Records one quiz attempt and updates streak/progress. */
+  recordAnswer: (wasCorrect: boolean) => void;
+  /** Ends the current run: builds lastRun and stops the session. */
+  finishRun: (endedBy?: "completed" | "finished") => void;
+  resetRunProgress: () => void;
   // Hangman actions
   setHangmanWord: (word: string) => void;
   guessHangmanLetter: (letter: string) => void;
@@ -102,6 +122,7 @@ export const useGameStore = create<GameState>((set, get) => {
         guessedElements: s.guessedElements,
         answerQueue: s.answerQueue,
         sessionLength: s.sessionLength,
+        lastRun: s.lastRun,
       };
       localStorage.setItem("atomology.session", JSON.stringify(toSave));
     } catch {
@@ -122,6 +143,11 @@ export const useGameStore = create<GameState>((set, get) => {
     guessedElements: persisted?.guessedElements ?? [],
     answerQueue: persisted?.answerQueue ?? [],
     sessionLength: persisted?.sessionLength ?? "q25",
+    questionsAnswered: 0,
+    correctCount: 0,
+    currentStreak: 0,
+    bestStreak: 0,
+    lastRun: null,
     // Hangman state
     hangmanWord: null,
     hangmanGuessedLetters: [],
@@ -170,6 +196,52 @@ export const useGameStore = create<GameState>((set, get) => {
     setHangmanPool: (pool) => set({ hangmanPool: pool }),
     setSessionLength: (length) => {
       set({ sessionLength: length });
+      persist();
+    },
+    recordAnswer: (wasCorrect) => {
+      set((state) => ({
+        questionsAnswered: state.questionsAnswered + 1,
+        correctCount: state.correctCount + (wasCorrect ? 1 : 0),
+        currentStreak: wasCorrect ? state.currentStreak + 1 : 0,
+        bestStreak: Math.max(
+          state.bestStreak,
+          wasCorrect ? state.currentStreak + 1 : 0
+        ),
+      }));
+      // Finite sessions end the moment their limit is reached.
+      const s = get();
+      const limits = { q10: 10, q25: 25, cycle: 118 } as const;
+      if (
+        s.sessionLength !== "endless" &&
+        s.questionsAnswered >= limits[s.sessionLength]
+      ) {
+        get().finishRun("completed");
+      }
+    },
+    finishRun: (endedBy = "completed") => {
+      const s = get();
+      set({
+        lastRun: {
+          mode: s.gameMode,
+          length: s.sessionLength,
+          score: s.score,
+          answered: s.questionsAnswered,
+          correct: s.correctCount,
+          bestStreak: s.bestStreak,
+          endedBy,
+        },
+        gameStarted: false,
+      });
+      persist();
+    },
+    resetRunProgress: () => {
+      set({
+        questionsAnswered: 0,
+        correctCount: 0,
+        currentStreak: 0,
+        bestStreak: 0,
+        lastRun: null,
+      });
       persist();
     },
 
@@ -222,6 +294,11 @@ export const useGameStore = create<GameState>((set, get) => {
         elements: [],
         answer: null,
         answerQueue: [],
+        questionsAnswered: 0,
+        correctCount: 0,
+        currentStreak: 0,
+        bestStreak: 0,
+        lastRun: null,
         hangmanWord: null,
         hangmanGuessedLetters: [],
         hangmanIncorrectGuesses: 0,
