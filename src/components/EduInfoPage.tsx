@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useGameStore, useUIStore } from "../store/atomologyStore";
 import { getRawElementByName } from "../data/elements";
 import { accentForCategory } from "../utils/spectral";
+import ElementVideo from "./ElementVideo";
 
 /**
  * Full-page element dossier shown when educational mode is on and an
@@ -148,6 +149,9 @@ export default function EduInfoPage() {
             {raw.summary}
           </p>
         )}
+
+        {/* video slot: curated entry or search fallback */}
+        <ElementVideo name={raw.name} />
 
         {/* data blocks */}
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-6">
