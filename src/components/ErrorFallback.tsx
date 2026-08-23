@@ -24,9 +24,9 @@ export default function ErrorFallback({
   return (
     <div
       role="alert"
-      className="fixed inset-0 z-[5000] flex items-center justify-center bg-base-100 text-base-content p-4"
+      className="fixed inset-0 z-[5000] flex items-center justify-center bg-void text-specimen p-4"
     >
-      <div className="max-w-md w-full rounded-lg border border-error/40 bg-base-200 p-6 text-center shadow-lg">
+      <div className="max-w-md w-full rounded-lg border border-strontium/40 bg-bench p-6 text-center shadow-lg">
         <h1 className="text-xl font-bold mb-2">Something went wrong</h1>
         <p className="mb-6 opacity-80">
           An unexpected error interrupted the game. Your progress may be lost.

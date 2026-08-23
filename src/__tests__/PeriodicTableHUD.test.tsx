@@ -30,7 +30,7 @@ describe("PeriodicTableHUD", () => {
 
     // Hydrogen element in data has name 'Hydrogen' and symbol 'H'
     const hydrogen = screen.getByTitle("Hydrogen");
-    expect(hydrogen).toHaveClass("bg-green-400");
+    expect(hydrogen).toHaveClass("bg-copper");
   });
 
   it("renders empty boxes for non-guessed elements", () => {
@@ -38,7 +38,7 @@ describe("PeriodicTableHUD", () => {
     render(<PeriodicTableHUD guessed={guessed} />);
 
     const hydrogen = screen.getByTitle("Hydrogen");
-    expect(hydrogen).not.toHaveClass("bg-green-400");
+    expect(hydrogen).not.toHaveClass("bg-copper");
   });
 
   it("places lanthanides like Erbium in the HUD and toggles fill when guessed", () => {
@@ -50,13 +50,13 @@ describe("PeriodicTableHUD", () => {
 
     const erb = screen.getByTitle("Erbium");
     expect(erb).toBeInTheDocument();
-    expect(erb).not.toHaveClass("bg-green-400");
+    expect(erb).not.toHaveClass("bg-copper");
 
     // guessed
     const guessedEr = new Set<string>(["Er"]);
     rerender(<PeriodicTableHUD guessed={guessedEr} />);
     const erbAfter = screen.getByTitle("Erbium");
-    expect(erbAfter).toHaveClass("bg-green-400");
+    expect(erbAfter).toHaveClass("bg-copper");
   });
 
   it("integration: store action addGuessedElement updates HUD", () => {
@@ -72,14 +72,14 @@ describe("PeriodicTableHUD", () => {
     render(<HUDWrapper />);
 
     const erb = screen.getByTitle("Erbium");
-    expect(erb).not.toHaveClass("bg-green-400");
+    expect(erb).not.toHaveClass("bg-copper");
 
     act(() => {
       useGameStore.getState().addGuessedElement("Er");
     });
 
     const erbAfter = screen.getByTitle("Erbium");
-    expect(erbAfter).toHaveClass("bg-green-400");
+    expect(erbAfter).toHaveClass("bg-copper");
 
     // cleanup
     act(() => {

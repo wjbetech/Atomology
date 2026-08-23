@@ -172,8 +172,8 @@ export default function HangmanGame() {
         className={
           "inline-flex items-center justify-center w-7 h-7 sm:w-9 sm:h-9 mx-0.5 text-base sm:text-lg font-semibold rounded-sm border-2 transition-colors duration-200 " +
           (revealed
-            ? "bg-green-700 border-green-700 text-white"
-            : "border-gray-400 text-transparent bg-transparent")
+            ? "bg-copper border-copper text-void"
+            : "border-hairline text-transparent bg-transparent")
         }
         aria-hidden={!revealed}
       >

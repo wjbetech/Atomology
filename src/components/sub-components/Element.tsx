@@ -4,6 +4,7 @@ import ConfettiSparks from "./ConfettiSparks";
 
 // zustand store
 import { useGameStore } from "../../store/atomologyStore";
+import { accentForCategory } from "../../utils/spectral";
 
 export default function Element() {
   const { gameStarted, answer, playerAnswer } = useGameStore();
@@ -65,16 +66,27 @@ export default function Element() {
   }, [playerAnswer, answer]);
 
   if (gameStarted) {
+    const accent = accentForCategory(answer?.category);
     return (
       <div className="place-self-center py-8">
         {/* Confetti/sparks celebration effect overlays the entire element box */}
         <ConfettiSparks trigger={celebrate} anchor={anchor} />
         <div
           ref={boxRef}
-          className="relative p-4 md:p-6 lg:p-8 rounded-lg bg-opacity-50 bg-gradient-to-rshadow-lg backdrop-blur-md transition-all duration-500 *:overflow-hidden"
+          className="relative p-4 md:p-6 lg:p-8 rounded-md bg-bench border border-hairline transition-all duration-500"
+          style={{ borderTopColor: accent }}
         >
-          {/* static blurred background */}
-          <div className="absolute -inset-1 rounded-lg bg-gradient-to-r from-black to-transparent blur opacity-20"></div>
+          {/* emission strip: this element's own light */}
+          <div
+            aria-hidden
+            className="absolute top-0 left-0 right-0 h-[3px]"
+            style={{ backgroundColor: accent, opacity: celebrate ? 1 : 0.55 }}
+          />
+          {/* corner measurement ticks (specimen slide frame) */}
+          <span aria-hidden className="absolute top-1 left-1 w-2 h-2 border-t-2 border-l-2 border-hairline" />
+          <span aria-hidden className="absolute top-1 right-1 w-2 h-2 border-t-2 border-r-2 border-hairline" />
+          <span aria-hidden className="absolute bottom-1 left-1 w-2 h-2 border-b-2 border-l-2 border-hairline" />
+          <span aria-hidden className="absolute bottom-1 right-1 w-2 h-2 border-b-2 border-r-2 border-hairline" />
 
           {/* glow overlay separate from content so border doesn't scale */}
           <AnimatePresence>
@@ -85,11 +97,11 @@ export default function Element() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.6 }}
-                className="absolute inset-0 pointer-events-none rounded-lg"
+                className="absolute inset-0 pointer-events-none rounded-md"
               >
                 <div
-                  style={{ boxShadow: "0px 12px 32px rgba(34,197,94,0.18)" }}
-                  className="w-full h-full rounded-lg"
+                  style={{ boxShadow: "0 0 40px rgba(53,217,154,0.35)" }}
+                  className="w-full h-full rounded-md"
                 />
               </motion.div>
             )}
@@ -102,14 +114,19 @@ export default function Element() {
             className="relative z-10 flex flex-col items-center justify-center h-[74px] md:h-[100px]"
             style={{ willChange: "transform" }}
           >
-            <span className="drop-shadow-lg text">{answer?.number}</span>
-            <h1 className="font-semibold text-2xl md:text-4xl lg:text-5xl drop-shadow-lg tracking-wider">
+            <span className="font-mono text-xs text-annotation">
+              {answer?.number}
+            </span>
+            <h1 className="font-display text-sodium text-3xl md:text-4xl lg:text-5xl drop-shadow-lg tracking-[0.15em]">
               {answer?.symbol}
             </h1>
           </motion.div>
 
           {/* Glowing animated border (not scaled) */}
-          <div className="absolute inset-0 rounded-lg border-2 animate-pulse"></div>
+          <div
+            className="absolute inset-0 rounded-md border animate-pulse pointer-events-none"
+            style={{ borderColor: accent }}
+          ></div>
         </div>
       </div>
     );

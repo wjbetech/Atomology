@@ -25,7 +25,7 @@ export default function HangmanGuessInput({
           type="text"
           inputMode="text"
           placeholder="the element is..."
-          className="flex-1 w-full text-center text-lg leading-10 rounded-full bg-base-100 text-base-content border border-gray-500 focus:border-blue-400 px-4 placeholder:text-sm placeholder:italic placeholder:text-gray-400"
+          className="flex-1 w-full text-center text-lg leading-10 rounded-pill bg-slide text-specimen border border-hairline focus:border-argon px-4 placeholder:text-sm placeholder:italic placeholder:text-annotation/70"
           value={wordGuess}
           onChange={(e) => setWordGuess(e.target.value)}
           disabled={disabled}
