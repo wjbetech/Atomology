@@ -27,6 +27,8 @@ export interface GameState {
   guessedElements: string[];
   // Names still to be shown as the correct answer this cycle (multi/open)
   answerQueue: string[];
+  /** Run length chosen on Configure; consumed by the win-states ticket. */
+  sessionLength: "q10" | "q25" | "cycle" | "endless";
   // Hangman mode state
   hangmanWord: string | null;
   hangmanGuessedLetters: string[];
@@ -39,6 +41,7 @@ export interface GameState {
   setGameMode: (mode: string) => void;
   setScore: (update: number | ((prevScore: number) => number)) => void;
   setGameStarted: (gameStarted: boolean) => void;
+  setSessionLength: (length: "q10" | "q25" | "cycle" | "endless") => void;
   // Hangman actions
   setHangmanWord: (word: string) => void;
   guessHangmanLetter: (letter: string) => void;
@@ -67,6 +70,9 @@ export interface uiSlice {
   setShowHUD: (show: boolean) => void;
   soundEnabled: boolean;
   setSoundEnabled: (enabled: boolean) => void;
+  /** When on, a correct answer opens the element's info page first. */
+  educationalMode: boolean;
+  setEducationalMode: (enabled: boolean) => void;
 }
 
 export const useGameStore = create<GameState>((set, get) => {
@@ -95,6 +101,7 @@ export const useGameStore = create<GameState>((set, get) => {
         gameStarted: s.gameStarted,
         guessedElements: s.guessedElements,
         answerQueue: s.answerQueue,
+        sessionLength: s.sessionLength,
       };
       localStorage.setItem("atomology.session", JSON.stringify(toSave));
     } catch {
@@ -114,6 +121,7 @@ export const useGameStore = create<GameState>((set, get) => {
     answerElementName: persisted?.answerElementName ?? "",
     guessedElements: persisted?.guessedElements ?? [],
     answerQueue: persisted?.answerQueue ?? [],
+    sessionLength: persisted?.sessionLength ?? "q25",
     // Hangman state
     hangmanWord: null,
     hangmanGuessedLetters: [],
@@ -160,6 +168,10 @@ export const useGameStore = create<GameState>((set, get) => {
     setHangmanDifficulty: (difficulty) =>
       set({ hangmanDifficulty: difficulty }),
     setHangmanPool: (pool) => set({ hangmanPool: pool }),
+    setSessionLength: (length) => {
+      set({ sessionLength: length });
+      persist();
+    },
 
     addGuessedElement: (symbol) => {
       if (get().guessedElements.includes(symbol)) return;
@@ -337,6 +349,20 @@ export const useUIStore = create<uiSlice>((set) => ({
     set({ soundEnabled: enabled });
     try {
       localStorage.setItem("atomology.soundEnabled", enabled ? "1" : "0");
+    } catch {}
+  },
+  // educational mode defaults off; behaviour ships with the info-page ticket
+  educationalMode: (() => {
+    try {
+      return localStorage.getItem("atomology.educationalMode") === "1";
+    } catch {
+      return false;
+    }
+  })(),
+  setEducationalMode: (enabled: boolean) => {
+    set({ educationalMode: enabled });
+    try {
+      localStorage.setItem("atomology.educationalMode", enabled ? "1" : "0");
     } catch {}
   },
 }));
