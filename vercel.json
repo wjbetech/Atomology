@@ -1,6 +1,5 @@
 {
   "framework": "vite",
-  "installCommand": "pnpm install",
-  "buildCommand": "pnpm run build",
-  "enableCorepack": true
+  "installCommand": "npm i -g pnpm@11.21.0 && pnpm install",
+  "buildCommand": "pnpm run build"
 }
