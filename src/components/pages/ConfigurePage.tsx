@@ -20,7 +20,6 @@ const MODES = [
     pitch: "See a symbol, pick the right name from four options.",
     win: "Finish your session length",
     accent: "#45C4FF",
-    symbol: "Ar",
   },
   {
     id: "open",
@@ -28,7 +27,6 @@ const MODES = [
     pitch: "No hints — recall the full element name yourself.",
     win: "Finish your session length",
     accent: "#35D99A",
-    symbol: "Au",
   },
   {
     id: "hangman",
@@ -36,7 +34,6 @@ const MODES = [
     pitch: "Spell hidden element names before the lives run out.",
     win: "Complete every word in the pool",
     accent: "#FFCB47",
-    symbol: "He",
   },
 ] as const;
 
@@ -141,12 +138,6 @@ export default function ConfigurePage() {
                   : undefined
               }
             >
-              <p
-                className="font-display text-3xl mb-3"
-                style={{ color: mode.accent }}
-              >
-                {mode.symbol}
-              </p>
               <h2 className="font-bold text-specimen">{mode.name}</h2>
               <p className="text-sm text-annotation mt-1 leading-snug">
                 {mode.pitch}
