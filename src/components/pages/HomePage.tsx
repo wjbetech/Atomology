@@ -114,14 +114,14 @@ export default function HomePage() {
         >
           <Link
             to="/configure"
-            className="btn border-0 rounded-pill px-12 py-3 font-semibold text-lg bg-sodium text-void hover:brightness-110 shadow-[0_0_28px_rgba(255,203,71,0.25)] transition-all"
+            className="btn border-0 rounded-pill px-12 min-h-12 inline-flex items-center justify-center leading-none font-semibold text-lg bg-sodium text-void hover:brightness-110 shadow-[0_0_28px_rgba(255,203,71,0.25)] transition-all"
             style={{ transformOrigin: "center" }}
           >
             Play!
           </Link>
           <Link
             to="/instructions"
-            className="btn btn-outline rounded-pill px-10 py-3 border-argon/60 text-argon hover:bg-argon/10 hover:border-argon transition-all"
+            className="btn btn-outline rounded-pill px-10 min-h-12 inline-flex items-center justify-center leading-none border-argon/60 text-argon hover:bg-argon/10 hover:border-argon transition-all"
           >
             Instructions
           </Link>
