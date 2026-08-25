@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { Navigate } from "react-router-dom";
 import MultipleChoice from "./MultipleChoice";
 import OpenAnswer from "./OpenAnswer";
-import HangmanDifficultySelect from "../hangman/HangmanDifficultySelect";
 import HangmanGame from "../hangman/HangmanGame";
 import { useGameStore } from "../../store/atomologyStore";
 import { getElementsByDifficulty } from "../../utils/hangmanDifficulty";
@@ -31,36 +30,32 @@ export default function PlayPage() {
     return <OpenAnswer />;
   }
 
-  // P1-01: Hangman hotfix — ensure an element always loads. If the run
-  // arrives without a word (old persisted state or direct /play), auto-init
-  // with the default pool so the game renders instead of blank/redirect.
+  // P1-07: Configure now owns difficulty; Play just renders the game.
+  // P1-01 hotfix retained: if a run lands here without a word (legacy
+  // persisted state or direct /play), auto-init with the stored or default
+  // difficulty so the element always loads.
   useEffect(() => {
     if (gameStarted && gameMode === "hangman" && !hangmanWord) {
-      const state = useGameStore.getState();
-      const diff = state.hangmanDifficulty || "all";
-      if (!state.hangmanDifficulty) state.setHangmanDifficulty(diff);
-      const pool = state.hangmanPool.length
-        ? state.hangmanPool
+      const st = useGameStore.getState();
+      const diff = (st.hangmanDifficulty as string) || "all";
+      if (!st.hangmanDifficulty) st.setHangmanDifficulty(diff);
+      const pool = st.hangmanPool.length
+        ? st.hangmanPool
         : shuffle(getElementsByDifficulty(diff as any)).map((e) => e.name);
-      if (!state.hangmanPool.length) {
-        state.setHangmanPool(pool);
-        state.setHangmanIndex(0);
+      if (!st.hangmanPool.length) {
+        st.setHangmanPool(pool);
+        st.setHangmanIndex(0);
       }
-      const word = pool[state.hangmanIndex ?? 0] || pool[0];
-      if (word) state.setHangmanWord(word);
+      const word = pool[st.hangmanIndex ?? 0] || pool[0];
+      if (word) st.setHangmanWord(word);
     }
   }, [gameStarted, gameMode, hangmanWord, hangmanDifficulty]);
 
   if (gameStarted && gameMode === "hangman") {
-    if (!hangmanDifficulty && !hangmanWord) {
-      // Still show difficulty select for legacy persisted runs where
-      // neither difficulty nor word is set — P1-07 will remove this.
-      return <HangmanDifficultySelect />;
-    }
     if (hangmanWord) {
       return <HangmanGame />;
     }
-    // Word is being auto-initialized above — render nothing briefly
+    // Word is being auto-initialized above — avoid flicker to /configure
     return null;
   }
 

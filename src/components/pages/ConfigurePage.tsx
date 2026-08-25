@@ -6,6 +6,8 @@ import {
 } from "../../store/atomologyStore";
 import SoundToggle from "../sub-components/SoundToggle";
 import { getElementsByDifficulty } from "../../utils/hangmanDifficulty";
+import type { DifficultyLevel } from "../../utils/hangmanDifficulty";
+import { DIFFICULTY_LABELS } from "../hangman/difficultyLabels";
 import { shuffle } from "../../utils/shuffle";
 
 /**
@@ -106,6 +108,20 @@ export default function ConfigurePage() {
       : null;
   });
 
+  // P1-07: Hangman difficulty lives on Configure now (conditional row)
+  const hangmanDifficulty = useGameStore((s) => s.hangmanDifficulty) as DifficultyLevel | null;
+  const setHangmanDifficultyRaw = useGameStore((s) => s.setHangmanDifficulty);
+  const [hangmanLevel, setHangmanLevel] = useState<DifficultyLevel>(
+    (hangmanDifficulty as DifficultyLevel) || "all"
+  );
+
+  const handleSelectMode = (id: ModeId) => {
+    setSelected(id);
+    if (id === "hangman" && hangmanDifficulty) {
+      setHangmanLevel(hangmanDifficulty as DifficultyLevel);
+    }
+  };
+
   // Hydrate other settings from lastConfig once on mount (TTL-checked)
   useEffect(() => {
     const last = readLastConfig();
@@ -142,6 +158,7 @@ export default function ConfigurePage() {
       localStorage.removeItem(LAST_CONFIG_KEY);
     } catch {}
     setSelected(null);
+    setHangmanLevel("all");
     useGameStore.getState().setSessionLength("q25");
     useGameStore.getState().setLivesMode(false);
     useUIStore.getState().setEducationalMode(false);
@@ -154,17 +171,15 @@ export default function ConfigurePage() {
   const start = () => {
     if (!selected) return;
     if (selected === "hangman") {
-      // P1-01: Ensure Hangman always has a word — previously only set
-      // difficulty to null and relied on a second screen. Now initialize
-      // with the default pool (all elements) so /play renders immediately.
-      // P1-07 will later move difficulty selection into this page.
+      // P1-07: Configure now owns difficulty — create the shuffled pool here
+      // so /play renders immediately with no interstitial (P1-01 hotfix retained).
       resetHangman();
-      const defaultDifficulty = "all";
-      setHangmanDifficulty(defaultDifficulty);
-      const pool = shuffle(getElementsByDifficulty(defaultDifficulty as any)).map((e) => e.name);
-      useGameStore.getState().setHangmanPool(pool);
-      useGameStore.getState().setHangmanIndex(0);
-      if (pool[0]) useGameStore.getState().setHangmanWord(pool[0]);
+      setHangmanDifficultyRaw(hangmanLevel);
+      const pool = shuffle(getElementsByDifficulty(hangmanLevel)).map((e) => e.name);
+      const st = useGameStore.getState();
+      st.setHangmanPool(pool);
+      st.setHangmanIndex(0);
+      if (pool[0]) st.setHangmanWord(pool[0]);
     } else {
       resetHangman();
       useGameStore.getState().resetRunProgress();
@@ -199,7 +214,7 @@ export default function ConfigurePage() {
             <button
               key={mode.id}
               type="button"
-              onClick={() => setSelected(mode.id)}
+              onClick={() => handleSelectMode(mode.id)}
               aria-pressed={active}
               className={`relative text-left rounded-md border bg-bench p-5 transition-all duration-200 ${
                 active
@@ -263,6 +278,40 @@ export default function ConfigurePage() {
           );
         })}
       </div>
+
+      {/* Hangman difficulty — only when Hangman is selected (P1-07) */}
+      {selected === "hangman" && (
+        <>
+          <p className="font-mono text-xs uppercase tracking-[0.2em] text-annotation mb-4">
+            Hangman difficulty
+          </p>
+          <div
+            role="radiogroup"
+            aria-label="Hangman difficulty"
+            className="flex flex-wrap gap-3 mb-10"
+          >
+            {Object.entries(DIFFICULTY_LABELS).map(([key, label]) => {
+              const active = hangmanLevel === key;
+              return (
+                <button
+                  key={key}
+                  type="button"
+                  role="radio"
+                  aria-checked={active}
+                  onClick={() => setHangmanLevel(key as DifficultyLevel)}
+                  className={`rounded-pill px-5 py-2 text-sm border transition-all ${
+                    active
+                      ? "bg-sodium/15 border-sodium text-sodium"
+                      : "border-hairline text-annotation hover:border-annotation/40"
+                  }`}
+                >
+                  {label}
+                </button>
+              );
+            })}
+          </div>
+        </>
+      )}
 
       {/* Global settings */}
       <p className="font-mono text-xs uppercase tracking-[0.2em] text-annotation mb-4">
