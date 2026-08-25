@@ -90,13 +90,6 @@ export default function HomePage() {
           />
         </motion.div>
 
-        <motion.p
-          {...rise(0.1)}
-          className="font-mono text-xs uppercase tracking-[0.35em] text-annotation mb-6"
-        >
-          Element 001–118 · Learn by play
-        </motion.p>
-
         <motion.h1
           {...rise(0.25)}
           className="font-display text-specimen text-3xl sm:text-5xl md:text-6xl tracking-[0.18em]"
