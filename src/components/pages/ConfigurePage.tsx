@@ -77,6 +77,10 @@ export default function ConfigurePage() {
       : null
   );
 
+  // P1-05: Single-gate — Configure is the only place to pick mode+length.
+  // Session Length pills already call setSessionLength directly, so Start
+  // just consumes the current store value and navigates to /play with no
+  // interstitial. Verified no post-configure page remains.
   const start = () => {
     if (!selected) return;
     if (selected === "hangman") {
@@ -98,7 +102,7 @@ export default function ConfigurePage() {
       useGameStore.getState().generateNextRound();
       setPlayerAnswer("");
     }
-    setSessionLength(sessionLength);
+    // sessionLength already set via pills; no extra page
     setGameMode(selected);
     setGameStarted(true);
     navigate("/play");
