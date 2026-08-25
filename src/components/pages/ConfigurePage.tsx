@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   useGameStore,
@@ -50,6 +50,33 @@ const LENGTHS: Array<{ id: "q10" | "q25" | "cycle" | "endless"; label: string }>
     { id: "endless", label: "Endless" },
   ];
 
+const LAST_CONFIG_KEY = "atomology:lastConfig";
+const LAST_TTL = 60 * 60 * 1000; // ~1hr per Q4
+
+type LastConfig = {
+  mode: ModeId;
+  length: "q10" | "q25" | "cycle" | "endless";
+  livesMode: boolean;
+  educationalMode: boolean;
+  savedAt: number;
+};
+
+function readLastConfig(): LastConfig | null {
+  try {
+    const raw = localStorage.getItem(LAST_CONFIG_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as LastConfig;
+    if (!parsed?.savedAt || Date.now() - parsed.savedAt > LAST_TTL) {
+      localStorage.removeItem(LAST_CONFIG_KEY);
+      return null;
+    }
+    if (!["multi", "open", "hangman"].includes(parsed.mode)) return null;
+    return parsed;
+  } catch {
+    return null;
+  }
+}
+
 export default function ConfigurePage() {
   const navigate = useNavigate();
   const gameMode = useGameStore((s) => s.gameMode);
@@ -70,12 +97,55 @@ export default function ConfigurePage() {
   const livesMode = useGameStore((s) => s.livesMode);
   const setLivesMode = useGameStore((s) => s.setLivesMode);
 
-  // Preselect a persisted mode if there is one; otherwise nothing is chosen.
-  const [selected, setSelected] = useState<ModeId | null>(
-    gameMode === "multi" || gameMode === "open" || gameMode === "hangman"
+  // P1-06: Preselect from 1hr TTL lastConfig if present, else from persisted gameMode
+  const [selected, setSelected] = useState<ModeId | null>(() => {
+    const last = readLastConfig();
+    if (last) return last.mode;
+    return gameMode === "multi" || gameMode === "open" || gameMode === "hangman"
       ? (gameMode as ModeId)
-      : null
-  );
+      : null;
+  });
+
+  // Hydrate other settings from lastConfig once on mount (TTL-checked)
+  useEffect(() => {
+    const last = readLastConfig();
+    if (!last) return;
+    const { setSessionLength: setLen, setShowHUD, setEducationalMode: setEdu, setLivesMode: setLives } =
+      // use store directly to avoid stale closures
+      {
+        setSessionLength: useGameStore.getState().setSessionLength,
+        setShowHUD: useUIStore.getState().setShowHUD,
+        setEducationalMode: useUIStore.getState().setEducationalMode,
+        setLivesMode: useGameStore.getState().setLivesMode,
+      };
+    setLen(last.length);
+    setLives(last.livesMode);
+    setEdu(last.educationalMode);
+    // showHUD not part of lastConfig TTL per spec, keep as-is
+  }, []);
+
+  const persistLastConfig = (mode: ModeId) => {
+    const payload: LastConfig = {
+      mode,
+      length: useGameStore.getState().sessionLength as LastConfig["length"],
+      livesMode: useGameStore.getState().livesMode,
+      educationalMode: useUIStore.getState().educationalMode,
+      savedAt: Date.now(),
+    };
+    try {
+      localStorage.setItem(LAST_CONFIG_KEY, JSON.stringify(payload));
+    } catch {}
+  };
+
+  const handleReset = () => {
+    try {
+      localStorage.removeItem(LAST_CONFIG_KEY);
+    } catch {}
+    setSelected(null);
+    useGameStore.getState().setSessionLength("q25");
+    useGameStore.getState().setLivesMode(false);
+    useUIStore.getState().setEducationalMode(false);
+  };
 
   // P1-05: Single-gate — Configure is the only place to pick mode+length.
   // Session Length pills already call setSessionLength directly, so Start
@@ -102,7 +172,8 @@ export default function ConfigurePage() {
       useGameStore.getState().generateNextRound();
       setPlayerAnswer("");
     }
-    // sessionLength already set via pills; no extra page
+    // sessionLength already set via pills; just persist the whole config for 1hr (P1-06)
+    persistLastConfig(selected);
     setGameMode(selected);
     setGameStarted(true);
     navigate("/play");
@@ -254,8 +325,8 @@ export default function ConfigurePage() {
         </div>
       </div>
 
-      {/* Start */}
-      <div className="flex justify-center">
+      {/* Start + Reset (P1-06) */}
+      <div className="flex flex-col items-center gap-3">
         <button
           type="button"
           disabled={!selected}
@@ -268,6 +339,16 @@ export default function ConfigurePage() {
         >
           {selected ? "Start!" : "Choose a mode to start"}
         </button>
+        <button
+          type="button"
+          onClick={handleReset}
+          className="btn btn-ghost btn-sm rounded-pill text-annotation hover:text-specimen"
+        >
+          Reset to defaults
+        </button>
+        <p className="font-mono text-[10px] text-annotation/70">
+          Remembers your last mode + length for ~1 hour
+        </p>
       </div>
     </div>
   );
