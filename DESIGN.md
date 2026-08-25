@@ -23,6 +23,7 @@ hue), so colour in this app encodes information rather than decorating it.
   presses, light that responds); never in mascots or clutter.
 - **Banned:** purple/violet in any shade. Also banned: the generic AI looks —
   cream+serif+terracotta, black-with-one-acid-accent, broadsheet hairlines.
+  *Exception (2026-08-25, Q7 B):* warm-paper **is** used for **Daylight Lab light only** (see below); the ban still applies to dark flagship.
 
 ## Palette
 
@@ -67,11 +68,42 @@ category so hue carries meaning:
 | Actinide                  | strontium  |
 | Unknown                   | annotation |
 
-### Daylight Lab (light counterpart)
+### Daylight Lab (warm-paper light counterpart) — *Q7 B override 2026-08-25*
 
-Paper `#F4F7FB`, ink `#0E1626`, same accents darkened ~15% for contrast on
-light surfaces. Implemented as the existing theme toggle's light side during
-the application pass (#47).
+> QA audit (inbox 25/08/2026, Q7 B) chose **warm-paper** for light theme
+> despite the prior ban on `cream+serif+terracotta` for Spectral Dark.
+> The ban **still applies to dark flagship**; light is intentionally
+> warm-paper for daylight-lab readability. This is the single source of
+> truth for all light-theme QA (P3-07/08).
+
+Warm paper evokes sunlit lab benches and specimen cards, not generic AI
+cream. Tokens are named the same as dark but their hexes invert:
+
+| Token        | Hex       | Role (light)                          | Contrast note |
+| ------------ | --------- | ------------------------------------- | ------------- |
+| `paper`      | `#FDF6EC` | Page background (warm paper)          | — |
+| `bench`      | `#F3E8D3` | Card / surface on paper               | `bench` vs `paper` ≥1.2:1, vs `ink` ≥12:1 |
+| `slide`      | `#E9DDC5` | Raised surface, hover, inputs         | — |
+| `hairline`   | `#DCCEB8` | Borders, grid lines                   | `hairline` vs `paper` ≥1.5:1, vs `ink` ≥9:1 |
+| `specimen`   | `#1C1917` | Primary text (warm near-black)        | `specimen` vs `paper` ≥16:1 (AAA) |
+| `annotation` | `#7A6E5D` | Secondary text, captions              | `annotation` vs `paper` ≥6.2:1 (AA) |
+| `ink`        | `#1C1917` | Alias for `specimen` on light         | — |
+
+Accents are the same hues darkened ~15% for contrast on warm-paper:
+
+| Token       | Light hex | Dark hex | Use on light |
+| ----------- | --------- | -------- | ------------ |
+| `sodium`    | `#E6B43F` | `#FFCB47` | Primary action (unchanged hue, darker value) |
+| `copper`    | `#2FAE7A` | `#35D99A` | Success |
+| `strontium` | `#E64C62` | `#FF5470` | Error |
+| `argon`     | `#3AA8D8` | `#45C4FF` | Links, focus |
+| `calcium`   | `#E67A3A` | `#FF8A5C` | Warn |
+
+Light implementation: `data-theme="cupcake"` (or `light`) maps to these
+tokens via CSS variables (`--paper`, `--bench`, etc.) and `bg-paper`
+`text-ink` utilities. Dark remains `data-theme="night"` with `void` etc.
+Both themes share the same accent hue names; only the light hexes are
+swapped in via the theme. See `P1-03`, `P3-07`, `P3-08`.
 
 ## Typography
 
