@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useGameStore, useUIStore } from "../store/atomologyStore";
 import { getRawElementByName } from "../data/elements";
 import { accentForCategory } from "../utils/spectral";
@@ -34,7 +35,23 @@ export default function EduInfoPage() {
   const name = useUIStore((s) => s.eduInfoName);
   const closeEduInfo = useUIStore((s) => s.closeEduInfo);
   const mode = useGameStore((s) => s.gameMode);
+  const navigate = useNavigate();
   const [nearBottom, setNearBottom] = useState(false);
+
+  const handleExit = () => {
+    const s = useGameStore.getState();
+    const hasProgress =
+      s.questionsAnswered > 0 || s.score > 0 || (s.hangmanIndex ?? 0) > 0;
+    if (
+      hasProgress &&
+      !window.confirm("Exit to Configure? Your current progress will be lost.")
+    )
+      return;
+    // Clear overlay without running the “continue” continuation
+    useUIStore.setState({ eduInfoName: null, eduExit: null });
+    s.returnToMain();
+    navigate("/configure");
+  };
 
   const raw = useMemo(
     () => (name ? getRawElementByName(name) : undefined),
@@ -55,13 +72,20 @@ export default function EduInfoPage() {
 
   if (!name || !raw) {
     return (
-      <div className="fixed inset-0 z-[4500] bg-void text-specimen flex items-center justify-center">
+      <div className="fixed inset-0 z-[4500] bg-void text-specimen flex items-center justify-center gap-4">
         <button
           type="button"
           className="btn rounded-pill px-8 bg-sodium text-void border-0 font-semibold"
           onClick={closeEduInfo}
         >
           Continue
+        </button>
+        <button
+          type="button"
+          className="btn rounded-pill px-6 bg-transparent border border-hairline text-specimen hover:bg-bench"
+          onClick={handleExit}
+        >
+          Exit to Configure
         </button>
       </div>
     );
@@ -206,8 +230,16 @@ export default function EduInfoPage() {
         )}
       </div>
 
-      {/* sticky manual exit */}
-      <div className="sticky bottom-0 left-0 right-0 bg-void/90 backdrop-blur border-t border-hairline py-4 px-6 flex justify-center z-10">
+      {/* sticky manual exit — P1-02: Back + Exit */}
+      <div className="sticky bottom-0 left-0 right-0 bg-void/90 backdrop-blur border-t border-hairline py-4 px-6 flex justify-center gap-3 z-10">
+        <button
+          type="button"
+          onClick={handleExit}
+          className="btn rounded-pill px-6 bg-transparent border border-hairline text-specimen hover:bg-bench font-semibold"
+          aria-label="Exit to Configure"
+        >
+          Exit to Configure
+        </button>
         <button
           type="button"
           onClick={closeEduInfo}
@@ -216,8 +248,9 @@ export default function EduInfoPage() {
               ? "bg-sodium text-void hover:brightness-110"
               : "bg-sodium/20 text-sodium hover:bg-sodium hover:text-void"
           }`}
+          aria-label="Back to game"
         >
-          Next element {nearBottom ? "" : "(Enter)"}
+          Back to Game {nearBottom ? "" : "(Enter)"}
         </button>
       </div>
     </div>
