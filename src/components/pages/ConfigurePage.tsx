@@ -5,6 +5,8 @@ import {
   useUIStore,
 } from "../../store/atomologyStore";
 import SoundToggle from "../sub-components/SoundToggle";
+import { getElementsByDifficulty } from "../../utils/hangmanDifficulty";
+import { shuffle } from "../../utils/shuffle";
 
 /**
  * Session setup per the redesign: mode cards, session length, global
@@ -78,8 +80,17 @@ export default function ConfigurePage() {
   const start = () => {
     if (!selected) return;
     if (selected === "hangman") {
+      // P1-01: Ensure Hangman always has a word — previously only set
+      // difficulty to null and relied on a second screen. Now initialize
+      // with the default pool (all elements) so /play renders immediately.
+      // P1-07 will later move difficulty selection into this page.
       resetHangman();
-      setHangmanDifficulty(null);
+      const defaultDifficulty = "all";
+      setHangmanDifficulty(defaultDifficulty);
+      const pool = shuffle(getElementsByDifficulty(defaultDifficulty as any)).map((e) => e.name);
+      useGameStore.getState().setHangmanPool(pool);
+      useGameStore.getState().setHangmanIndex(0);
+      if (pool[0]) useGameStore.getState().setHangmanWord(pool[0]);
     } else {
       resetHangman();
       useGameStore.getState().resetRunProgress();
