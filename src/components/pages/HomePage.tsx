@@ -3,25 +3,11 @@ import { Link } from "react-router-dom";
 import atoms from "../../assets/atoms.svg";
 
 /**
- * The front door. Grounded in DESIGN.md: Spectral Dark hero with the
- * restored spinning atom (src/assets/atoms.svg, Q2 A) replacing the
- * SPECTRUM blobs (Q8 A), plus two CTAs. Drifting tiles remain until
- * P2-05 removes them.
+ * The front door. Grounded in DESIGN.md: clean warm-paper hero with the
+ * restored spinning atom (src/assets/atoms.svg, Q2 A), title, tagline
+ * and two CTAs. P2-05: drifting specimen tiles and the spectrum grid
+ * background are gone — nothing floats behind the hero.
  */
-
-// P1-04: Restored exact spinning atom (Q2 A) replaces SPECTRUM blobs
-// (Q8 A). SPECTRUM kept as comment for reference if needed:
-// const SPECTRUM = [...] // removed per inbox 25/08/2026
-
-// Drifting specimen tiles: real symbols, coloured by category accent.
-const TILES = [
-  { symbol: "H", cls: "text-copper", top: "12%", left: "8%", delay: 0 },
-  { symbol: "He", cls: "text-argon", top: "22%", left: "78%", delay: 1.2 },
-  { symbol: "Li", cls: "text-strontium", top: "64%", left: "14%", delay: 0.6 },
-  { symbol: "Ca", cls: "text-calcium", top: "70%", left: "84%", delay: 1.8 },
-  { symbol: "Fe", cls: "text-argon", top: "40%", left: "90%", delay: 0.3 },
-  { symbol: "Cl", cls: "text-sodium", top: "80%", left: "48%", delay: 2.4 },
-];
 
 export default function HomePage() {
   const reduce = useReducedMotion();
@@ -36,37 +22,6 @@ export default function HomePage() {
 
   return (
     <div className="relative flex-1 flex flex-col items-center justify-center overflow-hidden px-6 min-h-[calc(var(--vh,1vh)*100-var(--site-navbar-height)-var(--site-footer-height))]">
-      {/* spectrum-readout background grid */}
-      <div
-        aria-hidden
-        className="absolute inset-0 pointer-events-none opacity-[0.35]"
-        style={{
-          backgroundImage:
-            "repeating-linear-gradient(90deg, #1F2C42 0 1px, transparent 1px 56px)",
-        }}
-      />
-
-      {/* drifting specimen tiles */}
-      {!reduce &&
-        TILES.map((tile) => (
-          <motion.span
-            key={tile.symbol}
-            aria-hidden
-            className={`absolute font-display text-6xl md:text-8xl ${tile.cls} opacity-[0.08] select-none pointer-events-none`}
-            style={{ top: tile.top, left: tile.left }}
-            animate={{ y: [-10, 10] }}
-            transition={{
-              duration: 9,
-              repeat: Infinity,
-              repeatType: "mirror",
-              ease: "easeInOut",
-              delay: tile.delay,
-            }}
-          >
-            {tile.symbol}
-          </motion.span>
-        ))}
-
       <div className="relative z-10 w-full max-w-3xl text-center">
         {/* P1-04: spinning atom (exact src/assets/atoms.svg, 18s linear, respects reduced-motion) */}
         <motion.div
