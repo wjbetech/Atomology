@@ -216,21 +216,17 @@ export default function ConfigurePage() {
               type="button"
               onClick={() => handleSelectMode(mode.id)}
               aria-pressed={active}
-              className={`relative text-left rounded-md border bg-bench p-5 transition-all duration-200 ${
+              className={`text-left rounded-md border p-5 transition-colors duration-200 ${
                 active
-                  ? "border-transparent shadow-[0_0_24px_rgba(69,196,255,0.15)]"
+                  ? ""
                   : "border-hairline hover:border-annotation/40"
               }`}
-              style={active ? { borderColor: mode.accent } : undefined}
+              style={
+                active
+                  ? { borderColor: mode.accent, backgroundColor: `${mode.accent}0D` }
+                  : undefined
+              }
             >
-              <span
-                aria-hidden
-                className="absolute top-0 left-0 right-0 h-[3px] rounded-t-md"
-                style={{
-                  backgroundColor: mode.accent,
-                  opacity: active ? 1 : 0.35,
-                }}
-              />
               <p
                 className="font-display text-3xl mb-3"
                 style={{ color: mode.accent }}
