@@ -1,8 +1,17 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { MemoryRouter } from "react-router-dom";
 import EduInfoPage from "../components/EduInfoPage";
 import { getRawElementByName } from "../data/elements";
 import { useGameStore, useUIStore } from "../store/atomologyStore";
+
+function renderEdu() {
+  return render(
+    <MemoryRouter>
+      <EduInfoPage />
+    </MemoryRouter>
+  );
+}
 
 describe("getRawElementByName", () => {
   it("returns the full raw entry with educational fields", () => {
@@ -23,7 +32,7 @@ describe("EduInfoPage", () => {
   });
 
   it("renders the element dossier with photo and attribution", () => {
-    render(<EduInfoPage />);
+    renderEdu();
 
     expect(screen.getByText("Helium")).toBeTruthy();
     expect(screen.getByAltText(/Bohr model of Helium/i)).toBeTruthy();
@@ -32,11 +41,14 @@ describe("EduInfoPage", () => {
       screen.getByText(/lowest among all the elements/i)
     ).toBeTruthy();
     expect(
-      screen.getByRole("button", { name: /Next element/i })
+      screen.getByRole("button", { name: /Back to Game/i })
+    ).toBeTruthy();
+    expect(
+      screen.getByRole("button", { name: /Exit to Configure/i })
     ).toBeTruthy();
   });
 
-  it("Next element runs the registered continuation and closes", async () => {
+  it("Back to Game runs the registered continuation and closes", async () => {
     const user = userEvent.setup();
     let continued = false;
     useUIStore.setState({
@@ -45,8 +57,8 @@ describe("EduInfoPage", () => {
       },
     });
 
-    render(<EduInfoPage />);
-    await user.click(screen.getByRole("button", { name: /Next element/i }));
+    renderEdu();
+    await user.click(screen.getByRole("button", { name: /Back to Game/i }));
 
     await waitFor(() => expect(continued).toBe(true));
     expect(useUIStore.getState().eduInfoName).toBeNull();
@@ -61,7 +73,7 @@ describe("EduInfoPage", () => {
       },
     });
 
-    render(<EduInfoPage />);
+    renderEdu();
     await user.keyboard("{Enter}");
 
     expect(continued).toBe(true);
