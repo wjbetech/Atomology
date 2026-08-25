@@ -1,44 +1,17 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { Link } from "react-router-dom";
+import atoms from "../../assets/atoms.svg";
 
 /**
- * The front door. Grounded in DESIGN.md: a dark-lab hero where the
- * signature emission-line spectrum draws itself in, drifting element
- * tiles float like specimens, and two CTAs route people onward.
+ * The front door. Grounded in DESIGN.md: Spectral Dark hero with the
+ * restored spinning atom (src/assets/atoms.svg, Q2 A) replacing the
+ * SPECTRUM blobs (Q8 A), plus two CTAs. Drifting tiles remain until
+ * P2-05 removes them.
  */
 
-// Deterministic spectrum barcode: [width%, accent key, opacity]
-// hues follow DESIGN.md accents
-const ACCENTS: Record<string, string> = {
-  sodium: "#FFCB47",
-  copper: "#35D99A",
-  strontium: "#FF5470",
-  argon: "#45C4FF",
-  calcium: "#FF8A5C",
-};
-
-const SPECTRUM: Array<[number, keyof typeof ACCENTS, number]> = [
-  [3, "strontium", 0.9],
-  [1.5, "sodium", 0.7],
-  [5, "argon", 0.95],
-  [2, "copper", 0.6],
-  [4, "calcium", 0.8],
-  [1, "argon", 0.5],
-  [6, "sodium", 0.9],
-  [2.5, "strontium", 0.65],
-  [3.5, "copper", 0.85],
-  [1.2, "calcium", 0.55],
-  [4.5, "argon", 0.9],
-  [2, "sodium", 0.7],
-  [5.5, "strontium", 0.85],
-  [1.8, "copper", 0.6],
-  [3, "calcium", 0.75],
-  [6.5, "sodium", 0.95],
-  [2.2, "argon", 0.6],
-  [1.4, "strontium", 0.5],
-  [4, "copper", 0.8],
-  [2.8, "sodium", 0.7],
-];
+// P1-04: Restored exact spinning atom (Q2 A) replaces SPECTRUM blobs
+// (Q8 A). SPECTRUM kept as comment for reference if needed:
+// const SPECTRUM = [...] // removed per inbox 25/08/2026
 
 // Drifting specimen tiles: real symbols, coloured by category accent.
 const TILES = [
@@ -95,27 +68,26 @@ export default function HomePage() {
         ))}
 
       <div className="relative z-10 w-full max-w-3xl text-center">
-        {/* signature: emission-line spectrum drawing in */}
+        {/* P1-04: spinning atom (exact src/assets/atoms.svg, 18s linear, respects reduced-motion) */}
         <motion.div
           aria-hidden
-          className="flex justify-center gap-[3px] h-6 mb-10 overflow-visible"
-          initial={false}
+          className="flex justify-center mb-10"
+          initial={reduce ? false : { opacity: 0, y: 8 }}
+          animate={reduce ? undefined : { opacity: 1, y: 0 }}
+          transition={{ delay: 0.15, duration: 0.45 }}
         >
-          {SPECTRUM.map(([w, color, opacity], i) => (
-            <motion.span
-              key={i}
-              className="h-full rounded-full"
-              style={{
-                width: `${w}%`,
-                backgroundColor: ACCENTS[color],
-                opacity,
-                originX: 0,
-              }}
-              initial={reduce ? false : { scaleX: 0 }}
-              animate={reduce ? undefined : { scaleX: 1 }}
-              transition={{ delay: 0.15 + i * 0.045, duration: 0.45 }}
-            />
-          ))}
+          <motion.img
+            src={atoms}
+            alt=""
+            className="w-24 h-24 md:w-28 md:h-28 select-none pointer-events-none"
+            animate={reduce ? undefined : { rotate: 360 }}
+            transition={
+              reduce
+                ? undefined
+                : { duration: 18, repeat: Infinity, ease: "linear" }
+            }
+            draggable={false}
+          />
         </motion.div>
 
         <motion.p
