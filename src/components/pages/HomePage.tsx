@@ -134,7 +134,7 @@ export default function HomePage() {
 
         <motion.p
           {...rise(0.45)}
-          className="mt-6 text-lg md:text-xl text-specimen/90 font-bold"
+          className="mt-6 text-lg md:text-xl text-specimen/80 font-light tracking-wide"
         >
           Every element has its own light.
         </motion.p>
