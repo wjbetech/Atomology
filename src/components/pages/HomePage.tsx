@@ -69,14 +69,14 @@ export default function HomePage() {
         >
           <Link
             to="/configure"
-            className="btn border-0 rounded-pill px-12 min-h-12 inline-flex items-center justify-center leading-none font-semibold text-lg bg-sodium text-[#1C1917] hover:brightness-110 transition-all"
+            className="inline-flex items-center justify-center rounded-pill px-12 min-h-12 leading-none font-semibold text-lg bg-sodium text-[#1C1917] hover:bg-sodium hover:brightness-110 active:brightness-95 active:scale-[0.98] transition-all"
             style={{ transformOrigin: "center" }}
           >
             Play!
           </Link>
           <Link
             to="/instructions"
-            className="btn btn-outline rounded-pill px-10 min-h-12 inline-flex items-center justify-center leading-none border-argon/60 text-argon hover:bg-argon/10 hover:border-argon transition-all"
+            className="inline-flex items-center justify-center rounded-pill px-10 min-h-12 leading-none border border-argon/60 text-argon hover:bg-argon/10 hover:border-argon active:scale-[0.98] transition-all"
           >
             Instructions
           </Link>
