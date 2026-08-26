@@ -169,8 +169,8 @@ export default function Navbar() {
         className="fixed inset-x-0 top-0 w-full bg-bench/90 backdrop-blur z-[3000] flex items-center justify-between gap-4 p-4 border-b border-hairline"
         style={{
           height: "var(--site-navbar-height)",
-          paddingLeft: "env(safe-area-inset-left)",
-          paddingRight: "env(safe-area-inset-right)",
+          paddingLeft: "max(1rem, env(safe-area-inset-left))",
+          paddingRight: "max(1rem, env(safe-area-inset-right))",
           zIndex: 3000,
         }}
       >
@@ -184,7 +184,7 @@ export default function Navbar() {
           </div>
         </div>
 
-        <div className="px-2 md:px-4 h-full flex items-center">
+        <div className="h-full flex items-center">
           <ThemeToggle />
         </div>
       </nav>
