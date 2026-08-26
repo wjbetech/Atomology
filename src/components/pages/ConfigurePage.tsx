@@ -192,7 +192,7 @@ export default function ConfigurePage() {
   };
 
   return (
-    <div className="w-full max-w-3xl mx-auto px-6 pt-14 md:pt-16 pb-16">
+    <div className="w-full max-w-3xl mx-auto px-6 my-auto pt-[calc(var(--site-navbar-height)_+_2.5rem)] pb-24 md:pb-28">
       <p className="font-mono text-xs uppercase tracking-[0.35em] text-annotation mb-3">
         Configure
       </p>
