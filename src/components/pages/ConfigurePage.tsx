@@ -367,10 +367,10 @@ export default function ConfigurePage() {
           type="button"
           disabled={!selected}
           onClick={start}
-          className={`btn border-0 rounded-pill px-16 py-3 font-semibold text-lg transition-all ${
+          className={`inline-flex items-center justify-center rounded-pill px-16 py-3 font-semibold text-lg transition-all active:scale-[0.98] ${
             selected
-              ? "bg-sodium text-void hover:brightness-110 shadow-[0_0_28px_rgba(255,203,71,0.25)]"
-              : "btn-disabled bg-bench text-annotation opacity-50"
+              ? "bg-sodium text-[#1C1917] hover:brightness-110 active:brightness-95 shadow-[0_0_28px_rgba(255,203,71,0.25)]"
+              : "bg-bench text-annotation opacity-50 cursor-not-allowed"
           }`}
         >
           {selected ? "Start!" : "Choose a mode to start"}
@@ -378,7 +378,7 @@ export default function ConfigurePage() {
         <button
           type="button"
           onClick={handleReset}
-          className="btn btn-ghost btn-sm rounded-pill text-annotation hover:text-specimen"
+          className="inline-flex items-center justify-center rounded-pill px-4 py-1.5 text-sm text-annotation hover:text-specimen hover:bg-bench active:scale-[0.98] transition-all"
         >
           Reset to defaults
         </button>

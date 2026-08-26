@@ -75,14 +75,14 @@ export default function EduInfoPage() {
       <div className="fixed inset-0 z-[4500] bg-void text-specimen flex items-center justify-center gap-4">
         <button
           type="button"
-          className="btn rounded-pill px-8 bg-sodium text-void border-0 font-semibold"
+          className="inline-flex items-center justify-center rounded-pill px-8 py-2.5 bg-sodium text-[#1C1917] font-semibold hover:brightness-110 active:brightness-95 active:scale-[0.98] transition-all"
           onClick={closeEduInfo}
         >
           Continue
         </button>
         <button
           type="button"
-          className="btn rounded-pill px-6 bg-transparent border border-hairline text-specimen hover:bg-bench"
+          className="inline-flex items-center justify-center rounded-pill px-6 py-2.5 bg-transparent border border-hairline text-specimen hover:bg-bench active:scale-[0.98] transition-all"
           onClick={handleExit}
         >
           Exit to Configure
@@ -235,7 +235,7 @@ export default function EduInfoPage() {
         <button
           type="button"
           onClick={handleExit}
-          className="btn rounded-pill px-6 bg-transparent border border-hairline text-specimen hover:bg-bench font-semibold"
+          className="inline-flex items-center justify-center rounded-pill px-6 py-2.5 bg-transparent border border-hairline text-specimen hover:bg-bench font-semibold active:scale-[0.98] transition-all"
           aria-label="Exit to Configure"
         >
           Exit to Configure
@@ -243,10 +243,10 @@ export default function EduInfoPage() {
         <button
           type="button"
           onClick={closeEduInfo}
-          className={`btn border-0 rounded-pill px-12 font-semibold transition-all ${
+          className={`inline-flex items-center justify-center rounded-pill px-12 py-2.5 font-semibold transition-all active:scale-[0.98] ${
             nearBottom
-              ? "bg-sodium text-void hover:brightness-110"
-              : "bg-sodium/20 text-sodium hover:bg-sodium hover:text-void"
+              ? "bg-sodium text-[#1C1917] hover:brightness-110 active:brightness-95"
+              : "bg-sodium/20 text-sodium hover:bg-sodium hover:text-[#1C1917] hover:brightness-110"
           }`}
           aria-label="Back to game"
         >

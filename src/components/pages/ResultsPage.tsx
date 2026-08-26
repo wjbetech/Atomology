@@ -136,7 +136,7 @@ export default function ResultsPage() {
           Finish a session and your results will land here — score, accuracy,
           streaks and all.
         </p>
-        <Link to="/configure" className="btn border-0 rounded-pill px-8 bg-sodium text-void font-semibold hover:brightness-110">
+        <Link to="/configure" className="inline-flex items-center justify-center rounded-pill px-8 py-2.5 bg-sodium text-[#1C1917] font-semibold hover:brightness-110 active:brightness-95 active:scale-[0.98] transition-all">
           Start one now
         </Link>
       </div>
@@ -246,13 +246,13 @@ export default function ResultsPage() {
       <div className="flex flex-col sm:flex-row justify-center gap-4 mt-12">
         <Link
           to="/configure"
-          className="btn border-0 rounded-pill px-10 bg-sodium text-void font-semibold hover:brightness-110"
+          className="inline-flex items-center justify-center rounded-pill px-10 py-2.5 bg-sodium text-[#1C1917] font-semibold hover:brightness-110 active:brightness-95 active:scale-[0.98] transition-all"
         >
           Play again
         </Link>
         <Link
           to="/"
-          className="btn btn-outline rounded-pill px-10 border-argon/60 text-argon hover:bg-argon/10"
+          className="inline-flex items-center justify-center rounded-pill px-10 py-2.5 border border-argon/60 text-argon hover:bg-argon/10 active:scale-[0.98] transition-all"
         >
           Home
         </Link>
