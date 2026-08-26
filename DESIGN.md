@@ -21,9 +21,12 @@ hue), so colour in this app encodes information rather than decorating it.
 - **Feeling:** a lab at night where specimens glow — precise, luminous,
   quietly playful. Texture lives in components (tactile cards, squishy
   presses, light that responds); never in mascots or clutter.
-- **Banned:** purple/violet in any shade. Also banned: the generic AI looks —
-  cream+serif+terracotta, black-with-one-acid-accent, broadsheet hairlines.
-  *Exception (2026-08-25, Q7 B):* warm-paper **is** used for **Daylight Lab light only** (see below); the ban still applies to dark flagship.
+- **Banned:** purple/violet in any shade. Also banned on **Spectral Dark
+  only**: the generic AI looks — cream+serif+terracotta,
+  black-with-one-acid-accent, broadsheet hairlines. See
+  `docs/adr/0001-daylight-lab-warm-paper.md` for the rationale
+  and the scope of the relaxation (Daylight Lab uses warm-paper;
+  Spectral Dark stays cool).
 
 ## Palette
 
@@ -171,7 +174,8 @@ produced for a brief about anything other than chemistry.
 
 ## Application notes
 
-- Tokens land inertly (#38); Michroma loads with the Home hero (#40) — the
-  display face is part of that page's identity. Atkinson Hyperlegible and
-  IBM Plex Mono load during the application pass (#47), so no bytes are
-  spent on unused assets before then.
+Tokens, typefaces, and the Home hero are all in production (closed in
+Phase 1, see `ROADMAP.md` #69–#75 + #38/#40/#47). The dark flagship and
+the warm-paper Daylight Lab light variant both render through the same
+token names; only hex values swap in by `data-theme` (`night` / `cupcake`).
+Phase 3 (#84–#91) layers the final theming QA on top of this.
