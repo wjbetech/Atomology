@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useGameStore } from "../../store/atomologyStore";
+import ThemeToggle from "../sub-components/ThemeToggle";
 import {
   getElementsByDifficulty,
   asDifficultyLevel,
@@ -183,7 +184,9 @@ export default function Navbar() {
           </div>
         </div>
 
-        <div className="px-4" />
+        <div className="px-2 md:px-4 h-full flex items-center">
+          <ThemeToggle />
+        </div>
       </nav>
     </>
   );

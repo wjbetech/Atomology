@@ -42,11 +42,12 @@
   font-weight: 400;
   font-size: 16px;
 
-  /* layout sizing tokens used by Navbar/Footer/Layout */
-  /* keep navbar and footer the same height; footer is the source of truth */
-  --site-footer-height: 56px;
-  --site-navbar-height: var(--site-footer-height);
-  --site-navbar-height-lg: var(--site-footer-height);
+  /* layout sizing tokens used by Navbar/Layout */
+  /* footer was removed (theme toggle moved to the navbar); the var stays
+     at 0 so existing min-height/padding calcs remain valid */
+  --site-footer-height: 0px;
+  --site-navbar-height: 56px;
+  --site-navbar-height-lg: 56px;
   /* theme-aware edge shadow used by Navbar/Footer (edge highlight)
      light theme: darker grey shadow; dark theme: subtle light shadow */
   --site-edge-shadow: rgba(0,0,0,0.14);
