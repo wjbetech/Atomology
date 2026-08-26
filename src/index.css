@@ -59,6 +59,9 @@
 }
 
 /* Prevent transient horizontal scrollbar by clamping body overflow */
+html {
+  scrollbar-gutter: stable;
+}
 html,
 body,
 #root {

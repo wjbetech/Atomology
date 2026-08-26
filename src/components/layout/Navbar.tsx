@@ -184,7 +184,7 @@ export default function Navbar() {
           </div>
         </div>
 
-        <div className="h-full flex items-center">
+        <div className="h-full flex items-center pr-4">
           <ThemeToggle />
         </div>
       </nav>
