@@ -1,10 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   useGameStore,
   useUIStore,
 } from "../../store/atomologyStore";
 import SoundToggle from "../sub-components/SoundToggle";
+import { getElementsByDifficulty } from "../../utils/hangmanDifficulty";
+import type { DifficultyLevel } from "../../utils/hangmanDifficulty";
+import { DIFFICULTY_LABELS } from "../hangman/difficultyLabels";
+import { shuffle } from "../../utils/shuffle";
 
 /**
  * Session setup per the redesign: mode cards, session length, global
@@ -18,7 +22,6 @@ const MODES = [
     pitch: "See a symbol, pick the right name from four options.",
     win: "Finish your session length",
     accent: "#45C4FF",
-    symbol: "Ar",
   },
   {
     id: "open",
@@ -26,7 +29,6 @@ const MODES = [
     pitch: "No hints — recall the full element name yourself.",
     win: "Finish your session length",
     accent: "#35D99A",
-    symbol: "Au",
   },
   {
     id: "hangman",
@@ -34,7 +36,6 @@ const MODES = [
     pitch: "Spell hidden element names before the lives run out.",
     win: "Complete every word in the pool",
     accent: "#FFCB47",
-    symbol: "He",
   },
 ] as const;
 
@@ -47,6 +48,33 @@ const LENGTHS: Array<{ id: "q10" | "q25" | "cycle" | "endless"; label: string }>
     { id: "cycle", label: "Full cycle · 118" },
     { id: "endless", label: "Endless" },
   ];
+
+const LAST_CONFIG_KEY = "atomology:lastConfig";
+const LAST_TTL = 60 * 60 * 1000; // ~1hr per Q4
+
+type LastConfig = {
+  mode: ModeId;
+  length: "q10" | "q25" | "cycle" | "endless";
+  livesMode: boolean;
+  educationalMode: boolean;
+  savedAt: number;
+};
+
+function readLastConfig(): LastConfig | null {
+  try {
+    const raw = localStorage.getItem(LAST_CONFIG_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as LastConfig;
+    if (!parsed?.savedAt || Date.now() - parsed.savedAt > LAST_TTL) {
+      localStorage.removeItem(LAST_CONFIG_KEY);
+      return null;
+    }
+    if (!["multi", "open", "hangman"].includes(parsed.mode)) return null;
+    return parsed;
+  } catch {
+    return null;
+  }
+}
 
 export default function ConfigurePage() {
   const navigate = useNavigate();
@@ -68,18 +96,87 @@ export default function ConfigurePage() {
   const livesMode = useGameStore((s) => s.livesMode);
   const setLivesMode = useGameStore((s) => s.setLivesMode);
 
-  // Preselect a persisted mode if there is one; otherwise nothing is chosen.
-  const [selected, setSelected] = useState<ModeId | null>(
-    gameMode === "multi" || gameMode === "open" || gameMode === "hangman"
+  // P1-06: Preselect from 1hr TTL lastConfig if present, else from persisted gameMode
+  const [selected, setSelected] = useState<ModeId | null>(() => {
+    const last = readLastConfig();
+    if (last) return last.mode;
+    return gameMode === "multi" || gameMode === "open" || gameMode === "hangman"
       ? (gameMode as ModeId)
-      : null
+      : null;
+  });
+
+  // P1-07: Hangman difficulty lives on Configure now (conditional row)
+  const hangmanDifficulty = useGameStore((s) => s.hangmanDifficulty) as DifficultyLevel | null;
+  const setHangmanDifficultyRaw = useGameStore((s) => s.setHangmanDifficulty);
+  const [hangmanLevel, setHangmanLevel] = useState<DifficultyLevel>(
+    (hangmanDifficulty as DifficultyLevel) || "all"
   );
 
+  const handleSelectMode = (id: ModeId) => {
+    setSelected(id);
+    if (id === "hangman" && hangmanDifficulty) {
+      setHangmanLevel(hangmanDifficulty as DifficultyLevel);
+    }
+  };
+
+  // Hydrate other settings from lastConfig once on mount (TTL-checked)
+  useEffect(() => {
+    const last = readLastConfig();
+    if (!last) return;
+    const { setSessionLength: setLen, setShowHUD, setEducationalMode: setEdu, setLivesMode: setLives } =
+      // use store directly to avoid stale closures
+      {
+        setSessionLength: useGameStore.getState().setSessionLength,
+        setShowHUD: useUIStore.getState().setShowHUD,
+        setEducationalMode: useUIStore.getState().setEducationalMode,
+        setLivesMode: useGameStore.getState().setLivesMode,
+      };
+    setLen(last.length);
+    setLives(last.livesMode);
+    setEdu(last.educationalMode);
+    // showHUD not part of lastConfig TTL per spec, keep as-is
+  }, []);
+
+  const persistLastConfig = (mode: ModeId) => {
+    const payload: LastConfig = {
+      mode,
+      length: useGameStore.getState().sessionLength as LastConfig["length"],
+      livesMode: useGameStore.getState().livesMode,
+      educationalMode: useUIStore.getState().educationalMode,
+      savedAt: Date.now(),
+    };
+    try {
+      localStorage.setItem(LAST_CONFIG_KEY, JSON.stringify(payload));
+    } catch {}
+  };
+
+  const handleReset = () => {
+    try {
+      localStorage.removeItem(LAST_CONFIG_KEY);
+    } catch {}
+    setSelected(null);
+    setHangmanLevel("all");
+    useGameStore.getState().setSessionLength("q25");
+    useGameStore.getState().setLivesMode(false);
+    useUIStore.getState().setEducationalMode(false);
+  };
+
+  // P1-05: Single-gate — Configure is the only place to pick mode+length.
+  // Session Length pills already call setSessionLength directly, so Start
+  // just consumes the current store value and navigates to /play with no
+  // interstitial. Verified no post-configure page remains.
   const start = () => {
     if (!selected) return;
     if (selected === "hangman") {
+      // P1-07: Configure now owns difficulty — create the shuffled pool here
+      // so /play renders immediately with no interstitial (P1-01 hotfix retained).
       resetHangman();
-      setHangmanDifficulty(null);
+      setHangmanDifficultyRaw(hangmanLevel);
+      const pool = shuffle(getElementsByDifficulty(hangmanLevel)).map((e) => e.name);
+      const st = useGameStore.getState();
+      st.setHangmanPool(pool);
+      st.setHangmanIndex(0);
+      if (pool[0]) st.setHangmanWord(pool[0]);
     } else {
       resetHangman();
       useGameStore.getState().resetRunProgress();
@@ -87,14 +184,15 @@ export default function ConfigurePage() {
       useGameStore.getState().generateNextRound();
       setPlayerAnswer("");
     }
-    setSessionLength(sessionLength);
+    // sessionLength already set via pills; just persist the whole config for 1hr (P1-06)
+    persistLastConfig(selected);
     setGameMode(selected);
     setGameStarted(true);
     navigate("/play");
   };
 
   return (
-    <div className="w-full max-w-3xl mx-auto px-6 py-14">
+    <div className="w-full max-w-3xl mx-auto px-6 my-auto pt-[calc(var(--site-navbar-height)_+_2.5rem)] pb-24 md:pb-28">
       <p className="font-mono text-xs uppercase tracking-[0.35em] text-annotation mb-3">
         Configure
       </p>
@@ -113,29 +211,19 @@ export default function ConfigurePage() {
             <button
               key={mode.id}
               type="button"
-              onClick={() => setSelected(mode.id)}
+              onClick={() => handleSelectMode(mode.id)}
               aria-pressed={active}
-              className={`relative text-left rounded-md border bg-bench p-5 transition-all duration-200 ${
+              className={`text-left rounded-md border p-5 transition-colors duration-200 ${
                 active
-                  ? "border-transparent shadow-[0_0_24px_rgba(69,196,255,0.15)]"
+                  ? ""
                   : "border-hairline hover:border-annotation/40"
               }`}
-              style={active ? { borderColor: mode.accent } : undefined}
+              style={
+                active
+                  ? { borderColor: mode.accent, backgroundColor: `${mode.accent}0D` }
+                  : undefined
+              }
             >
-              <span
-                aria-hidden
-                className="absolute top-0 left-0 right-0 h-[3px] rounded-t-md"
-                style={{
-                  backgroundColor: mode.accent,
-                  opacity: active ? 1 : 0.35,
-                }}
-              />
-              <p
-                className="font-display text-3xl mb-3"
-                style={{ color: mode.accent }}
-              >
-                {mode.symbol}
-              </p>
               <h2 className="font-bold text-specimen">{mode.name}</h2>
               <p className="text-sm text-annotation mt-1 leading-snug">
                 {mode.pitch}
@@ -177,6 +265,40 @@ export default function ConfigurePage() {
           );
         })}
       </div>
+
+      {/* Hangman difficulty — only when Hangman is selected (P1-07) */}
+      {selected === "hangman" && (
+        <>
+          <p className="font-mono text-xs uppercase tracking-[0.2em] text-annotation mb-4">
+            Hangman difficulty
+          </p>
+          <div
+            role="radiogroup"
+            aria-label="Hangman difficulty"
+            className="flex flex-wrap gap-3 mb-10"
+          >
+            {Object.entries(DIFFICULTY_LABELS).map(([key, label]) => {
+              const active = hangmanLevel === key;
+              return (
+                <button
+                  key={key}
+                  type="button"
+                  role="radio"
+                  aria-checked={active}
+                  onClick={() => setHangmanLevel(key as DifficultyLevel)}
+                  className={`rounded-pill px-5 py-2 text-sm border transition-all ${
+                    active
+                      ? "bg-sodium/15 border-sodium text-sodium"
+                      : "border-hairline text-annotation hover:border-annotation/40"
+                  }`}
+                >
+                  {label}
+                </button>
+              );
+            })}
+          </div>
+        </>
+      )}
 
       {/* Global settings */}
       <p className="font-mono text-xs uppercase tracking-[0.2em] text-annotation mb-4">
@@ -239,20 +361,30 @@ export default function ConfigurePage() {
         </div>
       </div>
 
-      {/* Start */}
-      <div className="flex justify-center">
+      {/* Start + Reset (P1-06) */}
+      <div className="flex flex-col items-center gap-3">
         <button
           type="button"
           disabled={!selected}
           onClick={start}
-          className={`btn border-0 rounded-pill px-16 py-3 font-semibold text-lg transition-all ${
+          className={`inline-flex items-center justify-center rounded-pill px-16 py-3 font-semibold text-lg transition-all active:scale-[0.98] ${
             selected
-              ? "bg-sodium text-void hover:brightness-110 shadow-[0_0_28px_rgba(255,203,71,0.25)]"
-              : "btn-disabled bg-bench text-annotation opacity-50"
+              ? "bg-sodium text-[#1C1917] hover:brightness-110 active:brightness-95 shadow-[0_0_28px_rgba(255,203,71,0.25)]"
+              : "bg-bench text-annotation opacity-50 cursor-not-allowed"
           }`}
         >
           {selected ? "Start!" : "Choose a mode to start"}
         </button>
+        <button
+          type="button"
+          onClick={handleReset}
+          className="inline-flex items-center justify-center rounded-pill px-4 py-1.5 text-sm text-annotation hover:text-specimen hover:bg-bench active:scale-[0.98] transition-all"
+        >
+          Reset to defaults
+        </button>
+        <p className="font-mono text-[10px] text-annotation/70">
+          Remembers your last mode + length for ~1 hour
+        </p>
       </div>
     </div>
   );

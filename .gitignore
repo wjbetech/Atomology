@@ -25,3 +25,8 @@ dist-ssr
 
 # npm artifacts (repo uses pnpm)
 package-lock.json
+
+# Local scratch / Vercel metadata (not source)
+.scratch/
+.vercel/
+.out-of-scope/

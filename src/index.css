@@ -20,18 +20,19 @@
 }
 
 [data-theme="cupcake"] {
-  --at-void: #f4f7fb;
-  --at-bench: #ffffff;
-  --at-slide: #eef3f8;
-  --at-hairline: #d7e0ea;
-  --at-specimen: #0e1626;
-  --at-annotation: #5a6b80;
-  /* accents darkened for contrast on light surfaces */
-  --at-sodium: #b8860b;
-  --at-copper: #1fa873;
-  --at-strontium: #e03a55;
-  --at-argon: #1f9ed9;
-  --at-calcium: #e06a33;
+  /* Warm-paper Daylight Lab — Q7 B + P1-03 (DESIGN.md) */
+  --at-void: #fdf6ec; /* paper */
+  --at-bench: #f3e8d3;
+  --at-slide: #e9ddc5;
+  --at-hairline: #dcceb8;
+  --at-specimen: #1c1917;
+  --at-annotation: #7a6e5d;
+  /* accents darkened ~15% for contrast on warm-paper */
+  --at-sodium: #e6b43f;
+  --at-copper: #2fae7a;
+  --at-strontium: #e64c62;
+  --at-argon: #3aa8d8;
+  --at-calcium: #e67a3a;
 }
 
 :root {
@@ -41,11 +42,12 @@
   font-weight: 400;
   font-size: 16px;
 
-  /* layout sizing tokens used by Navbar/Footer/Layout */
-  /* keep navbar and footer the same height; footer is the source of truth */
-  --site-footer-height: 56px;
-  --site-navbar-height: var(--site-footer-height);
-  --site-navbar-height-lg: var(--site-footer-height);
+  /* layout sizing tokens used by Navbar/Layout */
+  /* footer was removed (theme toggle moved to the navbar); the var stays
+     at 0 so existing min-height/padding calcs remain valid */
+  --site-footer-height: 0px;
+  --site-navbar-height: 56px;
+  --site-navbar-height-lg: 56px;
   /* theme-aware edge shadow used by Navbar/Footer (edge highlight)
      light theme: darker grey shadow; dark theme: subtle light shadow */
   --site-edge-shadow: rgba(0,0,0,0.14);
@@ -57,6 +59,9 @@
 }
 
 /* Prevent transient horizontal scrollbar by clamping body overflow */
+html {
+  scrollbar-gutter: stable;
+}
 html,
 body,
 #root {

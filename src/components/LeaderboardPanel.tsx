@@ -87,7 +87,7 @@ export default function LeaderboardPanel({
           <button
             type="button"
             onClick={() => setReloadKey((k) => k + 1)}
-            className="btn btn-outline btn-sm rounded-pill border-argon/50 text-argon"
+            className="inline-flex items-center justify-center rounded-pill px-3 py-1.5 text-sm border border-argon/50 text-argon hover:bg-argon/10 active:scale-[0.98] transition-all"
           >
             Retry
           </button>
@@ -141,7 +141,7 @@ export default function LeaderboardPanel({
               />
               <button
                 type="submit"
-                className="btn btn-sm border-0 rounded-pill px-5 bg-sodium/15 text-sodium border-sodium/40 hover:bg-sodium hover:text-void transition-colors"
+                className="inline-flex items-center justify-center rounded-pill px-5 py-1.5 text-sm bg-sodium/15 text-sodium border border-sodium/40 hover:bg-sodium hover:text-[#1C1917] hover:brightness-110 active:scale-[0.98] transition-all"
               >
                 Submit score
               </button>
@@ -162,7 +162,7 @@ export default function LeaderboardPanel({
               />
               <button
                 type="submit"
-                className="btn btn-sm btn-outline rounded-pill border-strontium/60 text-strontium"
+                className="inline-flex items-center justify-center rounded-pill px-3 py-1.5 text-sm border border-strontium/60 text-strontium hover:bg-strontium/10 active:scale-[0.98] transition-all"
               >
                 Try submitting again
               </button>

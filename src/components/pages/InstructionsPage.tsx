@@ -190,7 +190,7 @@ export default function InstructionsPage() {
         </p>
         <Link
           to="/configure"
-          className="btn border-0 rounded-pill px-8 bg-sodium text-void hover:brightness-110 font-semibold"
+          className="inline-flex items-center justify-center rounded-pill px-8 py-2.5 bg-sodium text-[#1C1917] font-semibold hover:brightness-110 active:brightness-95 active:scale-[0.98] transition-all"
         >
           Go to Configure
         </Link>

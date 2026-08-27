@@ -26,6 +26,11 @@ describe("Layout navbar visibility", () => {
     expect(screen.getByRole("link", { name: "Contact" })).toBeTruthy();
   });
 
+  it("shows the theme toggle in the navbar on non-game screens", () => {
+    renderLayout();
+    expect(screen.getByLabelText("Toggle theme")).toBeTruthy();
+  });
+
   it("hides the site navbar while a game is running", () => {
     useGameStore.setState({ gameMode: "multi", gameStarted: true });
     renderLayout();

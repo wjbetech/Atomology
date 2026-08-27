@@ -7,16 +7,7 @@ import AboutContent from "../AboutContent";
 export default function About() {
   return (
     <Layout>
-      <div
-        className="w-full flex-1 flex items-center justify-center overflow-auto"
-        style={{
-          paddingTop: "var(--site-navbar-height)",
-          paddingBottom: "var(--site-footer-height)",
-          boxSizing: "border-box",
-        }}
-      >
-        <AboutContent />
-      </div>
+      <AboutContent />
     </Layout>
   );
 }
